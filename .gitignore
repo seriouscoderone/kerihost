@@ -1,0 +1,43 @@
+# Rust
+target/
+**/*.rs.bk
+
+# Node.js
+node_modules/
+dist/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# CDK
+cdk.out/
+*.js.map
+outputs.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.d.ts.map
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Lambda packaging
+*.zip

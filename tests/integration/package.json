@@ -1,0 +1,19 @@
+{
+  "name": "@kerihost/integration-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:deployed": "WITNESS_API_URL=${WITNESS_API_URL:-$(cat ../../infrastructure/outputs.json 2>/dev/null | jq -r '.KerihostStack.ApiUrl' || echo '')} vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "~5.4.0",
+    "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "signify-ts": "^0.2.0"
+  }
+}

@@ -1,0 +1,66 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/kerihost-core",
+    "crates/kerihost-db",
+    "crates/kerihost-witness",
+    "lambdas/witness-process",
+    "lambdas/witness-query",
+    "lambdas/witness-oobi",
+    "lambdas/witness-escrow-check",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["KERI Host <dev@keri.host>"]
+license = "Apache-2.0"
+repository = "https://github.com/kerihost/kerihost"
+
+[workspace.dependencies]
+# Internal crates
+kerihost-core = { path = "crates/kerihost-core" }
+kerihost-db = { path = "crates/kerihost-db" }
+kerihost-witness = { path = "crates/kerihost-witness" }
+
+# KERI/CESR dependencies
+cesride = "0.6"
+parside = "0.2"
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# AWS SDK
+aws-sdk-dynamodb = "1"
+aws-config = "1"
+
+# Lambda
+lambda_runtime = "0.13"
+aws_lambda_events = "0.15"
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# Logging/tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Testing
+rstest = "0.18"
+mockall = "0.12"
+once_cell = "1"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true

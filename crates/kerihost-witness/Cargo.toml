@@ -1,0 +1,22 @@
+[package]
+name = "kerihost-witness"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Witness business logic for kerihost"
+
+[dependencies]
+kerihost-core = { workspace = true }
+kerihost-db = { workspace = true }
+cesride = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+rstest = { workspace = true }

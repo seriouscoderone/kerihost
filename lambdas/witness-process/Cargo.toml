@@ -1,0 +1,25 @@
+[package]
+name = "witness-process"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Lambda handler for processing KERI events"
+
+[[bin]]
+name = "witness-process"
+path = "src/main.rs"
+
+[dependencies]
+kerihost-core = { workspace = true }
+kerihost-db = { workspace = true }
+kerihost-witness = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+lambda_runtime = { workspace = true }
+aws_lambda_events = { workspace = true }
+aws-config = { workspace = true }
+chrono = { workspace = true }
