@@ -51,10 +51,23 @@ async fn handler(
     let witness = get_witness().await;
     let now = chrono::Utc::now().to_rfc3339();
 
-    let path = event.payload.path.as_deref().unwrap_or("/");
+    let full_path = event.payload.path.as_deref().unwrap_or("/");
+
+    // Strip base path prefix (e.g., /witness) if present
+    // The base path is derived from PUBLIC_URL env var or defaults to /witness
+    let base_path = std::env::var("PUBLIC_URL")
+        .ok()
+        .and_then(|url| url.rsplit('/').next().map(|s| format!("/{}", s)))
+        .unwrap_or_else(|| "/witness".to_string());
+
+    let path = full_path
+        .strip_prefix(&base_path)
+        .unwrap_or(full_path);
+
+    info!(full_path = %full_path, base_path = %base_path, path = %path, "Processing request");
 
     // Handle /introduce endpoint
-    if path == "/introduce" || path == "/" {
+    if path == "/introduce" || path == "/" || path.is_empty() {
         info!("Serving witness OOBI");
 
         let oobi = Oobi::witness(&witness.prefix, &witness.oobi_url());
