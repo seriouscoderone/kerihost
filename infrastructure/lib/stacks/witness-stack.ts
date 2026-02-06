@@ -3,14 +3,11 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as events from "aws-cdk-lib/aws-events";
 import * as targets from "aws-cdk-lib/aws-events-targets";
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
-import * as acm from "aws-cdk-lib/aws-certificatemanager";
-import * as route53 from "aws-cdk-lib/aws-route53";
-import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { RustFunction } from "cargo-lambda-cdk";
 import * as path from "path";
-import { API_DEFAULTS, LAMBDA_SLUGS } from "../config/constants";
+import { LAMBDA_SLUGS } from "../config/constants";
 
 export interface WitnessStackProps extends cdk.StackProps {
   /**
@@ -29,14 +26,14 @@ export interface WitnessStackProps extends cdk.StackProps {
   witnessSeed: secretsmanager.ISecret;
 
   /**
-   * Custom domain name for the API (e.g., 'api.keri.host')
+   * REST API Gateway from ApiStack
    */
-  domainName: string;
+  api: apigateway.RestApi;
 
   /**
-   * Route53 hosted zone ID for DNS validation
+   * Public URL for the witness service (e.g., 'https://api.keri.host/witness')
    */
-  hostedZoneId: string;
+  publicUrl: string;
 
   /**
    * Base path for witness routes (e.g., 'witness')
@@ -45,53 +42,26 @@ export interface WitnessStackProps extends cdk.StackProps {
 }
 
 /**
- * WitnessStack contains the witness service including:
- * - API Gateway with custom domain
+ * WitnessStack contains the witness service:
  * - 4 Rust Lambda functions (process, query, oobi, escrow-check)
  * - API routes under /{basePath}/...
  * - EventBridge schedule for escrow processing
  *
+ * API Gateway and DNS are managed by ApiStack.
  * Resource names are derived from stack name: {StackName}-{slug}
  */
 export class WitnessStack extends cdk.Stack {
-  public readonly api: apigateway.RestApi;
-  public readonly customDomainUrl: string;
-
   constructor(scope: Construct, id: string, props: WitnessStackProps) {
     super(scope, id, props);
 
-    const { tables, witnessSeed, domainName, hostedZoneId, basePath } = props;
+    const { tables, witnessSeed, api, publicUrl, basePath } = props;
 
     // Helper to create resource name: {StackName}-{slug}
     const resourceName = (slug: string) => `${this.stackName}-${slug}`;
 
     // =======================================================================
-    // Route53 Hosted Zone
-    // =======================================================================
-
-    const hostedZone = route53.HostedZone.fromHostedZoneAttributes(
-      this,
-      "HostedZone",
-      {
-        hostedZoneId,
-        zoneName: domainName.split(".").slice(-2).join("."), // Extract root domain
-      }
-    );
-
-    // =======================================================================
-    // ACM Certificate
-    // =======================================================================
-
-    const certificate = new acm.Certificate(this, "ApiCertificate", {
-      domainName,
-      validation: acm.CertificateValidation.fromDns(hostedZone),
-    });
-
-    // =======================================================================
     // Lambda Environment Variables
     // =======================================================================
-
-    const publicUrl = `https://${domainName}/${basePath}`;
 
     const lambdaEnv = {
       KEL_TABLE: tables.kel.tableName,
@@ -184,52 +154,11 @@ export class WitnessStack extends cdk.Stack {
     witnessSeed.grantRead(escrowCheckLambda);
 
     // =======================================================================
-    // API Gateway
-    // =======================================================================
-
-    this.api = new apigateway.RestApi(this, "WitnessApi", {
-      restApiName: resourceName("api"),
-      description: `KERI Host API Gateway - ${domainName}`,
-      deployOptions: {
-        stageName: "prod",
-        throttlingRateLimit: API_DEFAULTS.THROTTLE_RATE_LIMIT,
-        throttlingBurstLimit: API_DEFAULTS.THROTTLE_BURST_LIMIT,
-      },
-      defaultCorsPreflightOptions: {
-        allowOrigins: apigateway.Cors.ALL_ORIGINS,
-        allowMethods: apigateway.Cors.ALL_METHODS,
-        allowHeaders: [
-          "Content-Type",
-          "Authorization",
-          "X-Amz-Date",
-          "X-Api-Key",
-        ],
-      },
-      domainName: {
-        domainName,
-        certificate,
-        endpointType: apigateway.EndpointType.REGIONAL,
-      },
-    });
-
-    // =======================================================================
-    // Route53 A Record
-    // =======================================================================
-
-    new route53.ARecord(this, "ApiARecord", {
-      zone: hostedZone,
-      recordName: domainName,
-      target: route53.RecordTarget.fromAlias(
-        new route53Targets.ApiGateway(this.api)
-      ),
-    });
-
-    // =======================================================================
-    // API Routes
+    // API Routes (attached to shared API Gateway)
     // =======================================================================
 
     // Create base resource for witness routes: /{basePath}
-    const witnessResource = this.api.root.addResource(basePath);
+    const witnessResource = api.root.addResource(basePath);
 
     // GET /{basePath} - Witness OOBI at base path
     witnessResource.addMethod(
@@ -287,22 +216,8 @@ export class WitnessStack extends cdk.Stack {
     });
 
     // =======================================================================
-    // Exports
+    // Outputs
     // =======================================================================
-
-    this.customDomainUrl = `https://${domainName}`;
-
-    new cdk.CfnOutput(this, "ApiUrl", {
-      value: this.api.url,
-      description: "API Gateway default URL",
-      exportName: `${this.stackName}-ApiUrl`,
-    });
-
-    new cdk.CfnOutput(this, "CustomDomainUrl", {
-      value: this.customDomainUrl,
-      description: "API Gateway custom domain URL",
-      exportName: `${this.stackName}-CustomDomainUrl`,
-    });
 
     new cdk.CfnOutput(this, "WitnessBasePath", {
       value: `/${basePath}`,

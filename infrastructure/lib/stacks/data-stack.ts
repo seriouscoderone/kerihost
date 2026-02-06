@@ -10,7 +10,8 @@ import { TABLE_SLUGS, GSI_SLUGS, SECRET_NAMES } from "../config/constants";
  * - Reference to witness seed secret
  *
  * This stack is the foundation layer that other stacks depend on.
- * Tables use RETAIN policy to prevent accidental data loss.
+ * Data protection is achieved through stack separation - this stack
+ * is never destroyed during normal service deployments.
  *
  * Resource names are derived from stack name: {StackName}-{slug}
  */
@@ -42,7 +43,6 @@ export class DataStack extends cdk.Stack {
       sortKey: { name: "sn", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       pointInTimeRecoverySpecification: { pointInTimeRecoveryEnabled: true },
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
     // States Table (current key state for each identifier)
@@ -51,7 +51,6 @@ export class DataStack extends cdk.Stack {
       tableName: resourceName(TABLE_SLUGS.STATES),
       partitionKey: { name: "aid", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
     // Receipts Table (witness receipts for events)
@@ -64,7 +63,6 @@ export class DataStack extends cdk.Stack {
       },
       sortKey: { name: "witness_aid", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
     // Escrows Table (events waiting for conditions to be met)
@@ -76,7 +74,6 @@ export class DataStack extends cdk.Stack {
       sortKey: { name: "reason_digest", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       timeToLiveAttribute: "ttl",
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // Escrows can be destroyed
     });
 
     // Global Secondary Index for escrows - to query all escrows regardless of aid
