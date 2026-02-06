@@ -10,7 +10,7 @@ import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { RustFunction } from "cargo-lambda-cdk";
 import * as path from "path";
-import { API_DEFAULTS } from "../config/constants";
+import { API_DEFAULTS, LAMBDA_SLUGS } from "../config/constants";
 
 export interface WitnessStackProps extends cdk.StackProps {
   /**
@@ -50,6 +50,8 @@ export interface WitnessStackProps extends cdk.StackProps {
  * - 4 Rust Lambda functions (process, query, oobi, escrow-check)
  * - API routes under /{basePath}/...
  * - EventBridge schedule for escrow processing
+ *
+ * Resource names are derived from stack name: {StackName}-{slug}
  */
 export class WitnessStack extends cdk.Stack {
   public readonly api: apigateway.RestApi;
@@ -59,6 +61,9 @@ export class WitnessStack extends cdk.Stack {
     super(scope, id, props);
 
     const { tables, witnessSeed, domainName, hostedZoneId, basePath } = props;
+
+    // Helper to create resource name: {StackName}-{slug}
+    const resourceName = (slug: string) => `${this.stackName}-${slug}`;
 
     // =======================================================================
     // Route53 Hosted Zone
@@ -110,7 +115,7 @@ export class WitnessStack extends cdk.Stack {
     const processLambda = new RustFunction(this, "ProcessLambda", {
       manifestPath: path.join(workspaceRoot, "Cargo.toml"),
       binaryName: "witness-process",
-      functionName: "kerihost-witness-process",
+      functionName: resourceName(LAMBDA_SLUGS.PROCESS),
       environment: lambdaEnv,
       timeout: cdk.Duration.seconds(30),
       memorySize: 256,
@@ -121,7 +126,7 @@ export class WitnessStack extends cdk.Stack {
     const queryLambda = new RustFunction(this, "QueryLambda", {
       manifestPath: path.join(workspaceRoot, "Cargo.toml"),
       binaryName: "witness-query",
-      functionName: "kerihost-witness-query",
+      functionName: resourceName(LAMBDA_SLUGS.QUERY),
       environment: lambdaEnv,
       timeout: cdk.Duration.seconds(10),
       memorySize: 256,
@@ -132,7 +137,7 @@ export class WitnessStack extends cdk.Stack {
     const oobiLambda = new RustFunction(this, "OobiLambda", {
       manifestPath: path.join(workspaceRoot, "Cargo.toml"),
       binaryName: "witness-oobi",
-      functionName: "kerihost-witness-oobi",
+      functionName: resourceName(LAMBDA_SLUGS.OOBI),
       environment: lambdaEnv,
       timeout: cdk.Duration.seconds(5),
       memorySize: 128,
@@ -143,7 +148,7 @@ export class WitnessStack extends cdk.Stack {
     const escrowCheckLambda = new RustFunction(this, "EscrowCheckLambda", {
       manifestPath: path.join(workspaceRoot, "Cargo.toml"),
       binaryName: "witness-escrow-check",
-      functionName: "kerihost-witness-escrow-check",
+      functionName: resourceName(LAMBDA_SLUGS.ESCROW_CHECK),
       environment: lambdaEnv,
       timeout: cdk.Duration.seconds(60),
       memorySize: 256,
@@ -183,8 +188,8 @@ export class WitnessStack extends cdk.Stack {
     // =======================================================================
 
     this.api = new apigateway.RestApi(this, "WitnessApi", {
-      restApiName: "kerihost-api",
-      description: "KERI Host API Gateway - api.keri.host",
+      restApiName: resourceName("api"),
+      description: `KERI Host API Gateway - ${domainName}`,
       deployOptions: {
         stageName: "prod",
         throttlingRateLimit: API_DEFAULTS.THROTTLE_RATE_LIMIT,
@@ -275,6 +280,7 @@ export class WitnessStack extends cdk.Stack {
 
     // Run escrow check every 5 minutes
     new events.Rule(this, "EscrowCheckSchedule", {
+      ruleName: resourceName("escrow-schedule"),
       schedule: events.Schedule.rate(cdk.Duration.minutes(5)),
       targets: [new targets.LambdaFunction(escrowCheckLambda)],
       description: "Scheduled check for promotable escrowed events",
@@ -289,13 +295,13 @@ export class WitnessStack extends cdk.Stack {
     new cdk.CfnOutput(this, "ApiUrl", {
       value: this.api.url,
       description: "API Gateway default URL",
-      exportName: "KerihostApiUrl",
+      exportName: `${this.stackName}-ApiUrl`,
     });
 
     new cdk.CfnOutput(this, "CustomDomainUrl", {
       value: this.customDomainUrl,
       description: "API Gateway custom domain URL",
-      exportName: "KerihostCustomDomainUrl",
+      exportName: `${this.stackName}-CustomDomainUrl`,
     });
 
     new cdk.CfnOutput(this, "WitnessBasePath", {

@@ -2,7 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
-import { TABLE_NAMES, SECRET_NAMES } from "../config/constants";
+import { TABLE_SLUGS, GSI_SLUGS, SECRET_NAMES } from "../config/constants";
 
 /**
  * DataStack contains all persistent data resources:
@@ -11,6 +11,8 @@ import { TABLE_NAMES, SECRET_NAMES } from "../config/constants";
  *
  * This stack is the foundation layer that other stacks depend on.
  * Tables use RETAIN policy to prevent accidental data loss.
+ *
+ * Resource names are derived from stack name: {StackName}-{slug}
  */
 export class DataStack extends cdk.Stack {
   public readonly tables: {
@@ -25,6 +27,9 @@ export class DataStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // Helper to create resource name: {StackName}-{slug}
+    const resourceName = (slug: string) => `${this.stackName}-${slug}`;
+
     // =======================================================================
     // DynamoDB Tables
     // =======================================================================
@@ -32,7 +37,7 @@ export class DataStack extends cdk.Stack {
     // KEL (Key Event Log) Table
     // PK: aid (AID/prefix), SK: sn (zero-padded sequence number)
     const kelTable = new dynamodb.Table(this, "KelTable", {
-      tableName: TABLE_NAMES.KEL,
+      tableName: resourceName(TABLE_SLUGS.KEL),
       partitionKey: { name: "aid", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "sn", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
@@ -43,7 +48,7 @@ export class DataStack extends cdk.Stack {
     // States Table (current key state for each identifier)
     // PK: aid (AID/prefix)
     const statesTable = new dynamodb.Table(this, "StatesTable", {
-      tableName: TABLE_NAMES.STATES,
+      tableName: resourceName(TABLE_SLUGS.STATES),
       partitionKey: { name: "aid", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
@@ -52,7 +57,7 @@ export class DataStack extends cdk.Stack {
     // Receipts Table (witness receipts for events)
     // PK: event_digest, SK: witness_aid
     const receiptsTable = new dynamodb.Table(this, "ReceiptsTable", {
-      tableName: TABLE_NAMES.RECEIPTS,
+      tableName: resourceName(TABLE_SLUGS.RECEIPTS),
       partitionKey: {
         name: "event_digest",
         type: dynamodb.AttributeType.STRING,
@@ -66,7 +71,7 @@ export class DataStack extends cdk.Stack {
     // PK: aid, SK: reason#digest
     // TTL enabled for automatic expiration
     const escrowsTable = new dynamodb.Table(this, "EscrowsTable", {
-      tableName: TABLE_NAMES.ESCROWS,
+      tableName: resourceName(TABLE_SLUGS.ESCROWS),
       partitionKey: { name: "aid", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "reason_digest", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
@@ -76,7 +81,7 @@ export class DataStack extends cdk.Stack {
 
     // Global Secondary Index for escrows - to query all escrows regardless of aid
     escrowsTable.addGlobalSecondaryIndex({
-      indexName: "escrows-by-reason",
+      indexName: `${TABLE_SLUGS.ESCROWS}-${GSI_SLUGS.ESCROWS_BY_REASON}`,
       partitionKey: { name: "reason", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "created", type: dynamodb.AttributeType.NUMBER },
       projectionType: dynamodb.ProjectionType.ALL,
@@ -113,25 +118,25 @@ export class DataStack extends cdk.Stack {
     new cdk.CfnOutput(this, "KelTableName", {
       value: kelTable.tableName,
       description: "DynamoDB table for Key Event Log",
-      exportName: "KerihostKelTableName",
+      exportName: `${this.stackName}-KelTableName`,
     });
 
     new cdk.CfnOutput(this, "StatesTableName", {
       value: statesTable.tableName,
       description: "DynamoDB table for Key States",
-      exportName: "KerihostStatesTableName",
+      exportName: `${this.stackName}-StatesTableName`,
     });
 
     new cdk.CfnOutput(this, "ReceiptsTableName", {
       value: receiptsTable.tableName,
       description: "DynamoDB table for Witness Receipts",
-      exportName: "KerihostReceiptsTableName",
+      exportName: `${this.stackName}-ReceiptsTableName`,
     });
 
     new cdk.CfnOutput(this, "EscrowsTableName", {
       value: escrowsTable.tableName,
       description: "DynamoDB table for Escrowed Events",
-      exportName: "KerihostEscrowsTableName",
+      exportName: `${this.stackName}-EscrowsTableName`,
     });
   }
 }
