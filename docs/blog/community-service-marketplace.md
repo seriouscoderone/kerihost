@@ -87,6 +87,46 @@ Every act of service becomes:
 
 ---
 
+## Sometimes It's Just a Visit
+
+The simplest version of this is almost embarrassingly simple.
+
+**Someone posts:** "I'd like a visitor this week."
+
+**Someone responds:** "I'd like to visit someone this week."
+
+That's it. That's the whole interaction.
+
+No elaborate service description. No complex negotiation. Just:
+- A person who wants company
+- A person willing to give company
+- A match
+- A visit
+- An attestation: "We visited. It was good."
+
+### Why This Matters
+
+Loneliness is an epidemic. Elders isolated. New parents overwhelmed. People working from home who haven't had a real conversation in days.
+
+The barrier to asking for help is shame. "I shouldn't need this." "I don't want to be a burden."
+
+But in a community service marketplace, asking for a visit isn't weakness — it's participation. You're creating an opportunity for someone else to contribute. You're letting them build reputation. You're part of the circulation.
+
+**Requesting a visit is a gift to the visitor.**
+
+### The Visit OADA
+
+**Offer:** "I'm available to visit someone Tuesday afternoon."
+**Accept:** "I'd welcome a visit Tuesday."
+**Disclose:** "I'm housebound / I just like company / I make great coffee"
+**Attest:** "We had a good visit." / "We had a good visit."
+
+Both parties attest. Both build community reputation. Both gave something. Both received something.
+
+It's that easy. It should be that easy.
+
+---
+
 ## The Community Service Marketplace
 
 ### Not a Platform — A Protocol
