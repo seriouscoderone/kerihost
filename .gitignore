@@ -41,3 +41,9 @@ coverage/
 
 # Lambda packaging
 *.zip
+
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata

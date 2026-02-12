@@ -1,0 +1,78 @@
+# KERI.host Blog
+# Built with Jekyll + Minimal Mistakes on GitHub Pages
+
+# Site settings
+title: "KERI.host"
+subtitle: "Infrastructure for the rest of us"
+description: "Building decentralized identity infrastructure that treats people as partners, not products."
+url: "https://blog.keri.host"
+baseurl: ""
+repository: "seriouscoderone/kerihost"
+
+# Theme
+remote_theme: mmistakes/minimal-mistakes
+minimal_mistakes_skin: "air"
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-include-cache
+  - jekyll-paginate
+
+# Pagination
+paginate: 10
+paginate_path: /page:num/
+
+# Permalink structure
+permalink: /blog/:year/:month/:day/:title/
+
+# Reading
+show_date: true
+date_format: "%B %-d, %Y"
+words_per_minute: 200
+
+# Author (organizational voice, not personal)
+author:
+  name: "KERI.host"
+  bio: "Infrastructure for the rest of us. Forkable. Self-hostable. Never a gatekeeper."
+  location: "Decentralized"
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/seriouscoderone/kerihost"
+
+# Site defaults
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: false
+      read_time: true
+      comments: false
+      share: false
+      related: true
+      toc: true
+      toc_sticky: true
+
+# Exclude from processing
+exclude:
+  - blog/
+  - "*.ts"
+  - "*.js"
+  - "*.json"
+  - node_modules/
+  - infrastructure/
+  - packages/
+  - target/
+  - Cargo.toml
+  - Cargo.lock
+  - package.json
+  - package-lock.json
+  - tsconfig.json
+  - README.md
+  - CLAUDE.md
+  - .claude/

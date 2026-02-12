@@ -102,6 +102,14 @@ export class ApiStack extends cdk.Stack {
       ),
     });
 
+    // Route53 CNAME for blog.keri.host → GitHub Pages
+    new route53.CnameRecord(this, "BlogCnameRecord", {
+      zone: hostedZone,
+      recordName: "blog.keri.host",
+      domainName: "seriouscoderone.github.io",
+      ttl: cdk.Duration.seconds(300),
+    });
+
     // =======================================================================
     // Exports
     // =======================================================================
