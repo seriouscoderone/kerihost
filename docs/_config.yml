@@ -59,6 +59,9 @@ author:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/seriouscoderone/kerihost"
+    - label: "Sponsor"
+      icon: "fas fa-fw fa-heart"
+      url: "https://github.com/sponsors/seriouscoderone"
 
 # Site defaults
 defaults:
