@@ -28,6 +28,17 @@ paginate_path: /page:num/
 # Permalink structure
 permalink: /blog/:year/:month/:day/:title/
 
+# Comments (Giscus - GitHub Discussions)
+comments:
+  provider: "giscus"
+  giscus:
+    repo_id: "R_kgDORKWezA"
+    category_name: "General"
+    category_id: "DIC_kwDORKWezM4C2ZIn"
+    discussion_term: "pathname"
+    reactions_enabled: "1"
+    theme: "light"
+
 # Reading
 show_date: true
 date_format: "%B %-d, %Y"
@@ -52,7 +63,7 @@ defaults:
       layout: single
       author_profile: false
       read_time: true
-      comments: false
+      comments: true
       share: false
       related: true
       toc: true
