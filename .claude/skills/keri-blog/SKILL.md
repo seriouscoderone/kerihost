@@ -117,29 +117,9 @@ YYYY-MM-DD-slug-name.md
 
 Use today's date for new posts. Slugs should be lowercase, hyphenated, descriptive.
 
-## Existing Posts Reference
+## Existing Posts
 
-When writing new posts, maintain consistency with these existing pieces:
-
-| Post | Categories | Key Themes |
-|------|-----------|------------|
-| `keri-ai-security-framework` | ai, technical | Delegated AIDs for AI agents, scoped authority, threat elimination |
-| `data-at-the-edge` | identity, philosophy | Data sovereignty, KERI stores, partnership vs extraction |
-| `actual-value-economy` | economy, philosophy | Removing intermediaries, direct value exchange, efficiency |
-| `earth-ready-for-peace` | philosophy | Earth as mother, evolutionary perspective, infrastructure for peace |
-| `community-service-marketplace` | community, economy | OADA pattern, mutual aid, visits, reputation, time banking |
-| `why-digital-identity` | identity | 10 reasons for self-sovereign ID, practical benefits |
-| `1990-internet-moment` | identity, philosophy | Historical parallel, network effects, paradigm shift |
-| `follow-people-not-platforms` | identity, philosophy | Portable relationships, platform independence |
-| `the-new-crypto` | technical, economy | KERI vs blockchain, MyCHIPs credit clearing, ACDCs as contracts |
-| `buy-your-ai-dont-rent-it` | ai, philosophy | AI ownership, local inference, sovereignty |
-| `fifteen-million-dollars-and-no-identity-layer` | economy, identity | CTO challenge, missing infrastructure |
-| `you-can-leave-whenever-you-want` | identity | Pre-rotation, transition from Apple/Google, exit freedom |
-| `identity-theft-protection-you-actually-control` | identity | Multi-layer protection, key management, trusted circles |
-| `accept-these-terms-or-what` | identity, philosophy | Terms of service, ACDC-based agreements, informed consent |
-| `money-is-people` | economy, philosophy | Credit vs commodity money, MyCHIPs, relationship-based wealth |
-| `the-last-satisfying-application` | ai, technical | AID + ACDC + LLM formula, contracts replace platforms |
-| `elon-is-right-about-the-what` | ai, philosophy | Musk AI prediction, who owns the identity layer |
+Before writing a new post, scan `docs/_posts/` to understand what's already been covered. Read the frontmatter (`title`, `categories`, `tags`, `theme_summary`) of existing posts to avoid contradictions, find cross-link opportunities, and maintain thematic consistency. Do not duplicate arguments already made in other posts — reference and build on them instead.
 
 ## Content Architecture Context
 
