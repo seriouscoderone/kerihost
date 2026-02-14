@@ -42,6 +42,11 @@ coverage/
 # Lambda packaging
 *.zip
 
+# Scripts working directories
+scripts/staging/
+scripts/markdown/
+scripts/.venv/
+
 # Jekyll
 _site/
 .sass-cache/

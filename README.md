@@ -65,6 +65,8 @@ The infrastructure is organized into three AWS CDK stacks:
 - Node.js (LTS)
 - AWS CLI configured
 - [cargo-lambda](https://www.cargo-lambda.info/)
+- [pandoc](https://pandoc.org/) — HTML to Markdown conversion (`brew install pandoc`)
+- Python 3.10+ — PDF to Markdown conversion via [pymupdf4llm](https://pypi.org/project/pymupdf4llm/)
 
 ### Build
 
