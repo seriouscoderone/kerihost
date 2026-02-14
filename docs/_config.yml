@@ -13,6 +13,12 @@ repository: "seriouscoderone/kerihost"
 remote_theme: mmistakes/minimal-mistakes
 minimal_mistakes_skin: "air"
 
+# Analytics
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "G-L3JFYTT1JH"
+
 # Plugins
 plugins:
   - jekyll-feed
