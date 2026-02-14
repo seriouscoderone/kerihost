@@ -38,7 +38,7 @@ Musk described the destination. He didn't describe the road. And the road determ
 
 ## The Missing Architecture
 
-We wrote recently about a formula: **AID + ACDC + LLM = every application.** A cryptographic identity, machine-readable contracts, and an AI that understands both. That's it.
+We wrote recently about a formula: **[AID + ACDC + LLM = every application](/blog/2026/02/14/the-last-satisfying-application/).** A cryptographic identity, machine-readable contracts, and an AI that understands both. That's it.
 
 That post was about the end of enterprise platforms. But it's also the answer to the question Musk left open.
 

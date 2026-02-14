@@ -80,6 +80,8 @@ That was a reasonable solution for empires managing armies. It was never the onl
 
 ## MyCHIPs: Credit for the Digital Age
 
+We introduced MyCHIPs in [The New Crypto](/blog/2026/02/13/the-new-crypto/) as a post-blockchain protocol. But that post focused on the technical contrast with blockchain. Here's the deeper story.
+
 The problem with traditional credit networks was scale. They worked in villages where everyone knew everyone. They broke down when you needed to transact with someone outside your circle of trust.
 
 This is the problem MyCHIPs solves.
