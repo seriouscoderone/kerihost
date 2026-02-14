@@ -40,6 +40,7 @@ Every post must embody this voice. It is non-negotiable.
 - Acknowledge what doesn't exist yet (use `*TODO:*` notes)
 - Treat the reader as intelligent and capable of nuance
 - Connect individual posts to the broader KERI.host vision
+- **Cross-link related posts:** When referencing ideas from another blog post, always include a markdown link using the permalink format: `[Post Title](/blog/YYYY/MM/DD/slug-name/)`. Read `docs/_posts/` to find the correct slug and date. Also add a `**Related:**` link at the bottom of posts that have a companion piece.
 - End with a clear, honest assessment of where we are
 
 ## Pattern Vocabulary
@@ -129,6 +130,16 @@ When writing new posts, maintain consistency with these existing pieces:
 | `community-service-marketplace` | community, economy | OADA pattern, mutual aid, visits, reputation, time banking |
 | `why-digital-identity` | identity | 10 reasons for self-sovereign ID, practical benefits |
 | `1990-internet-moment` | identity, philosophy | Historical parallel, network effects, paradigm shift |
+| `follow-people-not-platforms` | identity, philosophy | Portable relationships, platform independence |
+| `the-new-crypto` | technical, economy | KERI vs blockchain, MyCHIPs credit clearing, ACDCs as contracts |
+| `buy-your-ai-dont-rent-it` | ai, philosophy | AI ownership, local inference, sovereignty |
+| `fifteen-million-dollars-and-no-identity-layer` | economy, identity | CTO challenge, missing infrastructure |
+| `you-can-leave-whenever-you-want` | identity | Pre-rotation, transition from Apple/Google, exit freedom |
+| `identity-theft-protection-you-actually-control` | identity | Multi-layer protection, key management, trusted circles |
+| `accept-these-terms-or-what` | identity, philosophy | Terms of service, ACDC-based agreements, informed consent |
+| `money-is-people` | economy, philosophy | Credit vs commodity money, MyCHIPs, relationship-based wealth |
+| `the-last-satisfying-application` | ai, technical | AID + ACDC + LLM formula, contracts replace platforms |
+| `elon-is-right-about-the-what` | ai, philosophy | Musk AI prediction, who owns the identity layer |
 
 ## Content Architecture Context
 
