@@ -185,4 +185,4 @@ Money is not a thing you get. Money is a promise between people. The better your
 
 Not metaphorically. Actually.
 
-*TODO: Add MyCHIPs technical deep-dive (lift protocol mechanics, tally structure, credit limits), specific examples of credit clearing in practice, comparison with hawala and other historical credit networks, exploration of how ACDC schemas would represent MyCHIPs tallies, and connection to the community service marketplace (credit for community service as literal community currency)*
+{% comment %}TODO: Add MyCHIPs technical deep-dive (lift protocol mechanics, tally structure, credit limits), specific examples of credit clearing in practice, comparison with hawala and other historical credit networks, exploration of how ACDC schemas would represent MyCHIPs tallies, and connection to the community service marketplace (credit for community service as literal community currency){% endcomment %}

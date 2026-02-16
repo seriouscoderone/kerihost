@@ -365,4 +365,4 @@ The choice is whether to take it back.
 
 *Your identity. Your data. Your value. Your choice.*
 
-*TODO: Add practical getting-started guide and technical overview*
+{% comment %}TODO: Add practical getting-started guide and technical overview{% endcomment %}

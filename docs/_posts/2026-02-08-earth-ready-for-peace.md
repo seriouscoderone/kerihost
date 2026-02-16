@@ -139,4 +139,4 @@ Maybe it's time to use that inheritance.
 
 Maybe it's time to let the Earth — and ourselves — rest.
 
-*TODO: Expand with historical specifics, scientific grounding, and connection to KERI.host mission*
+{% comment %}TODO: Expand with historical specifics, scientific grounding, and connection to KERI.host mission{% endcomment %}

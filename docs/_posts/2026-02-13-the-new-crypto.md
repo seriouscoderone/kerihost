@@ -182,4 +182,4 @@ KERI, MyCHIPs, and the systems being built around them represent the next step: 
 
 Not a better blockchain. Something new.
 
-*TODO: Add technical comparison of KERI vs specific blockchain identity solutions (ENS, DID:ethr, etc.), deeper MyCHIPs integration patterns with KERI identifiers, and reference to Ryan Fugger's original Ripple vision that MyCHIPs builds upon*
+{% comment %}TODO: Add technical comparison of KERI vs specific blockchain identity solutions (ENS, DID:ethr, etc.), deeper MyCHIPs integration patterns with KERI identifiers, and reference to Ryan Fugger's original Ripple vision that MyCHIPs builds upon{% endcomment %}

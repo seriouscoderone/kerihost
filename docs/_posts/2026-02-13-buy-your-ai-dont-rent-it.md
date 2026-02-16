@@ -188,4 +188,4 @@ KERI provides the trust infrastructure. Owned AI provides the usability layer. T
 
 That's the recipe. Identity you own. Intelligence you own. Community you build. Big Tech not required.
 
-*TODO: Add specific examples of local AI models suitable for KERI agent integration, technical architecture for KERI agent + local LLM, comparison of total cost of ownership (AI product vs lifetime AI service subscription), and real-world community scenarios showing the management overhead reduction*
+{% comment %}TODO: Add specific examples of local AI models suitable for KERI agent integration, technical architecture for KERI agent + local LLM, comparison of total cost of ownership (AI product vs lifetime AI service subscription), and real-world community scenarios showing the management overhead reduction{% endcomment %}

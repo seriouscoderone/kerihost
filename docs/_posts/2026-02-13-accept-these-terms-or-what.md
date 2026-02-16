@@ -199,4 +199,4 @@ Accept these terms... or choose different ones. From a provider who competes for
 
 That's the "or what" that doesn't exist today. ACDCs build it.
 
-*TODO: Add specific ACDC schema examples for healthcare service agreements, comparison of current privacy regulation approaches (HIPAA, GDPR consent mechanisms) vs ACDC-based contract transparency, economic analysis of how contract visibility changes market dynamics, technical walkthrough of agent-mediated contract review flow, and real examples of industries where terms competition already exists in nascent form*
+{% comment %}TODO: Add specific ACDC schema examples for healthcare service agreements, comparison of current privacy regulation approaches (HIPAA, GDPR consent mechanisms) vs ACDC-based contract transparency, economic analysis of how contract visibility changes market dynamics, technical walkthrough of agent-mediated contract review flow, and real examples of industries where terms competition already exists in nascent form{% endcomment %}

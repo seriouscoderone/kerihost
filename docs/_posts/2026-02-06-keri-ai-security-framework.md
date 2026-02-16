@@ -213,4 +213,4 @@ The combination of KERI's cryptographic accountability with AI agent frameworks 
 
 This isn't incremental improvement. It's a paradigm shift in how we think about AI security.
 
-*TODO: Add diagrams, code examples, and real-world scenarios*
+{% comment %}TODO: Add diagrams, code examples, and real-world scenarios{% endcomment %}

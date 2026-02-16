@@ -265,4 +265,4 @@ Not "free" services that cost your privacy. Real services. Contractual relations
 
 The infrastructure is being built. The question is whether we'll use it.
 
-*TODO: Add examples of KERI-native services, economic models, and transition strategies*
+{% comment %}TODO: Add examples of KERI-native services, economic models, and transition strategies{% endcomment %}

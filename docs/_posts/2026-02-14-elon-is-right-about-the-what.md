@@ -150,4 +150,4 @@ That's not a product question. It's a civilization question. And it has exactly 
 
 We're building toward the first answer. The clock is ticking on the second.
 
-*TODO: Add specific examples of how Apple/Google could bootstrap KERI identifiers within existing ecosystems, technical comparison of xAI Grok vs a KERI-native agent architecture, and timeline analysis of credential ecosystem development needed for the five-year window*
+{% comment %}TODO: Add specific examples of how Apple/Google could bootstrap KERI identifiers within existing ecosystems, technical comparison of xAI Grok vs a KERI-native agent architecture, and timeline analysis of credential ecosystem development needed for the five-year window{% endcomment %}

@@ -281,4 +281,4 @@ Now imagine explaining what digital identity enables to someone today. Their rea
 
 *We're at the 1990 moment. The things that sound crazy now will be obvious in hindsight. The things we can't imagine will be the most important.*
 
-*TODO: Add timeline predictions, early use cases, and historical parallels*
+{% comment %}TODO: Add timeline predictions, early use cases, and historical parallels{% endcomment %}

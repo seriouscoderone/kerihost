@@ -227,4 +227,4 @@ Utah is building the identity layer. KERI is the architecture that makes it work
 
 The pieces are on the table.
 
-*TODO: Add specific ACDC schema examples for educational credentials and LERs, comparison with W3C Verifiable Credentials and Open Badges 3.0 approaches, technical architecture for a KERI-native talent marketplace, analysis of which CTO Challenge requirements KERI addresses directly, and detailed mapping of SB275 provisions to KERI capabilities*
+{% comment %}TODO: Add specific ACDC schema examples for educational credentials and LERs, comparison with W3C Verifiable Credentials and Open Badges 3.0 approaches, technical architecture for a KERI-native talent marketplace, analysis of which CTO Challenge requirements KERI addresses directly, and detailed mapping of SB275 provisions to KERI capabilities{% endcomment %}

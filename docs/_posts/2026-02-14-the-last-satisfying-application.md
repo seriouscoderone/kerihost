@@ -162,4 +162,4 @@ The building is the contracts. It always was.
 
 **Related:** [Elon Is Right About the What](/blog/2026/02/14/elon-is-right-about-the-what/) explores what happens when this vision collides with Big Tech's version of AI-replaces-everything.
 
-*TODO: Add technical architecture showing ACDC schema design for role-based contracts, concrete examples of contract-to-UI generation with current LLM capabilities, comparison with smart contracts (and why this is fundamentally different), and exploration of the credential ecosystem needed for professional qualifications*
+{% comment %}TODO: Add technical architecture showing ACDC schema design for role-based contracts, concrete examples of contract-to-UI generation with current LLM capabilities, comparison with smart contracts (and why this is fundamentally different), and exploration of the credential ecosystem needed for professional qualifications{% endcomment %}

@@ -318,4 +318,4 @@ Covenant. Community. Contract.
 
 Lifting one another's burdens — verifiably, sustainably, together.
 
-*TODO: Add concrete examples, technical architecture, and pilot community design*
+{% comment %}TODO: Add concrete examples, technical architecture, and pilot community design{% endcomment %}

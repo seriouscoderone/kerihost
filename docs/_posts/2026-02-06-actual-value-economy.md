@@ -220,4 +220,4 @@ Not because efficiency is a virtue in itself, but because the alternative is was
 
 The overhead economy had its run. Time for the actual value economy.
 
-*TODO: Add concrete examples, economic models, and transition pathways*
+{% comment %}TODO: Add concrete examples, economic models, and transition pathways{% endcomment %}

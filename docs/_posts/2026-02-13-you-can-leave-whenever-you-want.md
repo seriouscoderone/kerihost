@@ -149,4 +149,4 @@ No permission. No migration. No asking nicely.
 
 You just rotate.
 
-*TODO: Add technical diagram of pre-rotation flow, concrete example of AID creation by platform followed by user-initiated rotation, comparison with current platform account portability (Google Takeout, Apple data export) to show how KERI rotation is fundamentally different, and timeline estimate for realistic platform adoption scenarios*
+{% comment %}TODO: Add technical diagram of pre-rotation flow, concrete example of AID creation by platform followed by user-initiated rotation, comparison with current platform account portability (Google Takeout, Apple data export) to show how KERI rotation is fundamentally different, and timeline estimate for realistic platform adoption scenarios{% endcomment %}

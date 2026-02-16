@@ -231,4 +231,4 @@ A piece of paper in a safe. A circle of people who care about you. Math that doe
 
 That's identity theft protection you actually control.
 
-*TODO: Add step-by-step setup guides for each level, specific hardware recommendations for key storage, walkthrough of a recovery scenario using a trusted circle, comparison with existing recovery mechanisms (Apple Account Recovery Contacts, Google Inactive Account Manager), and technical diagrams of multi-sig threshold structures*
+{% comment %}TODO: Add step-by-step setup guides for each level, specific hardware recommendations for key storage, walkthrough of a recovery scenario using a trusted circle, comparison with existing recovery mechanisms (Apple Account Recovery Contacts, Google Inactive Account Manager), and technical diagrams of multi-sig threshold structures{% endcomment %}

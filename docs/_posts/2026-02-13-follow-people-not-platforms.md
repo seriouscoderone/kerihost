@@ -175,4 +175,4 @@ Or you can follow people. Actually follow them. Directly. Verifiably. On your te
 
 The technology to do this exists today. The question is whether we'll keep accepting the platform's version of "follow" — or start building something that means what it says.
 
-*TODO: Add technical walkthrough of KERI-based content subscription, comparison of subscription models (RSS, ActivityPub, Nostr) with KERI approach, and concrete examples of community-based follow networks*
+{% comment %}TODO: Add technical walkthrough of KERI-based content subscription, comparison of subscription models (RSS, ActivityPub, Nostr) with KERI approach, and concrete examples of community-based follow networks{% endcomment %}
