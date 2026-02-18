@@ -16,7 +16,8 @@ pub use interaction::*;
 pub use rotation::*;
 
 use crate::error::{CoreError, CoreResult};
-use cesride::{Diger, Indexer, Prefixer, Siger, Verfer};
+use cesride::{Diger, Indexer, Matter, Prefixer, Siger, Verfer};
+use parside::{CesrGroup, Message};
 use serde::{Deserialize, Serialize};
 
 /// KERI event types
@@ -91,14 +92,44 @@ impl Threshold {
     }
 
     /// Check if signatures meet threshold
+    ///
+    /// For weighted thresholds, `satisfied_indices` should be the indices of keys
+    /// with valid signatures. For simple thresholds, only `sig_count` matters.
     pub fn is_satisfied(&self, sig_count: usize, _key_count: usize) -> bool {
         match self {
             Threshold::Simple(n) => sig_count >= *n as usize,
-            Threshold::Weighted(_weights) => {
-                // For weighted thresholds, need more complex logic
-                // For now, treat as simple majority
-                // TODO: Implement proper weighted threshold checking
-                sig_count > 0
+            Threshold::Weighted(_) => {
+                // Any clause satisfied means threshold is met
+                // This simple check assumes signatures are for indices 0..sig_count
+                // For proper checking, use is_satisfied_by_indices
+                self.is_satisfied_by_indices(&(0..sig_count).collect::<Vec<_>>())
+            }
+        }
+    }
+
+    /// Check if weighted threshold is satisfied by specific key indices
+    pub fn is_satisfied_by_indices(&self, indices: &[usize]) -> bool {
+        match self {
+            Threshold::Simple(n) => indices.len() >= *n as usize,
+            Threshold::Weighted(clauses) => {
+                // Each inner vec is a clause; satisfaction requires meeting ANY clause
+                // Within a clause, sum weights of keys with valid signatures
+                // Clause is satisfied if sum >= 1
+                clauses.iter().any(|clause| {
+                    let mut sum_num: u64 = 0;
+                    let mut sum_den: u64 = 1; // LCM denominator
+                    for (key_idx, weight_str) in clause.iter().enumerate() {
+                        if indices.contains(&key_idx) {
+                            if let Some((num, den)) = parse_fraction(weight_str) {
+                                // Add num/den to sum: sum = sum_num/sum_den + num/den
+                                sum_num = sum_num * den + num * sum_den;
+                                sum_den *= den;
+                            }
+                        }
+                    }
+                    // Satisfied if sum >= 1, i.e., sum_num >= sum_den
+                    sum_num >= sum_den
+                })
             }
         }
     }
@@ -107,7 +138,14 @@ impl Threshold {
     pub fn min_signatures(&self) -> usize {
         match self {
             Threshold::Simple(n) => *n as usize,
-            Threshold::Weighted(_) => 1, // Conservative minimum
+            Threshold::Weighted(clauses) => {
+                // Find the clause that requires the fewest signatures
+                clauses
+                    .iter()
+                    .map(|clause| min_sigs_for_clause(clause))
+                    .min()
+                    .unwrap_or(1)
+            }
         }
     }
 }
@@ -175,6 +213,12 @@ pub struct KeyEvent {
     pub witnesses: Vec<String>,
     /// Anchors/seals
     pub anchors: Vec<Anchor>,
+    /// Witnesses to remove (rotation only, from "br" field)
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub witnesses_remove: Vec<String>,
+    /// Witnesses to add (rotation only, from "ba" field)
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub witnesses_add: Vec<String>,
     /// Delegator prefix (for delegated events)
     pub delegator: Option<String>,
     /// Original serialized bytes (for signing/verification)
@@ -190,6 +234,11 @@ impl KeyEvent {
         // Parse as JSON
         let ked: serde_json::Value = serde_json::from_slice(raw)
             .map_err(|e| CoreError::CesrParse(format!("JSON parse error: {}", e)))?;
+
+        // Validate version string if present
+        if let Some(v) = ked["v"].as_str() {
+            parse_version_string(v)?;
+        }
 
         // Extract event type
         let event_type_str = ked["t"]
@@ -268,6 +317,25 @@ impl KeyEvent {
             })
             .unwrap_or_default();
 
+        // Extract witness changes (rotation only)
+        let witnesses_remove: Vec<String> = ked["br"]
+            .as_array()
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|w| w.as_str().map(|s| s.to_string()))
+                    .collect()
+            })
+            .unwrap_or_default();
+
+        let witnesses_add: Vec<String> = ked["ba"]
+            .as_array()
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|w| w.as_str().map(|s| s.to_string()))
+                    .collect()
+            })
+            .unwrap_or_default();
+
         // Extract delegator (for dip/drt)
         let delegator = ked["di"].as_str().map(|s| s.to_string());
 
@@ -276,6 +344,9 @@ impl KeyEvent {
             .as_str()
             .ok_or_else(|| CoreError::InvalidEvent("missing digest".to_string()))?
             .to_string();
+
+        // SAID verification: verify the digest field matches the event content
+        verify_said(raw, &digest)?;
 
         Ok(KeyEvent {
             prefix,
@@ -288,6 +359,8 @@ impl KeyEvent {
             witness_threshold,
             witnesses,
             anchors,
+            witnesses_remove,
+            witnesses_add,
             delegator,
             raw: raw.to_vec(),
             digest,
@@ -365,11 +438,45 @@ impl SignedEvent {
 
     /// Parse signed event from CESR stream
     pub fn from_cesr(raw: &[u8]) -> CoreResult<Self> {
-        // First parse the event
-        let (event_end, event) = parse_event_from_stream(raw)?;
+        // Parse the JSON event — from_stream_bytes returns remaining bytes
+        let (after_event, first_msg) = Message::from_stream_bytes(raw)
+            .map_err(|e| CoreError::CesrParse(format!("parside: {}", e)))?;
 
-        // Then parse signatures from remainder
-        let signatures = parse_signatures(&raw[event_end..])?;
+        // Verify it's a JSON payload
+        match &first_msg {
+            Message::Custom { .. } => {}
+            _ => {
+                return Err(CoreError::CesrParse(
+                    "Expected JSON event as first message".into(),
+                ))
+            }
+        }
+
+        // Compute event size from remaining bytes — preserves original raw bytes for SAID
+        let event_size = raw.len() - after_event.len();
+        let event = KeyEvent::from_cesr(&raw[..event_size])?;
+
+        // Parse attachment groups from remaining bytes
+        let mut signatures = Vec::new();
+        let mut rest = after_event;
+        while !rest.is_empty() {
+            let (remaining, msg) = Message::from_stream_bytes(rest)
+                .map_err(|e| CoreError::CesrParse(format!("parside attachment: {}", e)))?;
+
+            if let Message::Group { value } = msg {
+                if let CesrGroup::ControllerIdxSigsVariant { value: sigs } = value {
+                    for sig in &sigs.value {
+                        signatures.push(IndexedSignature::from_siger(&sig.siger)?);
+                    }
+                }
+                // Other group types (witness sigs, receipts, etc.) silently ignored for now
+            }
+
+            if remaining.len() == rest.len() {
+                break; // No progress, avoid infinite loop
+            }
+            rest = remaining;
+        }
 
         Ok(SignedEvent { event, signatures })
     }
@@ -408,103 +515,201 @@ fn parse_threshold(value: &serde_json::Value) -> CoreResult<Threshold> {
     }
 }
 
-fn parse_event_from_stream(raw: &[u8]) -> CoreResult<(usize, KeyEvent)> {
-    // Find the end of the JSON event (before attachments)
-    // KERI events are JSON followed by CESR attachments
-    let mut depth = 0;
-    let mut in_string = false;
-    let mut escape = false;
-    let mut end = 0;
+/// Verify SAID (Self-Addressing IDentifier) of an event
+///
+/// Takes the original raw bytes, replaces the "d" field value with placeholder
+/// chars of the correct length, computes digest, and compares.
+fn verify_said(raw: &[u8], expected_digest: &str) -> CoreResult<()> {
+    // Determine the digest algorithm from the expected digest code
+    let diger = Diger::new_with_qb64(expected_digest)
+        .map_err(|e| CoreError::CesrParse(format!("Invalid SAID: {}", e)))?;
+    let placeholder = "#".repeat(expected_digest.len());
 
-    for (i, &b) in raw.iter().enumerate() {
+    // Find and replace the "d" field value in the raw bytes
+    // Look for "d":"<value>" pattern
+    let raw_str = std::str::from_utf8(raw)
+        .map_err(|e| CoreError::CesrParse(format!("Invalid UTF-8 in event: {}", e)))?;
+
+    // Find the "d" field and replace its value with placeholder
+    let replaced = replace_json_field_value(raw_str, "d", &placeholder)
+        .ok_or_else(|| CoreError::InvalidEvent("Could not find 'd' field for SAID verification".to_string()))?;
+
+    // Compute digest using the same algorithm
+    let code = Matter::code(&diger);
+    let computed = Diger::new_with_ser(replaced.as_bytes(), Some(&code))
+        .map_err(|e| CoreError::CesrParse(format!("Failed to compute SAID: {}", e)))?;
+
+    let computed_qb64 = computed
+        .qb64()
+        .map_err(|e| CoreError::CesrParse(format!("Failed to encode computed SAID: {}", e)))?;
+
+    if computed_qb64 != expected_digest {
+        return Err(CoreError::InvalidEvent(format!(
+            "SAID mismatch: expected {}, computed {}",
+            expected_digest, computed_qb64
+        )));
+    }
+
+    Ok(())
+}
+
+/// Replace a JSON string field's value in raw text, preserving all formatting
+fn replace_json_field_value(json: &str, field: &str, replacement: &str) -> Option<String> {
+    // Look for "field":"value" pattern (field must be a string value)
+    let pattern = format!("\"{}\":\"", field);
+    // Also check with space after colon
+    let pattern_spaced = format!("\"{}\": \"", field);
+
+    let (start, prefix_len) = if let Some(pos) = json.find(&pattern) {
+        (pos, pattern.len())
+    } else if let Some(pos) = json.find(&pattern_spaced) {
+        (pos, pattern_spaced.len())
+    } else {
+        return None;
+    };
+
+    let value_start = start + prefix_len;
+    // Find the closing quote of the value (handle escaped quotes)
+    let rest = &json[value_start..];
+    let mut end = 0;
+    let mut escape = false;
+    for (i, c) in rest.chars().enumerate() {
         if escape {
             escape = false;
             continue;
         }
-
-        match b {
-            b'\\' if in_string => escape = true,
-            b'"' => in_string = !in_string,
-            b'{' if !in_string => depth += 1,
-            b'}' if !in_string => {
-                depth -= 1;
-                if depth == 0 {
-                    end = i + 1;
-                    break;
-                }
-            }
-            _ => {}
+        if c == '\\' {
+            escape = true;
+            continue;
+        }
+        if c == '"' {
+            end = i;
+            break;
         }
     }
 
-    if end == 0 {
-        return Err(CoreError::CesrParse("Could not find event end".to_string()));
-    }
-
-    let event = KeyEvent::from_cesr(&raw[..end])?;
-    Ok((end, event))
+    let mut result = String::with_capacity(json.len());
+    result.push_str(&json[..value_start]);
+    result.push_str(replacement);
+    result.push_str(&json[value_start + end..]);
+    Some(result)
 }
 
-fn parse_signatures(raw: &[u8]) -> CoreResult<Vec<IndexedSignature>> {
-    if raw.is_empty() {
-        return Ok(vec![]);
-    }
-
-    let mut signatures = Vec::new();
-
-    // Parse CESR counter and signatures
-    // Counter format: -A## where ## is base64 count
-    if raw.len() >= 4 && raw[0] == b'-' {
-        let counter_code = std::str::from_utf8(&raw[..2])
-            .map_err(|e| CoreError::CesrParse(e.to_string()))?;
-
-        if counter_code == "-A" {
-            // Controller indexed signatures
-            let count_b64 = std::str::from_utf8(&raw[2..4])
-                .map_err(|e| CoreError::CesrParse(e.to_string()))?;
-            let count = decode_b64_count(count_b64)?;
-
-            let mut offset = 4;
-            for _ in 0..count {
-                if offset + 88 > raw.len() {
-                    break;
-                }
-
-                let sig_qb64 = std::str::from_utf8(&raw[offset..offset + 88])
-                    .map_err(|e| CoreError::CesrParse(e.to_string()))?;
-
-                // Parse index from signature code
-                let siger = Siger::new_with_qb64(sig_qb64, None)
-                    .map_err(|e| CoreError::CesrParse(e.to_string()))?;
-
-                signatures.push(IndexedSignature::from_siger(&siger)?);
-                offset += 88;
+/// Parse a fractional weight string like "1/2" into (numerator, denominator)
+fn parse_fraction(s: &str) -> Option<(u64, u64)> {
+    let parts: Vec<&str> = s.split('/').collect();
+    match parts.len() {
+        1 => {
+            let n: u64 = parts[0].parse().ok()?;
+            Some((n, 1))
+        }
+        2 => {
+            let num: u64 = parts[0].parse().ok()?;
+            let den: u64 = parts[1].parse().ok()?;
+            if den == 0 {
+                return None;
             }
+            Some((num, den))
+        }
+        _ => None,
+    }
+}
+
+/// Calculate minimum signatures needed to satisfy a single weighted clause
+fn min_sigs_for_clause(clause: &[String]) -> usize {
+    // Sort weights descending, greedily pick until sum >= 1
+    let mut weights: Vec<(u64, u64)> = clause
+        .iter()
+        .filter_map(|s| parse_fraction(s))
+        .collect();
+    // Sort descending by value (num/den)
+    weights.sort_by(|a, b| (b.0 * a.1).cmp(&(a.0 * b.1)));
+
+    let mut sum_num: u64 = 0;
+    let mut sum_den: u64 = 1;
+    let mut count = 0;
+    for (num, den) in &weights {
+        sum_num = sum_num * den + num * sum_den;
+        sum_den *= den;
+        count += 1;
+        if sum_num >= sum_den {
+            return count;
         }
     }
-
-    Ok(signatures)
+    count.max(1) // Need all signatures if none suffice individually
 }
 
-fn decode_b64_count(s: &str) -> CoreResult<usize> {
-    const B64_CHARS: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+/// Parsed KERI version string
+#[derive(Debug, Clone)]
+pub struct VersionString {
+    /// Protocol (e.g., "KERI")
+    pub protocol: String,
+    /// Major version
+    pub major: u8,
+    /// Minor version
+    pub minor: u8,
+    /// Serialization kind (JSON, CBOR, MGPK)
+    pub kind: String,
+    /// Event size in bytes (from hex field)
+    pub size: usize,
+}
 
-    let bytes = s.as_bytes();
-    if bytes.len() != 2 {
-        return Err(CoreError::CesrParse("Invalid count length".to_string()));
+/// Parse a KERI version string like "KERI10JSON0000ed_"
+fn parse_version_string(v: &str) -> CoreResult<VersionString> {
+    // Format: PPPPvvKKKKssssss_ (17 chars)
+    // PPPP = protocol (4 chars)
+    // vv = version (2 chars: major, minor as hex digits)
+    // KKKK = serialization kind (4 chars: JSON, CBOR, MGPK)
+    // ssssss = size in hex (6 chars)
+    // _ = terminator
+    if v.len() < 17 || !v.ends_with('_') {
+        return Err(CoreError::InvalidEvent(format!(
+            "Invalid version string format: {}",
+            v
+        )));
     }
 
-    let high = B64_CHARS
-        .iter()
-        .position(|&c| c == bytes[0])
-        .ok_or_else(|| CoreError::CesrParse("Invalid base64 char".to_string()))?;
-    let low = B64_CHARS
-        .iter()
-        .position(|&c| c == bytes[1])
-        .ok_or_else(|| CoreError::CesrParse("Invalid base64 char".to_string()))?;
+    let protocol = &v[0..4];
+    if protocol != "KERI" {
+        return Err(CoreError::InvalidEvent(format!(
+            "Unknown protocol: {}",
+            protocol
+        )));
+    }
 
-    Ok(high * 64 + low)
+    let major = u8::from_str_radix(&v[4..5], 16)
+        .map_err(|_| CoreError::InvalidEvent("Invalid version major".to_string()))?;
+    let minor = u8::from_str_radix(&v[5..6], 16)
+        .map_err(|_| CoreError::InvalidEvent("Invalid version minor".to_string()))?;
+
+    // Accept version 1.0
+    if major != 1 || minor != 0 {
+        return Err(CoreError::InvalidEvent(format!(
+            "Unsupported KERI version: {}.{}",
+            major, minor
+        )));
+    }
+
+    let kind = &v[6..10];
+    if kind != "JSON" {
+        return Err(CoreError::InvalidEvent(format!(
+            "Unsupported serialization kind: {} (only JSON supported)",
+            kind
+        )));
+    }
+
+    let size = usize::from_str_radix(&v[10..16], 16)
+        .map_err(|_| CoreError::InvalidEvent("Invalid size in version string".to_string()))?;
+
+    Ok(VersionString {
+        protocol: protocol.to_string(),
+        major,
+        minor,
+        kind: kind.to_string(),
+        size,
+    })
 }
+
 
 #[cfg(test)]
 mod tests {
@@ -559,14 +764,6 @@ mod tests {
     }
 
     #[test]
-    fn test_decode_b64_count() {
-        assert_eq!(decode_b64_count("AA").unwrap(), 0);
-        assert_eq!(decode_b64_count("AB").unwrap(), 1);
-        assert_eq!(decode_b64_count("AC").unwrap(), 2);
-        assert_eq!(decode_b64_count("BA").unwrap(), 64);
-    }
-
-    #[test]
     fn test_anchor_digest() {
         let anchor = Anchor::digest("Eabc123");
         assert!(anchor.i.is_none());
@@ -584,26 +781,33 @@ mod tests {
 
     #[test]
     fn test_key_event_from_json() {
-        let json = r#"{
-            "v": "KERI10JSON0000ed_",
-            "t": "icp",
-            "d": "EBq7-hJfUj_R3yaMhXVDLrP7STSCC7ckVfEDiPq2fhJI",
-            "i": "EBq7-hJfUj_R3yaMhXVDLrP7STSCC7ckVfEDiPq2fhJI",
-            "s": "0",
-            "kt": "1",
-            "k": ["DJD91FzIX4DH6VZ9fICaNM6KrOJ4CcXTX2mH4lPAMjpI"],
-            "nt": "1",
-            "n": ["ENpxKUo7y4UKcTI0F7T4rH5mwgmfblhB4kGUGLCDJZDs"],
-            "bt": "0",
-            "b": [],
-            "c": [],
-            "a": []
-        }"#;
+        // Build a valid event with correct SAID using the proper derivation procedure:
+        // 1. Create JSON with placeholder d and placeholder size (same length as final)
+        // 2. The size field is 6 hex chars, placeholder is also 6 hex chars, so size is stable
+        // 3. Compute size first, then compute SAID, then substitute
+        let placeholder = "#".repeat(44);
+        let prefix = "DJD91FzIX4DH6VZ9fICaNM6KrOJ4CcXTX2mH4lPAMjpI";
+        // Use a temp size that has the right number of digits
+        let temp = format!(
+            r#"{{"v":"KERI10JSON000000_","t":"icp","d":"{}","i":"{}","s":"0","kt":"1","k":["{}"],"nt":"1","n":["ENpxKUo7y4UKcTI0F7T4rH5mwgmfblhB4kGUGLCDJZDs"],"bt":"0","b":[],"c":[],"a":[]}}"#,
+            placeholder, prefix, prefix,
+        );
+        // JSON length is stable (placeholder and SAID are both 44 chars)
+        let size_hex = format!("{:06x}", temp.len());
+        let template = temp.replace("000000", &size_hex);
+
+        // Compute SAID over the template (d is placeholder, size is correct)
+        let diger = Diger::new_with_ser(template.as_bytes(), Some("E")).unwrap();
+        let said = diger.qb64().unwrap();
+
+        // Substitute SAID into d field only (first occurrence of placeholder)
+        let json = template.replacen(&placeholder, &said, 1);
 
         let event = KeyEvent::from_cesr(json.as_bytes()).unwrap();
         assert_eq!(event.event_type, EventType::Icp);
         assert_eq!(event.sn, 0);
         assert_eq!(event.signing_keys.len(), 1);
+        assert_eq!(event.digest, said);
     }
 
     #[test]
@@ -619,6 +823,8 @@ mod tests {
             witness_threshold: Threshold::simple(0),
             witnesses: vec![],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: vec![],
             digest: "EDigest123".to_string(),
@@ -634,5 +840,115 @@ mod tests {
 
         let json = serde_json::to_string(&signed).unwrap();
         assert!(json.contains("\"prefix\":\"DTest123\""));
+    }
+
+    // --- SAID verification tests ---
+
+    #[test]
+    fn test_said_tampered_event_rejected() {
+        let placeholder = "#".repeat(44);
+        let prefix = "DJD91FzIX4DH6VZ9fICaNM6KrOJ4CcXTX2mH4lPAMjpI";
+        let temp = format!(
+            r#"{{"v":"KERI10JSON000000_","t":"icp","d":"{}","i":"{}","s":"0","kt":"1","k":["{}"],"nt":"1","n":["ENpxKUo7y4UKcTI0F7T4rH5mwgmfblhB4kGUGLCDJZDs"],"bt":"0","b":[],"c":[],"a":[]}}"#,
+            placeholder, prefix, prefix,
+        );
+        let size_hex = format!("{:06x}", temp.len());
+        let template = temp.replace("000000", &size_hex);
+        let diger = Diger::new_with_ser(template.as_bytes(), Some("E")).unwrap();
+        let said = diger.qb64().unwrap();
+        let mut json = template.replacen(&placeholder, &said, 1);
+
+        // Tamper with the event: change sequence number
+        json = json.replace(r#""s":"0""#, r#""s":"1""#);
+
+        let result = KeyEvent::from_cesr(json.as_bytes());
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("SAID mismatch"));
+    }
+
+    // --- Weighted threshold tests ---
+
+    #[test]
+    fn test_weighted_threshold_satisfied() {
+        // 2-of-3 with equal weights: each key has weight 1/2, need sum >= 1
+        let t = Threshold::Weighted(vec![vec![
+            "1/2".to_string(),
+            "1/2".to_string(),
+            "1/2".to_string(),
+        ]]);
+        assert!(t.is_satisfied_by_indices(&[0, 1]));    // 1/2 + 1/2 = 1 >= 1
+        assert!(t.is_satisfied_by_indices(&[0, 2]));    // 1/2 + 1/2 = 1 >= 1
+        assert!(!t.is_satisfied_by_indices(&[0]));       // 1/2 < 1
+        assert!(!t.is_satisfied_by_indices(&[]));
+    }
+
+    #[test]
+    fn test_weighted_threshold_multi_clause() {
+        // Two clauses: either [1/2, 1/2] or [1]
+        let t = Threshold::Weighted(vec![
+            vec!["1/2".to_string(), "1/2".to_string()],
+            vec!["1".to_string()],
+        ]);
+        assert!(t.is_satisfied_by_indices(&[0, 1]));    // First clause: 1/2+1/2=1
+        assert!(t.is_satisfied_by_indices(&[0]));        // Second clause: key 0 has weight 1
+        assert!(!t.is_satisfied_by_indices(&[]));
+    }
+
+    #[test]
+    fn test_weighted_threshold_min_signatures() {
+        let t = Threshold::Weighted(vec![vec![
+            "1/2".to_string(),
+            "1/2".to_string(),
+            "1/2".to_string(),
+        ]]);
+        assert_eq!(t.min_signatures(), 2);
+
+        let t = Threshold::Weighted(vec![
+            vec!["1/3".to_string(), "1/3".to_string(), "1/3".to_string()],
+            vec!["1".to_string()],
+        ]);
+        assert_eq!(t.min_signatures(), 1); // Second clause needs only 1
+    }
+
+    // --- Version string tests ---
+
+    #[test]
+    fn test_version_string_parsing() {
+        let vs = parse_version_string("KERI10JSON0000ed_").unwrap();
+        assert_eq!(vs.protocol, "KERI");
+        assert_eq!(vs.major, 1);
+        assert_eq!(vs.minor, 0);
+        assert_eq!(vs.kind, "JSON");
+        assert_eq!(vs.size, 0xed);
+    }
+
+    #[test]
+    fn test_version_string_unsupported_protocol() {
+        let result = parse_version_string("ACDC10JSON0000ed_");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_version_string_unsupported_kind() {
+        let result = parse_version_string("KERI10CBOR0000ed_");
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("only JSON"));
+    }
+
+    #[test]
+    fn test_version_string_unsupported_version() {
+        let result = parse_version_string("KERI20JSON0000ed_");
+        assert!(result.is_err());
+    }
+
+    // --- Fraction parsing tests ---
+
+    #[test]
+    fn test_parse_fraction() {
+        assert_eq!(parse_fraction("1/2"), Some((1, 2)));
+        assert_eq!(parse_fraction("1/3"), Some((1, 3)));
+        assert_eq!(parse_fraction("1"), Some((1, 1)));
+        assert_eq!(parse_fraction("0/1"), Some((0, 1)));
+        assert_eq!(parse_fraction("1/0"), None); // division by zero
     }
 }
