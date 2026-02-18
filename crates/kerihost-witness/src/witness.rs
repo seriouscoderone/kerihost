@@ -33,7 +33,11 @@ impl<D: WitnessDatabase> Witness<D> {
             config.prefix.clone()
         };
 
-        let processor = EventProcessor::new(Arc::clone(&db), config.strict_validation);
+        let processor = EventProcessor::new_with_prefix(
+            Arc::clone(&db),
+            config.strict_validation,
+            prefix.clone(),
+        );
 
         Witness {
             prefix,
@@ -238,6 +242,8 @@ mod tests {
             witness_threshold: Threshold::simple(1),
             witnesses: vec!["BTest123".to_string()],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: b"test event data".to_vec(),
             digest: format!("EDigest{}_{}", prefix, sn),

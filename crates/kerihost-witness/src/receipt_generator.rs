@@ -67,6 +67,8 @@ mod tests {
             witness_threshold: Threshold::simple(1),
             witnesses: vec![],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: b"test event data for signing".to_vec(),
             digest: "EDigest12345678901234567890123456789012345678901".to_string(),

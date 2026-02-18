@@ -77,6 +77,13 @@ impl EventValidator {
             ));
         }
 
+        // For rotation events, verify next-key commitment
+        if event.event.event_type == crate::event::EventType::Rot
+            || event.event.event_type == crate::event::EventType::Drt
+        {
+            Self::verify_next_key_commitment(state, &event.event)?;
+        }
+
         // Verify signatures
         Self::verify_signatures(event, Some(state))?;
 
@@ -120,6 +127,40 @@ impl EventValidator {
         Self::verify_signatures(event, None)?;
 
         Ok(ValidationResult::Valid)
+    }
+
+    /// Verify next-key commitment for rotation events
+    fn verify_next_key_commitment(state: &KeyState, event: &crate::event::KeyEvent) -> CoreResult<()> {
+        let committed_digest = match &state.next_key_digest {
+            Some(d) if !d.is_empty() => d,
+            _ => {
+                return Err(CoreError::InvalidEvent(
+                    "Cannot rotate non-transferable identifier (no next-key commitment)".to_string(),
+                ));
+            }
+        };
+
+        let keys_concat = event.signing_keys.join("");
+
+        let committed_diger = cesride::Diger::new_with_qb64(committed_digest)
+            .map_err(|e| CoreError::CesrParse(format!("Invalid next-key digest: {}", e)))?;
+        let code = Matter::code(&committed_diger);
+
+        let computed = cesride::Diger::new_with_ser(keys_concat.as_bytes(), Some(&code))
+            .map_err(|e| CoreError::CesrParse(format!("Failed to compute key digest: {}", e)))?;
+
+        let computed_qb64 = computed
+            .qb64()
+            .map_err(|e| CoreError::CesrParse(format!("Failed to encode key digest: {}", e)))?;
+
+        if computed_qb64 != *committed_digest {
+            return Err(CoreError::InvalidEvent(format!(
+                "Next-key commitment mismatch: committed {}, computed {}",
+                committed_digest, computed_qb64
+            )));
+        }
+
+        Ok(())
     }
 
     /// Verify signatures on an event
@@ -237,6 +278,8 @@ mod tests {
             witness_threshold: Threshold::simple(1),
             witnesses: vec![],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: b"test data".to_vec(),
             digest: format!("EDigest{}2345678901234567890123456789012345678901", sn),

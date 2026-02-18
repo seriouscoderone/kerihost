@@ -63,14 +63,12 @@ pnpm cdk deploy --all -c hostedZoneId=Z0070723WLKQKTOACN5H
 pnpm cdk deploy KerihostApiStack -c hostedZoneId=Z0070723WLKQKTOACN5H
 ```
 
-AWS profile: `personal`
-
 ### Integration Tests
 
 ```bash
 cd tests/integration
 pnpm install
-WITNESS_API_URL=https://api.keri.host/prod pnpm test
+WITNESS_API_URL=https://api.keri.host/witness pnpm test
 ```
 
 Tests use Vitest, cover: OOBI resolution, event processing (inception/interaction), duplicate detection, escrow (HTTP 202), state/kel/receipt queries, KERI-honest response format.

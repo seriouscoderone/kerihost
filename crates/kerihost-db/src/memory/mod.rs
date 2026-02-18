@@ -277,6 +277,8 @@ mod tests {
             witness_threshold: Threshold::simple(1),
             witnesses: vec![],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: b"test".to_vec(),
             digest: format!("EDigest{}_{}", prefix, sn),

@@ -46,6 +46,8 @@ impl ProcessResult {
 pub struct EventProcessor<D: WitnessDatabase> {
     db: Arc<D>,
     strict_validation: bool,
+    /// Witness prefix for authorization checks
+    witness_prefix: Option<String>,
 }
 
 impl<D: WitnessDatabase> EventProcessor<D> {
@@ -54,6 +56,16 @@ impl<D: WitnessDatabase> EventProcessor<D> {
         EventProcessor {
             db,
             strict_validation,
+            witness_prefix: None,
+        }
+    }
+
+    /// Create new event processor with witness prefix for authorization checks
+    pub fn new_with_prefix(db: Arc<D>, strict_validation: bool, witness_prefix: String) -> Self {
+        EventProcessor {
+            db,
+            strict_validation,
+            witness_prefix: Some(witness_prefix),
         }
     }
 
@@ -85,6 +97,32 @@ impl<D: WitnessDatabase> EventProcessor<D> {
 
         match validation_result {
             Ok(ValidationResult::Valid) => {
+                // Check witness authorization for non-inception events
+                if let Some(ref witness_prefix) = self.witness_prefix {
+                    if sn > 0 {
+                        // For non-inception: witness must be in the identifier's witness list
+                        let authorized = if let Some(ref state) = current_state {
+                            state.witnesses.contains(witness_prefix)
+                        } else {
+                            false
+                        };
+                        if !authorized {
+                            return Err(WitnessError::Validation(format!(
+                                "Witness {} is not authorized for identifier {}",
+                                witness_prefix, prefix
+                            )));
+                        }
+                    } else {
+                        // For inception: witness must be in the event's witness list
+                        if !event.event.witnesses.contains(witness_prefix) {
+                            return Err(WitnessError::Validation(format!(
+                                "Witness {} is not in inception witness list for {}",
+                                witness_prefix, prefix
+                            )));
+                        }
+                    }
+                }
+
                 // Store the event
                 self.db.append_event(&event).await?;
 
@@ -230,6 +268,8 @@ mod tests {
             witness_threshold: Threshold::simple(1),
             witnesses: vec!["BTest123".to_string()],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: b"test event data".to_vec(),
             digest: format!("EDigest{}_{}", prefix, sn),

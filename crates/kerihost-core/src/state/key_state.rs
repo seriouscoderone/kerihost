@@ -6,6 +6,9 @@
 use crate::error::{CoreError, CoreResult};
 use crate::event::{EventType, KeyEvent, Threshold};
 use crate::{ConfidenceLevel, HonestMetadata};
+use cesride::Diger;
+#[allow(unused_imports)]
+use cesride::Matter;
 use serde::{Deserialize, Serialize};
 
 /// Current key state of an identifier
@@ -138,6 +141,10 @@ impl KeyState {
 
     /// Apply rotation event
     fn apply_rotation(&self, event: &KeyEvent) -> CoreResult<KeyState> {
+        // Verify next-key commitment: the rotation's signing keys must match
+        // the next_key_digest committed in the prior establishment event
+        self.verify_next_key_commitment(event)?;
+
         let witness_threshold = match &event.witness_threshold {
             Threshold::Simple(n) => *n,
             Threshold::Weighted(_) => 1,
@@ -182,11 +189,66 @@ impl KeyState {
         })
     }
 
-    /// Apply witness changes from rotation event
+    /// Verify that rotation's new signing keys match the prior next-key commitment
+    fn verify_next_key_commitment(&self, event: &KeyEvent) -> CoreResult<()> {
+        let committed_digest = match &self.next_key_digest {
+            Some(d) if !d.is_empty() => d,
+            _ => {
+                // No next-key commitment means non-transferable — rotation not allowed
+                return Err(CoreError::InvalidEvent(
+                    "Cannot rotate non-transferable identifier (no next-key commitment)".to_string(),
+                ));
+            }
+        };
+
+        // Per KERI spec: hash the concatenated serialized next key list
+        // The commitment is a digest of the new signing keys
+        let keys_concat = event.signing_keys.join("");
+
+        // Parse the committed digest to determine the algorithm
+        let committed_diger = Diger::new_with_qb64(committed_digest)
+            .map_err(|e| CoreError::CesrParse(format!("Invalid next-key digest: {}", e)))?;
+        let code = Matter::code(&committed_diger);
+
+        // Compute digest of the new keys using the same algorithm
+        let computed = Diger::new_with_ser(keys_concat.as_bytes(), Some(&code))
+            .map_err(|e| CoreError::CesrParse(format!("Failed to compute key digest: {}", e)))?;
+
+        let computed_qb64 = computed
+            .qb64()
+            .map_err(|e| CoreError::CesrParse(format!("Failed to encode key digest: {}", e)))?;
+
+        if computed_qb64 != *committed_digest {
+            return Err(CoreError::InvalidEvent(format!(
+                "Next-key commitment mismatch: committed {}, computed {}",
+                committed_digest, computed_qb64
+            )));
+        }
+
+        Ok(())
+    }
+
+    /// Apply witness changes from rotation event using br/ba diff
     fn apply_witness_changes(&self, event: &KeyEvent) -> Vec<String> {
-        // For simplicity, rotation events carry the full witness list
-        // In full KERI, we'd need to parse br (remove) and ba (add)
-        event.witnesses.clone()
+        // If br/ba fields are present, apply diff logic
+        if !event.witnesses_remove.is_empty() || !event.witnesses_add.is_empty() {
+            let mut witnesses = self.witnesses.clone();
+            // Remove witnesses listed in br
+            witnesses.retain(|w| !event.witnesses_remove.contains(w));
+            // Add witnesses listed in ba
+            for w in &event.witnesses_add {
+                if !witnesses.contains(w) {
+                    witnesses.push(w.clone());
+                }
+            }
+            witnesses
+        } else if !event.witnesses.is_empty() {
+            // Fallback: if b field is populated directly (some implementations)
+            event.witnesses.clone()
+        } else {
+            // No changes
+            self.witnesses.clone()
+        }
     }
 
     /// Update metadata with receipt information
@@ -247,9 +309,22 @@ impl StateWithProvenance {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::event::{InceptionParams, KeyEvent};
+    use crate::event::KeyEvent;
+
+    /// Compute the Blake3-256 digest of concatenated keys (for next-key commitment)
+    fn compute_key_commitment(keys: &[String]) -> String {
+        let keys_concat = keys.join("");
+        let diger = Diger::new_with_ser(keys_concat.as_bytes(), Some("E")).unwrap();
+        diger.qb64().unwrap()
+    }
+
+    // Rotation signing keys used by create_test_rotation_event
+    const ROT_SIGNING_KEY: &str = "DKey2234567890123456789012345678901234567890123";
 
     fn create_test_inception_event() -> KeyEvent {
+        // Compute next-key commitment that matches the rotation's signing keys
+        let next_key_digest = compute_key_commitment(&[ROT_SIGNING_KEY.to_string()]);
+
         KeyEvent {
             prefix: "DTest123456789012345678901234567890123456789012".to_string(),
             sn: 0,
@@ -257,10 +332,12 @@ mod tests {
             prior_digest: None,
             signing_keys: vec!["DKey1234567890123456789012345678901234567890123".to_string()],
             signing_threshold: Threshold::simple(1),
-            next_key_digest: Some("ENext123456789012345678901234567890123456789012".to_string()),
+            next_key_digest: Some(next_key_digest),
             witness_threshold: Threshold::simple(1),
             witnesses: vec!["BWit1234567890123456789012345678901234567890123".to_string()],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: vec![],
             digest: "EDigest12345678901234567890123456789012345678901".to_string(),
@@ -273,12 +350,14 @@ mod tests {
             sn: 1,
             event_type: EventType::Rot,
             prior_digest: Some(prior_digest.to_string()),
-            signing_keys: vec!["DKey2234567890123456789012345678901234567890123".to_string()],
+            signing_keys: vec![ROT_SIGNING_KEY.to_string()],
             signing_threshold: Threshold::simple(1),
             next_key_digest: Some("ENext223456789012345678901234567890123456789012".to_string()),
             witness_threshold: Threshold::simple(1),
             witnesses: vec!["BWit1234567890123456789012345678901234567890123".to_string()],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: vec![],
             digest: "EDigest22345678901234567890123456789012345678901".to_string(),
@@ -297,6 +376,8 @@ mod tests {
             witness_threshold: Threshold::simple(0),
             witnesses: vec![],
             anchors: vec![],
+            witnesses_remove: vec![],
+            witnesses_add: vec![],
             delegator: None,
             raw: vec![],
             digest: format!("EDigest{}2345678901234567890123456789012345678901", sn),
@@ -469,5 +550,66 @@ mod tests {
 
         let state = KeyState::from_inception(&icp).unwrap();
         assert!(!state.transferable);
+    }
+
+    // --- Next-key commitment tests ---
+
+    #[test]
+    fn test_rotation_wrong_key_commitment_rejected() {
+        let mut icp = create_test_inception_event();
+        // Set a commitment that won't match the rotation's keys
+        icp.next_key_digest = Some("EWrongCommitment34567890123456789012345678901234".to_string());
+
+        let state = KeyState::from_inception(&icp).unwrap();
+        let rot = create_test_rotation_event(&icp.digest);
+        let result = state.apply(&rot);
+        assert!(result.is_err());
+        let err_msg = result.unwrap_err().to_string();
+        assert!(err_msg.contains("Next-key commitment") || err_msg.contains("next-key digest"));
+    }
+
+    #[test]
+    fn test_non_transferable_cannot_rotate() {
+        let mut icp = create_test_inception_event();
+        icp.next_key_digest = None;
+
+        let state = KeyState::from_inception(&icp).unwrap();
+        let rot = create_test_rotation_event(&icp.digest);
+        let result = state.apply(&rot);
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("non-transferable"));
+    }
+
+    // --- Witness br/ba tests ---
+
+    #[test]
+    fn test_witness_rotation_br_ba() {
+        let icp = create_test_inception_event();
+        let state = KeyState::from_inception(&icp).unwrap();
+        assert_eq!(state.witnesses, vec!["BWit1234567890123456789012345678901234567890123"]);
+
+        let mut rot = create_test_rotation_event(&icp.digest);
+        // Remove existing witness, add a new one
+        rot.witnesses_remove = vec!["BWit1234567890123456789012345678901234567890123".to_string()];
+        rot.witnesses_add = vec!["BNew1234567890123456789012345678901234567890123".to_string()];
+        rot.witnesses = vec![]; // Clear the direct witness list
+
+        let new_state = state.apply(&rot).unwrap();
+        assert_eq!(new_state.witnesses, vec!["BNew1234567890123456789012345678901234567890123"]);
+    }
+
+    #[test]
+    fn test_witness_rotation_add_only() {
+        let icp = create_test_inception_event();
+        let state = KeyState::from_inception(&icp).unwrap();
+
+        let mut rot = create_test_rotation_event(&icp.digest);
+        rot.witnesses_add = vec!["BNew1234567890123456789012345678901234567890123".to_string()];
+        rot.witnesses = vec![];
+
+        let new_state = state.apply(&rot).unwrap();
+        assert_eq!(new_state.witnesses.len(), 2);
+        assert!(new_state.witnesses.contains(&"BWit1234567890123456789012345678901234567890123".to_string()));
+        assert!(new_state.witnesses.contains(&"BNew1234567890123456789012345678901234567890123".to_string()));
     }
 }
