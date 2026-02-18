@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/fix-libsodium-esm.cjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:deployed": "WITNESS_API_URL=${WITNESS_API_URL:-$(cat ../../infrastructure/outputs.json 2>/dev/null | jq -r '.KerihostStack.ApiUrl' || echo '')} vitest run"

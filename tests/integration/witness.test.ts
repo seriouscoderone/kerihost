@@ -2,13 +2,11 @@
  * Integration tests for Kerihost Witness Service
  *
  * These tests run against the deployed API Gateway endpoint.
+ * They use signify-ts to construct real CESR events with valid SAIDs
+ * and Ed25519 signatures.
  *
  * Run with:
- *   WITNESS_API_URL=https://xxx.execute-api.us-west-2.amazonaws.com/prod pnpm test
- *
- * Or after CDK deploy:
- *   cd infrastructure && cdk deploy --outputs-file outputs.json
- *   WITNESS_API_URL=$(jq -r '.KerihostStack.ApiUrl' outputs.json) pnpm test
+ *   WITNESS_API_URL=https://api.keri.host/witness pnpm test
  */
 
 import { describe, it, expect, beforeAll, beforeEach } from "vitest";
@@ -17,9 +15,10 @@ import {
   requireApiUrl,
   randomPrefix,
   randomDigest,
-  createTestInceptionEvent,
-  createTestInteractionEvent,
-  createSignedEvent,
+  initCrypto,
+  getWitnessPrefix,
+  createRealInceptionEvent,
+  createRealInteractionEvent,
   submitEvent,
   queryWitness,
   getWitnessIntroduction,
@@ -31,10 +30,14 @@ const describeWithApi = API_URL ? describe : describe.skip;
 
 describeWithApi("Witness API Gateway Integration Tests", () => {
   let apiUrl: string;
+  let wits: string[]; // witness identifiers for inception events
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    await initCrypto();
     apiUrl = requireApiUrl();
-    console.log(`Testing against API: ${apiUrl}`);
+    const witnessPrefix = await getWitnessPrefix();
+    wits = [witnessPrefix];
+    console.log(`Testing against API: ${apiUrl} (witness: ${witnessPrefix})`);
   });
 
   describe("GET /introduce - Witness Introduction", () => {
@@ -63,10 +66,9 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
   describe("POST /process - Event Processing", () => {
     describe("Inception Events", () => {
       it("should accept valid inception event with KERI-honest response", async () => {
-        const event = createTestInceptionEvent();
-        const signedEvent = createSignedEvent(event);
+        const { cesr, prefix } = await createRealInceptionEvent(wits);
 
-        const { status, data } = await submitEvent(signedEvent);
+        const { status, data } = await submitEvent(cesr);
 
         expect(status).toBe(200);
         expect(data.status).toBe("accepted");
@@ -76,22 +78,21 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
 
         // State should be returned
         if (data.state) {
-          expect(data.state.prefix).toBe(event._prefix);
+          expect(data.state.prefix).toBe(prefix);
           expect(data.state.sn).toBe(0);
         }
       });
 
       it("should return duplicate for same inception submitted twice", async () => {
-        const event = createTestInceptionEvent();
-        const signedEvent = createSignedEvent(event);
+        const { cesr } = await createRealInceptionEvent(wits);
 
         // First submission
-        const first = await submitEvent(signedEvent);
+        const first = await submitEvent(cesr);
         expect(first.status).toBe(200);
         expect(first.data.status).toBe("accepted");
 
         // Second submission - should be duplicate
-        const second = await submitEvent(signedEvent);
+        const second = await submitEvent(cesr);
         expect(second.status).toBe(200);
         expect(second.data.status).toBe("duplicate");
         expect(second.data.asOf).toBeDefined();
@@ -112,13 +113,20 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
 
     describe("Out-of-Order Events", () => {
       it("should escrow out-of-order event with KERI-honest response", async () => {
-        const prefix = randomPrefix();
+        // Create inception and submit it first
+        const { cesr: icpCesr, prefix, digest, signer } =
+          await createRealInceptionEvent(wits);
+        await submitEvent(icpCesr);
 
-        // Submit interaction at sn=5 without prior events
-        const ixn = createTestInteractionEvent(prefix, 5, randomDigest());
-        const signedEvent = createSignedEvent(ixn);
+        // Submit interaction at sn=5 (skipping sn=1-4) — out of order
+        const { cesr: ixnCesr } = await createRealInteractionEvent(
+          prefix,
+          5,
+          digest,
+          signer
+        );
 
-        const { status, data } = await submitEvent(signedEvent);
+        const { status, data } = await submitEvent(ixnCesr);
 
         // HTTP 202 = escrowed (not rejected)
         expect(status).toBe(202);
@@ -133,22 +141,22 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
     describe("Sequential Events", () => {
       it("should accept inception then interaction in sequence", async () => {
         // Create and submit inception
-        const icpEvent = createTestInceptionEvent();
-        const icpSigned = createSignedEvent(icpEvent);
+        const { cesr: icpCesr, prefix, digest, signer } =
+          await createRealInceptionEvent(wits);
 
-        const icpResult = await submitEvent(icpSigned);
+        const icpResult = await submitEvent(icpCesr);
         expect(icpResult.status).toBe(200);
         expect(icpResult.data.status).toBe("accepted");
 
         // Create and submit interaction at sn=1
-        const ixnEvent = createTestInteractionEvent(
-          icpEvent._prefix,
+        const { cesr: ixnCesr } = await createRealInteractionEvent(
+          prefix,
           1,
-          icpEvent._digest
+          digest,
+          signer
         );
-        const ixnSigned = createSignedEvent(ixnEvent);
 
-        const ixnResult = await submitEvent(ixnSigned);
+        const ixnResult = await submitEvent(ixnCesr);
         expect(ixnResult.status).toBe(200);
         expect(ixnResult.data.status).toBe("accepted");
 
@@ -165,13 +173,11 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
     let testDigest: string;
 
     beforeEach(async () => {
-      // Create a test identifier
-      const event = createTestInceptionEvent();
-      testPrefix = event._prefix;
-      testDigest = event._digest;
-
-      const signedEvent = createSignedEvent(event);
-      await submitEvent(signedEvent);
+      // Create a real test identifier
+      const { cesr, prefix, digest } = await createRealInceptionEvent(wits);
+      testPrefix = prefix;
+      testDigest = digest;
+      await submitEvent(cesr);
     });
 
     describe("State Query", () => {
@@ -291,12 +297,10 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
     let testPrefix: string;
 
     beforeEach(async () => {
-      // Create a test identifier
-      const event = createTestInceptionEvent();
-      testPrefix = event._prefix;
-
-      const signedEvent = createSignedEvent(event);
-      await submitEvent(signedEvent);
+      // Create a real test identifier
+      const { cesr, prefix } = await createRealInceptionEvent(wits);
+      testPrefix = prefix;
+      await submitEvent(cesr);
     });
 
     it("should resolve OOBI for known identifier", async () => {
@@ -321,10 +325,9 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
 
   describe("KERI-Honest Design Verification", () => {
     it("should never return confidence level of FINAL", async () => {
-      const event = createTestInceptionEvent();
-      const signedEvent = createSignedEvent(event);
+      const { cesr } = await createRealInceptionEvent(wits);
 
-      const { data } = await submitEvent(signedEvent);
+      const { data } = await submitEvent(cesr);
 
       // Should have confidence field
       if (data.confidence) {
@@ -340,26 +343,34 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
       expect(intro.data.asOf).toBeDefined();
 
       // Test /process
-      const event = createTestInceptionEvent();
-      const signedEvent = createSignedEvent(event);
-      const process = await submitEvent(signedEvent);
+      const { cesr, prefix } = await createRealInceptionEvent(wits);
+      const process = await submitEvent(cesr);
       expect(process.data.asOf).toBeDefined();
 
       // Test /query
-      const query = await queryWitness("state", { prefix: event._prefix });
+      const query = await queryWitness("state", { prefix });
       expect(query.data.asOf).toBeDefined();
 
       // Test /oobi
-      const oobi = await resolveOobi(event._prefix);
+      const oobi = await resolveOobi(prefix);
       expect(oobi.data.asOf).toBeDefined();
     });
 
     it("should treat escrow as state, not error", async () => {
-      const prefix = randomPrefix();
-      const ixn = createTestInteractionEvent(prefix, 5, randomDigest());
-      const signedEvent = createSignedEvent(ixn);
+      // Create inception and submit it first
+      const { cesr: icpCesr, prefix, digest, signer } =
+        await createRealInceptionEvent(wits);
+      await submitEvent(icpCesr);
 
-      const { status, data } = await submitEvent(signedEvent);
+      // Submit interaction at sn=5 (out of order)
+      const { cesr: ixnCesr } = await createRealInteractionEvent(
+        prefix,
+        5,
+        digest,
+        signer
+      );
+
+      const { status, data } = await submitEvent(ixnCesr);
 
       // HTTP 202 indicates successful escrow (not 4xx error)
       expect(status).toBe(202);
@@ -400,6 +411,10 @@ describeWithApi("Witness API Gateway Integration Tests", () => {
 
 // Unit tests that don't require the API
 describe("Test Helpers (Unit Tests)", () => {
+  beforeAll(async () => {
+    await initCrypto();
+  });
+
   it("should generate valid prefix format", () => {
     const prefix = randomPrefix();
     expect(prefix).toMatch(/^D[A-Za-z0-9_-]{43}$/);
@@ -410,38 +425,33 @@ describe("Test Helpers (Unit Tests)", () => {
     expect(digest).toMatch(/^E[A-Za-z0-9_-]{43}$/);
   });
 
-  it("should create valid inception event structure", () => {
-    const event = createTestInceptionEvent();
+  it("should create real inception event with valid CESR", async () => {
+    const { cesr, prefix, digest, signer, serder } =
+      await createRealInceptionEvent();
 
-    expect(event.t).toBe("icp");
-    expect(event.i).toBeDefined();
-    expect(event.s).toBe("0");
-    expect(event.k).toHaveLength(1);
-    expect(event.n).toHaveLength(1);
-    expect(event.d).toBeDefined();
-    expect(event._prefix).toBeDefined();
+    // CESR bytes should be non-empty
+    expect(cesr.length).toBeGreaterThan(0);
+
+    // Prefix should start with D (Ed25519 transferable)
+    expect(prefix).toMatch(/^D/);
+
+    // Digest should start with E (Blake3-256)
+    expect(digest).toMatch(/^E/);
+
+    // Serder should have matching fields
+    expect(serder.pre).toBe(prefix);
+    expect(serder.ked.t).toBe("icp");
+    expect(serder.ked.s).toBe("0");
   });
 
-  it("should create valid interaction event structure", () => {
-    const prefix = randomPrefix();
-    const priorDigest = randomDigest();
-    const event = createTestInteractionEvent(prefix, 3, priorDigest);
+  it("should create real interaction event with valid CESR", async () => {
+    const { prefix, digest, signer } = await createRealInceptionEvent();
+    const { cesr, digest: ixnDigest, serder } =
+      await createRealInteractionEvent(prefix, 1, digest, signer);
 
-    expect(event.t).toBe("ixn");
-    expect(event.i).toBe(prefix);
-    expect(event.s).toBe("3");
-    expect(event.p).toBe(priorDigest);
-    expect(event.d).toBeDefined();
-    expect(event._prefix).toBe(prefix);
-    expect(event._sn).toBe(3);
-  });
-
-  it("should create valid signed event wrapper", () => {
-    const event = createTestInceptionEvent();
-    const signed = createSignedEvent(event);
-
-    // The signed event should contain the original event fields
-    expect((signed as any).t).toBe("icp");
-    expect((signed as any).i).toBeDefined();
+    expect(cesr.length).toBeGreaterThan(0);
+    expect(ixnDigest).toMatch(/^E/);
+    expect(serder.ked.t).toBe("ixn");
+    expect(serder.pre).toBe(prefix);
   });
 });

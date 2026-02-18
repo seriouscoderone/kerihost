@@ -1,21 +1,23 @@
 /**
  * Test helpers for KERI witness integration tests
  *
- * Uses KERI standard field names:
- * - t: event type (icp, rot, ixn, dip, drt)
- * - i: identifier prefix (AID)
- * - s: sequence number (hex string)
- * - p: prior event digest
- * - k: signing keys array
- * - kt: signing threshold
- * - n: next key digest (commitment)
- * - b: witnesses array
- * - bt: witness threshold
- * - a: anchors/seals
- * - d: event digest (SAID)
+ * Uses signify-ts to construct real CESR-formatted events with valid SAIDs
+ * and Ed25519 signatures. The witness parses these as genuine KERI events.
  */
 
 import * as crypto from "crypto";
+import {
+  ready,
+  Signer,
+  MtrDex,
+  Diger,
+  incept,
+  interact,
+  messagize,
+  Serder,
+  Siger,
+  b,
+} from "signify-ts";
 
 // Get API URL from environment
 export const API_URL = process.env.WITNESS_API_URL || "";
@@ -32,143 +34,132 @@ export function requireApiUrl(): string {
   return API_URL;
 }
 
+// Re-export types used by tests
+export type { Signer, Serder };
+
+/**
+ * Initialize libsodium + blake3 (call once in beforeAll)
+ */
+let cryptoReady = false;
+export async function initCrypto() {
+  if (!cryptoReady) {
+    await ready();
+    cryptoReady = true;
+  }
+}
+
+/**
+ * Fetch and cache the witness identifier from /introduce.
+ * The witness requires itself to be listed in the `b` (witnesses) field
+ * of inception events.
+ */
+let cachedWitnessPrefix: string | null = null;
+export async function getWitnessPrefix(): Promise<string> {
+  if (cachedWitnessPrefix) return cachedWitnessPrefix;
+  const { data } = await getWitnessIntroduction();
+  cachedWitnessPrefix = data.witness;
+  return cachedWitnessPrefix!;
+}
+
 /**
  * Generate a random prefix (AID-like identifier)
+ * Used for "unknown identifier" tests where we need a fake prefix.
  */
 export function randomPrefix(): string {
-  // Generate 32 random bytes and encode as qualified base64
-  // D prefix = Ed25519 public key (but we're faking it for tests)
   const bytes = crypto.randomBytes(32);
   const b64 = bytes.toString("base64url").replace(/=/g, "");
-  return `D${b64.substring(0, 43)}`; // 44 chars total
+  return `D${b64.substring(0, 43)}`;
 }
 
 /**
  * Generate a random digest
+ * Used for "unknown digest" tests where we need a fake digest.
  */
 export function randomDigest(): string {
-  // E prefix = Blake3-256 digest
   const bytes = crypto.randomBytes(32);
   const b64 = bytes.toString("base64url").replace(/=/g, "");
   return `E${b64.substring(0, 43)}`;
 }
 
 /**
- * Generate a random signing key
+ * Create a real CESR inception event using signify-ts.
+ *
+ * Generates an Ed25519 keypair, builds a SAID-valid inception event,
+ * signs it, and serializes to CESR bytes ready for submission.
+ *
+ * @param witnesses - Witness identifiers to include in `b` field.
+ *   The deployed witness requires itself to be listed here.
  */
-export function randomSigningKey(): string {
-  return randomPrefix(); // Same format as prefix
-}
+export async function createRealInceptionEvent(
+  witnesses: string[] = []
+): Promise<{
+  cesr: Uint8Array;
+  prefix: string;
+  digest: string;
+  signer: Signer;
+  serder: Serder;
+}> {
+  const signer = new Signer({ transferable: true });
+  const nextSigner = new Signer({ transferable: true });
+  const nextDiger = new Diger(
+    { code: MtrDex.Blake3_256 },
+    nextSigner.verfer.qb64b
+  );
 
-/**
- * Generate a random signature (placeholder)
- */
-export function randomSignature(): string {
-  // AA prefix = Ed25519 signature
-  const bytes = crypto.randomBytes(64);
-  const b64 = bytes.toString("base64url").replace(/=/g, "");
-  return `AA${b64.substring(0, 86)}`; // 88 chars total
-}
+  const serder = incept({
+    keys: [signer.verfer.qb64],
+    ndigs: [nextDiger.qb64],
+    isith: 1,
+    nsith: 1,
+    wits: witnesses,
+    toad: witnesses.length > 0 ? witnesses.length : undefined,
+  });
 
-/**
- * Convert number to hex string for sequence number
- */
-function snToHex(sn: number): string {
-  return sn.toString(16);
-}
-
-/**
- * Create a KERI-compatible inception event
- */
-export function createTestInceptionEvent(prefix?: string): {
-  t: string;
-  i: string;
-  s: string;
-  k: string[];
-  kt: string;
-  n: string[];
-  bt: string;
-  b: string[];
-  a: any[];
-  d: string;
-  // Keep these for test tracking
-  _prefix: string;
-  _sn: number;
-  _digest: string;
-} {
-  const p = prefix || randomPrefix();
-  const signingKey = randomSigningKey();
-  const nextDigest = randomDigest();
-  const eventDigest = randomDigest();
+  const sig = signer.sign(b(serder.raw), 0, true) as Siger;
+  const cesr = messagize(serder, [sig]);
 
   return {
-    t: "icp",
-    i: p,
-    s: "0",
-    k: [signingKey],
-    kt: "1",
-    n: [nextDigest],
-    bt: "0",
-    b: [],
-    a: [],
-    d: eventDigest,
-    // Helper fields for tests
-    _prefix: p,
-    _sn: 0,
-    _digest: eventDigest,
+    cesr,
+    prefix: serder.pre,
+    digest: serder.ked.d as string,
+    signer,
+    serder,
   };
 }
 
 /**
- * Create a KERI-compatible interaction event
+ * Create a real CESR interaction event using signify-ts.
+ *
+ * Builds a SAID-valid interaction event referencing a prior event,
+ * signs it with the same signer, and serializes to CESR bytes.
  */
-export function createTestInteractionEvent(
+export async function createRealInteractionEvent(
   prefix: string,
   sn: number,
-  priorDigest: string
-): {
-  t: string;
-  i: string;
-  s: string;
-  p: string;
-  a: any[];
-  d: string;
-  // Keep these for test tracking
-  _prefix: string;
-  _sn: number;
-  _digest: string;
-} {
-  const eventDigest = randomDigest();
+  priorDigest: string,
+  signer: Signer
+): Promise<{
+  cesr: Uint8Array;
+  digest: string;
+  serder: Serder;
+}> {
+  const serder = interact({
+    pre: prefix,
+    dig: priorDigest,
+    sn,
+    data: [],
+    version: undefined,
+    kind: undefined,
+  });
+
+  const sig = signer.sign(b(serder.raw), 0, true) as Siger;
+  const cesr = messagize(serder, [sig]);
 
   return {
-    t: "ixn",
-    i: prefix,
-    s: snToHex(sn),
-    p: priorDigest,
-    a: [],
-    d: eventDigest,
-    // Helper fields for tests
-    _prefix: prefix,
-    _sn: sn,
-    _digest: eventDigest,
+    cesr,
+    digest: serder.ked.d as string,
+    serder,
   };
-}
-
-/**
- * Create a signed event wrapper for submission to the witness
- *
- * The Lambda expects the raw event JSON as the body, with signatures attached
- */
-export function createSignedEvent(event: object): object {
-  // The Lambda's process handler expects raw bytes which are parsed as JSON
-  // The SignedEvent::from_cesr expects: { event fields at root level }
-  // But we also need to include signatures
-  // Looking at the processor code, it seems to parse the event directly
-  //
-  // For now, let's send the event as-is (the Lambda parses raw bytes as JSON)
-  // The signature would be attached separately in real CESR, but for this
-  // JSON-based test, we can include it in the body
-  return event;
 }
 
 /**
@@ -208,13 +199,30 @@ export async function witnessRequest(
 }
 
 /**
- * Submit an event to the witness
+ * Submit an event to the witness.
+ * Accepts raw CESR bytes (Uint8Array) or a plain object (for malformed-event tests).
  */
-export async function submitEvent(event: object): Promise<{
-  status: number;
-  data: any;
-}> {
-  // Send the event as raw JSON bytes to /process
+export async function submitEvent(
+  event: Uint8Array | object
+): Promise<{ status: number; data: any }> {
+  if (event instanceof Uint8Array) {
+    const url = `${requireApiUrl()}/process`;
+    const body = new TextDecoder().decode(event);
+    const response = await fetch(url, {
+      method: "POST",
+      body,
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      data = { error: "Failed to parse response" };
+    }
+    return { status: response.status, data };
+  }
+
+  // Legacy path: send JSON object (for malformed-event tests)
   return witnessRequest("/process", "POST", event);
 }
 
