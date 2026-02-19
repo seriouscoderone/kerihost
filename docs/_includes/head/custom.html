@@ -1,3 +1,22 @@
+<style>
+  pre.mermaid { cursor: zoom-in; }
+  .mermaid-lightbox {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.85);
+    display: flex; align-items: center; justify-content: center;
+    cursor: zoom-out;
+  }
+  .mermaid-lightbox svg {
+    max-width: 95vw; max-height: 90vh;
+    background: #fff; border-radius: 6px; padding: 1.5rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .mermaid-lightbox-hint {
+    position: absolute; bottom: 1.5rem; left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.6); font-size: 0.85rem;
+  }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script>
   // Jekyll renders ```mermaid as <pre><code class="language-mermaid">
@@ -11,6 +30,19 @@
       var parentPre = codeEl.parentElement;
       parentPre.parentElement.replaceChild(pre, parentPre);
     });
-    mermaid.run();
+    mermaid.run().then(function() {
+      document.querySelectorAll('pre.mermaid').forEach(function(el) {
+        el.addEventListener('click', function() {
+          var svg = el.querySelector('svg');
+          if (!svg) return;
+          var overlay = document.createElement('div');
+          overlay.className = 'mermaid-lightbox';
+          overlay.innerHTML = svg.outerHTML +
+            '<span class="mermaid-lightbox-hint">Click anywhere to close</span>';
+          overlay.addEventListener('click', function() { overlay.remove(); });
+          document.body.appendChild(overlay);
+        });
+      });
+    });
   });
 </script>
