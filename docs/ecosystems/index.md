@@ -2,6 +2,7 @@
 title: "Ecosystems"
 permalink: /ecosystems/
 layout: single
+author_profile: true
 description: "KERI ecosystem designs — real communities, real credentials, real architecture."
 ---
 

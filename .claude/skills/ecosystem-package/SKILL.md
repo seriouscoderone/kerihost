@@ -78,6 +78,7 @@ Use these terms consistently (same as blog skill):
 title: "{display_name}"
 permalink: /ecosystems/{name}/
 layout: single
+author_profile: true
 toc: true
 toc_sticky: true
 description: "{First sentence of ecosystem.description}"
@@ -184,6 +185,7 @@ Add:
 title: "{display_name} — Credentials"
 permalink: /ecosystems/{name}/credentials/
 layout: single
+author_profile: true
 toc: true
 toc_sticky: true
 description: "Complete credential catalog for the {display_name} ecosystem."
@@ -244,6 +246,7 @@ For each credential in `credential_catalog[]`, generate:
 title: "Ecosystems"
 permalink: /ecosystems/
 layout: single
+author_profile: true
 description: "KERI ecosystem designs — real communities, real credentials, real architecture."
 ---
 ```

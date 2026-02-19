@@ -2,6 +2,7 @@
 title: "Humanitarian Service Marketplace"
 permalink: /ecosystems/humanitarian-service-marketplace/
 layout: single
+author_profile: true
 toc: true
 toc_sticky: true
 description: "A cross-organizational ecosystem where individuals and organizations declaratively state service needs, and credentialed volunteers contractually commit to meet those needs."

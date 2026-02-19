@@ -2,6 +2,7 @@
 title: "Small Trades Cooperative"
 permalink: /ecosystems/small-trades-cooperative/
 layout: single
+author_profile: true
 toc: true
 toc_sticky: true
 description: "A cooperative of independent skilled tradespeople where each worker holds verifiable credentials and contracts directly with homeowners and cities."
