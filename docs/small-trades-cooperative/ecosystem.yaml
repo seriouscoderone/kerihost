@@ -1,0 +1,918 @@
+version: "1.0"
+
+ecosystem:
+  name: "small-trades-cooperative"
+  display_name: "Small Trades Cooperative"
+  description: >
+    A cooperative of independent skilled tradespeople where each worker holds
+    verifiable credentials — trade licenses, insurance, bonding, safety
+    certifications — and contracts directly with homeowners and cities. No
+    general contractor middleman. Job sequencing, credential verification, and
+    compliance are handled by the protocol. Reputation is built through
+    cryptographically attested job completions and travels with the worker.
+    The cooperative provides community and collective bargaining, not
+    administrative overhead. Workers capture the full value of their labor.
+
+governance:
+  regulatory_frameworks:
+    - "State trade licensing codes"
+    - "Local building codes (IBC/IRC)"
+    - "OSHA workplace safety standards"
+    - "State contractor registration requirements"
+    - "Surety and bonding requirements"
+
+  privacy_requirements:
+    - "Trade license numbers use selective disclosure — prove licensed without revealing number"
+    - "Insurance policy details use selective disclosure — coverage yes/no and amount only"
+    - "Background check results are pass/fail only — no underlying details disclosed"
+    - "Drug test results disclosed to coop membership verification only, not to homeowners"
+    - "Financial responsibility shows fundability, not bank balances or account details"
+    - "Witnessed recordings are contractual disclosure — locked box opened only for dispute resolution"
+    - "Property ownership details use selective disclosure — prove ownership without revealing financials"
+    - "Workers control their own privacy gradient based on career stage and preference"
+
+  dispute_resolution: >
+    Graduated 5-filter model designed to resolve disputes at the lowest possible
+    cost and friction level:
+
+    Filter 1 — Clear contracts: Contracts define scope, milestones, escrow
+    amounts, estimate ranges for unknowns, and pre-designated mediator. Scope
+    changes require signed amendments. Most misunderstandings prevented here.
+
+    Filter 2 — Verifiable attestations: Inspection sign-offs, milestone
+    completions, and timestamps make fault obvious. Audit trail shows who did
+    what, when, to what standard, inspected by whom.
+
+    Filter 3 — AI audit: Automated analysis of the KERI audit trail catches
+    non-obvious liability patterns. Adjudicating bodies publish resolution
+    algorithms that run against the evidence chain.
+
+    Filter 4 — Credentialed mediator: Pre-designated in the contract. Reviews
+    audit trails, witnessed recordings, and evidence. Issues binding ruling.
+    Fee comes from escrowed funds, defined up front. Both parties agreed to
+    this mediator before work began.
+
+    Filter 5 — Traditional legal system: Last resort. Court receives
+    cryptographic evidence chain — signed contracts, attested milestones,
+    witnessed recordings, mediator ruling. Case is simpler because evidence
+    is verifiable, not reconstructed from conflicting testimony.
+
+roles:
+  - name: tradesperson
+    display_name: "Independent Tradesperson"
+    description: >
+      Licensed skilled worker (plumber, electrician, HVAC, welder, carpenter,
+      concrete worker, etc.) who holds their own credentials, contracts directly
+      with clients, and builds portable reputation through attested job
+      completions. The atomic unit of this ecosystem. May be an apprentice,
+      journeyman, or master. Leaves any coop with all credentials and
+      reputation intact.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: false
+    governance_obligations:
+      - "Must maintain valid trade license for practiced trade category"
+      - "Must maintain current insurance and bonding credentials"
+      - "Must present credentials to homeowner and city upon request"
+      - "Must complete work to applicable building code standards"
+    credentials_issued:
+      - job_completion_attestation  # issued to them by homeowner, but they present it
+    credentials_required:
+      - trade_license
+      - insurance_credential
+      - safety_certification
+
+  - name: master_tradesperson
+    display_name: "Master Tradesperson"
+    description: >
+      Highly experienced tradesperson who mentors apprentices, issues
+      apprenticeship attestations, and serves as a trust anchor in the mature
+      ecosystem. Their reputation compounds through their apprentices' success.
+      Mentorship is a revenue stream — aging out of physical labor into
+      teaching, with reputation as the product. Creates a verifiable lineage:
+      who trained you, who trained them.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Must hold master designation from licensing board"
+      - "Must maintain active practice or recent practice history"
+      - "Must accurately attest apprentice skill progression"
+      - "Reputation is staked on apprentice quality — poor apprentices reflect on mentor"
+    credentials_issued:
+      - apprenticeship_attestation
+      - skill_level
+    credentials_required:
+      - trade_license
+      - master_designation
+      - insurance_credential
+      - safety_certification
+
+  - name: apprentice
+    display_name: "Apprentice"
+    description: >
+      Tradesperson-in-training working under a master or journeyman. Holds
+      apprenticeship credential issued by their mentor. Progresses to
+      journeyman through attested experience and mentor sign-off. The
+      apprenticeship path is an alternative to trade school — some people
+      choose the old-school route and find a good mentor. The mentor's
+      reputation flows to the apprentice.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: false
+    governance_obligations:
+      - "Must work under supervision of credentialed mentor"
+      - "Must not practice independently beyond apprentice scope"
+    credentials_issued: []
+    credentials_required:
+      - apprenticeship_attestation
+      - safety_certification
+
+  - name: coop
+    display_name: "Trades Cooperative"
+    description: >
+      Voluntary association of tradespeople with published membership
+      requirements. Provides collective brand, shared marketing, group
+      insurance rates, and peer community. Does NOT own members' credentials
+      or capture their revenue — members leave with everything. Competes with
+      traditional trade companies (AnyHour, ValleyPlumbing) by requiring the
+      same quality credentials without taking 40-60% of job revenue. Coops
+      differentiate by their governance requirements — some demand elite
+      certifications, others accept anyone with a valid license.
+    keri_infrastructure:
+      witness_pool: true
+      watcher_network: true
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Must publish governance framework publicly (membership requirements, standards)"
+      - "Must maintain witness pool with >= 3 witnesses"
+      - "Must verify member credentials on admission and monitor expiry"
+      - "Must not retain member credentials or reputation upon departure"
+    credentials_issued:
+      - coop_membership
+      - coop_governance_framework
+    credentials_required:
+      - coop_registration
+
+  - name: homeowner
+    display_name: "Property Owner / Client"
+    description: >
+      Individual or entity contracting for trade services. Funds escrow,
+      receives work completion, issues job completion attestations. The job
+      completion attestation — not a review — is the atomic unit of tradesperson
+      reputation. Low friction: just a confirmation that the job was done, signed
+      as part of contract close-out. Reviews happen organically through
+      word-of-mouth when friends see the attestation and ask about it.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: false
+    governance_obligations:
+      - "Must fund escrow before work begins"
+      - "Must attest job completion or initiate dispute within contract timeframe"
+    credentials_issued:
+      - job_completion_attestation
+    credentials_required:
+      - financial_responsibility
+      - property_credential
+
+  - name: inspector
+    display_name: "Credentialed Inspector"
+    description: >
+      Licensed individual who verifies physical work against building code
+      schemas. Can be government-employed or private. Private inspectors
+      compete on speed, availability, and reputation — breaking the city
+      inspector bottleneck. City accepts private inspector attestations when
+      inspector credentials are valid. AI-assisted verification (hardware-
+      attested images analyzed against code) serves as a first pass; human
+      inspector provides final attestation.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Must hold valid inspector license from licensing board or city"
+      - "Must attest only within licensed inspection categories"
+      - "Must maintain impartiality — cannot inspect own work or employer's work"
+      - "Subject to audit/spot-check by city building department"
+    credentials_issued:
+      - code_compliance_attestation
+    credentials_required:
+      - inspector_license
+
+  - name: mediator
+    display_name: "Dispute Mediator"
+    description: >
+      Credentialed individual — often a retired master tradesperson or licensed
+      arbitrator — agreed upon in contracts before work begins. Reviews audit
+      trails, witnessed recordings, and KERI evidence chain to resolve disputes.
+      Fee defined in escrow up front. Reputation built on ruling history and
+      fairness track record. A mediator known for fair rulings gets selected
+      more often.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: false
+    governance_obligations:
+      - "Must hold valid mediator credential from recognized arbitration body"
+      - "Must disclose any conflicts of interest before accepting a case"
+      - "Must render ruling within timeframe defined in contract"
+      - "Ruling history is public and contributes to reputation"
+    credentials_issued:
+      - mediation_ruling
+    credentials_required:
+      - mediator_credential
+
+  - name: licensing_board
+    display_name: "State Licensing Board"
+    description: >
+      Government entity that issues trade licenses and defines licensing
+      requirements. Trust anchor in the immature ecosystem. In the mature
+      ecosystem, retains standard-setting and audit authority but is no longer
+      the sole source of practitioner trust. Publishes licensing requirements
+      as verifiable schemas.
+    keri_infrastructure:
+      witness_pool: true
+      watcher_network: true
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Must issue and maintain trade license credentials"
+      - "Must publish licensing requirements as verifiable schemas"
+      - "Must revoke credentials when licenses lapse or are suspended"
+      - "Must maintain public OOBI endpoints for verification"
+    credentials_issued:
+      - trade_license
+      - master_designation
+      - inspector_license
+      - skill_level
+    credentials_required: []
+
+  - name: city_building_dept
+    display_name: "City Building Department"
+    description: >
+      Local government entity that publishes building code as verifiable
+      schemas, accepts inspector attestations, and retains spot-check audit
+      authority. Issues permits based on credential verification rather than
+      manual paperwork review. Role shifts from inspection workforce to
+      governance framework and quality audit.
+    keri_infrastructure:
+      witness_pool: true
+      watcher_network: true
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Must publish building code requirements as verifiable schemas"
+      - "Must accept attestations from credentialed inspectors"
+      - "Must maintain audit/spot-check program for inspector quality"
+      - "Must issue permits when credential requirements are met"
+    credentials_issued:
+      - inspector_license
+      - property_credential
+    credentials_required: []
+
+  - name: connector_service
+    display_name: "Connector / Recommendation Platform"
+    description: >
+      Optional service that facilitates discovery between homeowners and
+      tradespeople. Does NOT own reputation data — surfaces it. Competes on
+      matching quality, not data lock-in. Can be hyperlocal — neighborhood
+      boards, community groups, trade-specific directories. The organic,
+      local alternative to Yelp/Angi. Deliberately lightweight with no
+      infrastructure power accumulation.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: false
+    governance_obligations:
+      - "Must not store or claim ownership of tradesperson reputation data"
+      - "Must not gatekeep access to tradespeople"
+      - "Must present verifiable credentials, not proprietary ratings"
+    credentials_issued: []
+    credentials_required:
+      - connector_registration
+
+  - name: escrow_service
+    display_name: "Escrow Protocol Service"
+    description: >
+      Infrastructure that holds funds between contract signing and job
+      completion. Releases on mutual attestation (both parties confirm) or
+      mediator ruling. Cross-ecosystem primitive — the same escrow pattern
+      applies to any industry with service contracts. Not owned by any single
+      entity; operates as protocol infrastructure. Mediator fee defined in
+      escrow terms up front.
+    keri_infrastructure:
+      witness_pool: true
+      watcher_network: true
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Must hold funds securely and release only on defined trigger conditions"
+      - "Must support mutual attestation release and mediator ruling release"
+      - "Must publish transparent fee structure"
+      - "Must maintain audit trail of all escrow transactions"
+    credentials_issued:
+      - escrow_contract
+      - escrow_release
+    credentials_required: []
+
+  - name: device_attestor
+    display_name: "Hardware Device Attestor"
+    description: >
+      Manufacturer or certifier of devices (cameras, sensors) that produce
+      hardware-attested images and recordings. Their credential proves the
+      device produces authentic, unmodified, geolocated, timestamped media.
+      Enables the physical-to-digital bridge that makes witnessed recordings
+      admissible evidence.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: false
+      acdc_registry: true
+    governance_obligations:
+      - "Must certify devices meet authenticity standards"
+      - "Must revoke attestation for compromised devices"
+      - "Must publish device certification standards"
+    credentials_issued:
+      - hardware_attestation
+    credentials_required: []
+
+credential_catalog:
+  - id: trade_license
+    name: "Trade License"
+    description: >
+      State-issued license to practice a specific trade (plumbing, electrical,
+      HVAC, welding, carpentry, concrete, etc.). The entry floor — a valid
+      license means you can work today, regardless of experience level.
+    issuer_role: licensing_board
+    holder_role: tradesperson
+    verifier_roles: [homeowner, city_building_dept, coop, inspector]
+    schema_fields:
+      - { name: "trade_category", type: "string", required: true }
+      - { name: "license_number", type: "string", required: true }
+      - { name: "jurisdiction", type: "string", required: true }
+      - { name: "issue_date", type: "date", required: true }
+      - { name: "expiration_date", type: "date", required: true }
+      - { name: "license_status", type: "string", required: true }
+      - { name: "restrictions", type: "string[]", required: false }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: insurance_credential
+    name: "Insurance Coverage"
+    description: >
+      Proof of liability insurance coverage and amount. Verifiers see coverage
+      status and amount but not policy details, premiums, or claims history.
+      Auto-expires when policy lapses — no more stale certificates floating around.
+    issuer_role: insurance_ecosystem
+    holder_role: tradesperson
+    verifier_roles: [homeowner, city_building_dept, coop]
+    schema_fields:
+      - { name: "coverage_type", type: "string", required: true }
+      - { name: "coverage_amount", type: "number", required: true }
+      - { name: "policy_status", type: "string", required: true }
+      - { name: "effective_date", type: "date", required: true }
+      - { name: "expiration_date", type: "date", required: true }
+      - { name: "insurer_name", type: "string", required: true }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: bond_credential
+    name: "Surety Bond"
+    description: >
+      Proof of surety bond for larger jobs. Guarantees financial recourse if
+      work is not completed. In the mature ecosystem, escrow may replace
+      most bonding needs for smaller jobs.
+    issuer_role: surety_ecosystem
+    holder_role: tradesperson
+    verifier_roles: [homeowner, city_building_dept]
+    schema_fields:
+      - { name: "bond_amount", type: "number", required: true }
+      - { name: "bond_type", type: "string", required: true }
+      - { name: "surety_company", type: "string", required: true }
+      - { name: "effective_date", type: "date", required: true }
+      - { name: "expiration_date", type: "date", required: true }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: background_check
+    name: "Background Check"
+    description: >
+      Pass/fail background check. No underlying details disclosed — the
+      credential says "cleared" not "here's the report." Issued once, held
+      by the worker, verifiable by any coop without re-running the check.
+    issuer_role: issuing_agency
+    holder_role: tradesperson
+    verifier_roles: [coop]
+    schema_fields:
+      - { name: "check_type", type: "string", required: true }
+      - { name: "result", type: "string", required: true }
+      - { name: "check_date", type: "date", required: true }
+      - { name: "valid_until", type: "date", required: true }
+      - { name: "issuing_agency", type: "string", required: true }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: drug_test
+    name: "Drug Screening"
+    description: >
+      Pass/fail drug screening result. Disclosed to coop membership
+      verification only — homeowners see "coop member" which implies the
+      coop's requirements are met. Worker controls further disclosure.
+    issuer_role: testing_facility
+    holder_role: tradesperson
+    verifier_roles: [coop]
+    schema_fields:
+      - { name: "test_type", type: "string", required: true }
+      - { name: "result", type: "string", required: true }
+      - { name: "test_date", type: "date", required: true }
+      - { name: "valid_until", type: "date", required: true }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: safety_certification
+    name: "Safety Certification"
+    description: >
+      Job site safety training completion (OSHA 10, OSHA 30, trade-specific
+      safety certifications). Full disclosure — there's no reason to hide
+      that you're safety-trained.
+    issuer_role: training_provider
+    holder_role: tradesperson
+    verifier_roles: [homeowner, inspector, city_building_dept, coop]
+    schema_fields:
+      - { name: "certification_type", type: "string", required: true }
+      - { name: "issuing_organization", type: "string", required: true }
+      - { name: "completion_date", type: "date", required: true }
+      - { name: "expiration_date", type: "date", required: false }
+      - { name: "hours_completed", type: "number", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: skill_level
+    name: "Skill Level Designation"
+    description: >
+      Apprentice, journeyman, or master designation for a specific trade.
+      Issued by licensing board (formal path) or by a master tradesperson
+      (mentorship path). Both are verifiable — the market decides which
+      it values more.
+    issuer_role: licensing_board
+    holder_role: tradesperson
+    verifier_roles: [homeowner, coop, inspector]
+    schema_fields:
+      - { name: "trade_category", type: "string", required: true }
+      - { name: "level", type: "string", required: true }
+      - { name: "attested_by", type: "string", required: true }
+      - { name: "attestation_date", type: "date", required: true }
+      - { name: "years_experience", type: "number", required: false }
+    disclosure_mode: full
+    chained_from: trade_license
+
+  - id: apprenticeship_attestation
+    name: "Apprenticeship Attestation"
+    description: >
+      Issued by a master tradesperson to their apprentice. Records scope of
+      training, duration, and the mentor's identity. Creates a verifiable
+      lineage — who trained you, who trained them. The mentor's reputation
+      flows to the apprentice. Alternative to formal trade school path.
+      Mentor stakes their reputation on the apprentice's competence.
+    issuer_role: master_tradesperson
+    holder_role: apprentice
+    verifier_roles: [homeowner, coop, licensing_board]
+    schema_fields:
+      - { name: "mentor_aid", type: "string", required: true }
+      - { name: "mentor_name", type: "string", required: true }
+      - { name: "trade_category", type: "string", required: true }
+      - { name: "training_scope", type: "string[]", required: true }
+      - { name: "start_date", type: "date", required: true }
+      - { name: "end_date", type: "date", required: false }
+      - { name: "hours_completed", type: "number", required: true }
+      - { name: "competency_areas", type: "string[]", required: true }
+    disclosure_mode: full
+    chained_from: master_designation
+
+  - id: master_designation
+    name: "Master Designation"
+    description: >
+      Recognized master-level practitioner in a specific trade. Issued by
+      the licensing board. Authorizes the holder to mentor apprentices and
+      issue apprenticeship attestations. In the mature ecosystem, a master
+      with strong reputation becomes a trust anchor independent of
+      institutional backing.
+    issuer_role: licensing_board
+    holder_role: master_tradesperson
+    verifier_roles: [homeowner, coop, inspector, apprentice]
+    schema_fields:
+      - { name: "trade_category", type: "string", required: true }
+      - { name: "designation_date", type: "date", required: true }
+      - { name: "years_in_trade", type: "number", required: true }
+      - { name: "specializations", type: "string[]", required: false }
+    disclosure_mode: full
+    chained_from: trade_license
+
+  - id: coop_membership
+    name: "Cooperative Membership"
+    description: >
+      Active member of a specific cooperative. Implies the coop's published
+      membership requirements are met — background check, drug test, insurance
+      minimums, whatever the coop demands. The coop's brand and requirements
+      ARE the value of membership. Worker presents this instead of individual
+      screening credentials to homeowners.
+    issuer_role: coop
+    holder_role: tradesperson
+    verifier_roles: [homeowner, connector_service]
+    schema_fields:
+      - { name: "coop_name", type: "string", required: true }
+      - { name: "coop_aid", type: "string", required: true }
+      - { name: "membership_date", type: "date", required: true }
+      - { name: "trade_categories", type: "string[]", required: true }
+      - { name: "membership_tier", type: "string", required: false }
+    disclosure_mode: full
+    chained_from: coop_governance_framework
+
+  - id: coop_governance_framework
+    name: "Coop Governance Framework"
+    description: >
+      Public document of membership requirements and standards. The coop
+      publishes this so homeowners can see what "member of XYZ Coop" actually
+      means. Different coops have different requirements — this is how they
+      differentiate. Premium coops demand more; budget coops demand the legal
+      minimum. Both are transparent.
+    issuer_role: coop
+    holder_role: coop
+    verifier_roles: [homeowner, tradesperson, connector_service]
+    schema_fields:
+      - { name: "required_credentials", type: "string[]", required: true }
+      - { name: "minimum_insurance_amount", type: "number", required: true }
+      - { name: "background_check_required", type: "boolean", required: true }
+      - { name: "drug_test_required", type: "boolean", required: true }
+      - { name: "minimum_skill_level", type: "string", required: false }
+      - { name: "continuing_education_required", type: "boolean", required: false }
+      - { name: "version", type: "string", required: true }
+      - { name: "effective_date", type: "date", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: coop_registration
+    name: "Coop Registration"
+    description: >
+      State or city registration as a legally recognized cooperative entity.
+    issuer_role: licensing_board
+    holder_role: coop
+    verifier_roles: [homeowner, tradesperson, city_building_dept]
+    schema_fields:
+      - { name: "registration_number", type: "string", required: true }
+      - { name: "jurisdiction", type: "string", required: true }
+      - { name: "registration_date", type: "date", required: true }
+      - { name: "entity_type", type: "string", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: job_completion_attestation
+    name: "Job Completion Attestation"
+    description: >
+      The atomic unit of reputation. Homeowner attests that a specific job
+      was completed by a specific tradesperson. Not a review — just a fact.
+      Signed as part of contract close-out with zero extra effort. Friends
+      and neighbors see it and ask for recommendations through the
+      relationship, not through a platform. Workers accumulate these
+      as portable, verifiable work history.
+    issuer_role: homeowner
+    holder_role: tradesperson
+    verifier_roles: [homeowner, coop, connector_service, inspector]
+    schema_fields:
+      - { name: "job_type", type: "string", required: true }
+      - { name: "job_description", type: "string", required: true }
+      - { name: "completion_date", type: "date", required: true }
+      - { name: "property_type", type: "string", required: true }
+      - { name: "trade_category", type: "string", required: true }
+      - { name: "contract_aid", type: "string", required: true }
+      - { name: "escrow_released_clean", type: "boolean", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: financial_responsibility
+    name: "Financial Responsibility"
+    description: >
+      Proof that the homeowner can fund escrow for a given amount. Financial
+      institution attests fundability without revealing bank balance, account
+      details, or any other financial information. The tradesperson sees
+      "escrow fundable to $X" — that's it.
+    issuer_role: financial_institution
+    holder_role: homeowner
+    verifier_roles: [tradesperson, escrow_service]
+    schema_fields:
+      - { name: "fundable_amount", type: "number", required: true }
+      - { name: "attestation_date", type: "date", required: true }
+      - { name: "valid_until", type: "date", required: true }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: property_credential
+    name: "Property Ownership"
+    description: >
+      Proof of property ownership for permit and contract purposes. Issued
+      by city or county records. Selective disclosure — prove you own the
+      property without revealing purchase price or mortgage details.
+    issuer_role: city_building_dept
+    holder_role: homeowner
+    verifier_roles: [tradesperson, city_building_dept, inspector]
+    schema_fields:
+      - { name: "property_address", type: "string", required: true }
+      - { name: "owner_name", type: "string", required: true }
+      - { name: "parcel_id", type: "string", required: true }
+      - { name: "ownership_type", type: "string", required: true }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: inspector_license
+    name: "Inspector License"
+    description: >
+      Authorization to inspect and attest code compliance. Issued by
+      licensing board or city building department. In the mature ecosystem,
+      private inspectors with this credential compete with city inspectors
+      on speed and availability, breaking the inspection bottleneck.
+    issuer_role: licensing_board
+    holder_role: inspector
+    verifier_roles: [city_building_dept, homeowner, tradesperson]
+    schema_fields:
+      - { name: "inspection_categories", type: "string[]", required: true }
+      - { name: "jurisdiction", type: "string", required: true }
+      - { name: "license_number", type: "string", required: true }
+      - { name: "issue_date", type: "date", required: true }
+      - { name: "expiration_date", type: "date", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: code_compliance_attestation
+    name: "Code Compliance Attestation"
+    description: >
+      Specific work items verified against building code schema. Inspector
+      attests each item individually — electrical passed, plumbing passed,
+      ventilation passed. City accepts the complete attestation set
+      automatically when issued by a credentialed inspector. AI-assisted
+      verification with hardware-attested images serves as first pass.
+    issuer_role: inspector
+    holder_role: tradesperson
+    verifier_roles: [city_building_dept, homeowner]
+    schema_fields:
+      - { name: "permit_number", type: "string", required: true }
+      - { name: "inspection_type", type: "string", required: true }
+      - { name: "code_section", type: "string", required: true }
+      - { name: "result", type: "string", required: true }
+      - { name: "inspection_date", type: "date", required: true }
+      - { name: "deficiencies", type: "string[]", required: false }
+      - { name: "re_inspection_required", type: "boolean", required: true }
+      - { name: "inspector_aid", type: "string", required: true }
+    disclosure_mode: full
+    chained_from: inspector_license
+
+  - id: mediator_credential
+    name: "Mediator Credential"
+    description: >
+      Authorization to mediate disputes in trade contracts. Issued by a
+      recognized arbitration body or licensing board. Mediator selection
+      happens before work begins — both parties agree in the contract.
+    issuer_role: arbitration_body
+    holder_role: mediator
+    verifier_roles: [homeowner, tradesperson, escrow_service]
+    schema_fields:
+      - { name: "certification_type", type: "string", required: true }
+      - { name: "issuing_body", type: "string", required: true }
+      - { name: "specializations", type: "string[]", required: false }
+      - { name: "issue_date", type: "date", required: true }
+      - { name: "expiration_date", type: "date", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: mediation_ruling
+    name: "Mediation Ruling"
+    description: >
+      Binding ruling on a dispute. Triggers escrow release or reallocation.
+      Contractual disclosure — only the parties, escrow service, and any
+      appellate adjudicator see the ruling details. The existence of a ruling
+      (and its outcome) is part of the public record; the details are not.
+    issuer_role: mediator
+    holder_role: homeowner
+    verifier_roles: [escrow_service]
+    schema_fields:
+      - { name: "contract_aid", type: "string", required: true }
+      - { name: "ruling_date", type: "date", required: true }
+      - { name: "ruling_summary", type: "string", required: true }
+      - { name: "escrow_disposition", type: "string", required: true }
+      - { name: "amount_to_tradesperson", type: "number", required: true }
+      - { name: "amount_to_homeowner", type: "number", required: true }
+      - { name: "mediator_fee", type: "number", required: true }
+    disclosure_mode: contractual
+    chained_from: mediator_credential
+
+  - id: escrow_contract
+    name: "Escrow Contract"
+    description: >
+      Funds locked between contract signing and job completion. Defines
+      release conditions, milestone schedule, mediator designation, and
+      mediator fee. Both parties sign before work begins. Cross-ecosystem
+      primitive — this pattern applies to any service contract.
+    issuer_role: escrow_service
+    holder_role: homeowner
+    verifier_roles: [tradesperson, mediator]
+    schema_fields:
+      - { name: "total_amount", type: "number", required: true }
+      - { name: "milestones", type: "object[]", required: false }
+      - { name: "release_conditions", type: "string", required: true }
+      - { name: "mediator_aid", type: "string", required: true }
+      - { name: "mediator_fee_percentage", type: "number", required: true }
+      - { name: "dispute_deadline_days", type: "number", required: true }
+      - { name: "contract_date", type: "date", required: true }
+      - { name: "homeowner_aid", type: "string", required: true }
+      - { name: "tradesperson_aid", type: "string", required: true }
+    disclosure_mode: contractual
+    chained_from: null
+
+  - id: escrow_release
+    name: "Escrow Release"
+    description: >
+      Funds released — either clean close (mutual attestation) or mediated
+      ruling. The release record shows outcome (clean or mediated) but not
+      amounts. A tradesperson with many clean releases has a strong signal.
+    issuer_role: escrow_service
+    holder_role: tradesperson
+    verifier_roles: [homeowner, coop, connector_service]
+    schema_fields:
+      - { name: "contract_aid", type: "string", required: true }
+      - { name: "release_type", type: "string", required: true }
+      - { name: "release_date", type: "date", required: true }
+      - { name: "clean_release", type: "boolean", required: true }
+    disclosure_mode: selective
+    chained_from: escrow_contract
+
+  - id: witnessed_recording
+    name: "Witnessed Recording"
+    description: >
+      Hardware-attested photo or video of work, timestamped, geolocated, and
+      witnessed by KERI witnesses. Locked box — existence is known, content
+      is encrypted, access requires credentialed adjudicator and dispute
+      trigger defined in contract. The existence of the recording is itself
+      a deterrent. Both parties can create witnessed recordings.
+    issuer_role: device_attestor
+    holder_role: tradesperson
+    verifier_roles: [mediator, inspector]
+    schema_fields:
+      - { name: "recording_type", type: "string", required: true }
+      - { name: "capture_timestamp", type: "datetime", required: true }
+      - { name: "geolocation", type: "string", required: true }
+      - { name: "device_aid", type: "string", required: true }
+      - { name: "content_hash", type: "string", required: true }
+      - { name: "access_conditions", type: "string", required: true }
+    disclosure_mode: contractual
+    chained_from: hardware_attestation
+
+  - id: hardware_attestation
+    name: "Hardware Device Attestation"
+    description: >
+      Certifies that a device produces authentic, unmodified media.
+      Manufacturer or certifier attests to the device's integrity. Enables
+      the physical-to-digital bridge — without this, photos and videos
+      have no cryptographic provenance.
+    issuer_role: device_attestor
+    holder_role: tradesperson
+    verifier_roles: [inspector, mediator]
+    schema_fields:
+      - { name: "device_model", type: "string", required: true }
+      - { name: "device_serial", type: "string", required: true }
+      - { name: "manufacturer", type: "string", required: true }
+      - { name: "certification_standard", type: "string", required: true }
+      - { name: "certification_date", type: "date", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: connector_registration
+    name: "Connector Registration"
+    description: >
+      Registration for a recommendation/matching service. Self-attested or
+      coop-attested. Deliberately lightweight — connectors are optional,
+      replaceable, and must not accumulate power over reputation data.
+    issuer_role: coop
+    holder_role: connector_service
+    verifier_roles: [homeowner, tradesperson]
+    schema_fields:
+      - { name: "service_name", type: "string", required: true }
+      - { name: "service_type", type: "string", required: true }
+      - { name: "coverage_area", type: "string", required: true }
+      - { name: "registration_date", type: "date", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+delegation_trees:
+  # Trade Licensing Chain
+  - root_role: licensing_board
+    delegates:
+      - role: tradesperson
+        scope: "Practice trade within licensed category"
+        depth_limit: 1
+      - role: master_tradesperson
+        scope: "Practice trade and issue apprenticeship attestations"
+        depth_limit: 2
+      - role: inspector
+        scope: "Inspect within licensed trade categories"
+        depth_limit: 1
+
+  # City Inspection Authority
+  - root_role: city_building_dept
+    delegates:
+      - role: inspector
+        scope: "Attest code compliance for permitted work"
+        depth_limit: 1
+
+  # Coop Membership (no sub-delegation)
+  - root_role: coop
+    delegates:
+      - role: tradesperson
+        scope: "Represent coop brand, meet published governance requirements"
+        depth_limit: 1
+
+  # Dispute Resolution (no sub-delegation)
+  - root_role: arbitration_body
+    delegates:
+      - role: mediator
+        scope: "Issue binding rulings on trade contract disputes"
+        depth_limit: 1
+
+  # Escrow Release Authority
+  - root_role: escrow_service
+    delegates:
+      - role: homeowner
+        scope: "Jointly trigger release on mutual attestation with tradesperson"
+        depth_limit: 1
+      - role: tradesperson
+        scope: "Jointly trigger release on mutual attestation with homeowner"
+        depth_limit: 1
+      - role: mediator
+        scope: "Trigger release on binding ruling"
+        depth_limit: 1
+
+  # Mentorship Lineage
+  - root_role: licensing_board
+    delegates:
+      - role: master_tradesperson
+        scope: "Attest skill progression and issue apprenticeship credentials"
+        depth_limit: 3
+
+  # Mature ecosystem: masters as inspectors
+  # - root_role: licensing_board
+  #   delegates:
+  #     - role: master_tradesperson
+  #       scope: "Attest code compliance within their trade"
+  #       depth_limit: 1
+
+interoperability:
+  - target_ecosystem: "insurance"
+    bridge_credentials:
+      - insurance_credential
+      - bond_credential
+    data_flows:
+      - "Tradespeople carry insurance credentials from insurance ecosystem"
+      - "Escrow history and dispute-free record may influence insurance premiums"
+      - "Clean escrow release history is a signal for lower-risk pricing"
+
+  - target_ecosystem: "financial"
+    bridge_credentials:
+      - financial_responsibility
+    data_flows:
+      - "Homeowner's financial institution attests escrow fundability"
+      - "Credit-clearing networks (MyCHIPs) as alternative to traditional banking"
+      - "Tradesperson payment settlement through financial ecosystem"
+
+  - target_ecosystem: "escrow-protocol"
+    bridge_credentials:
+      - escrow_contract
+      - escrow_release
+      - mediation_ruling
+    data_flows:
+      - "Cross-ecosystem escrow primitive — same pattern for any service contract"
+      - "Mediator credentials recognized across ecosystems"
+
+  - target_ecosystem: "education-training"
+    bridge_credentials:
+      - apprenticeship_attestation
+      - safety_certification
+      - skill_level
+    data_flows:
+      - "Mentorship lineage credentials portable across ecosystems"
+      - "Alternative to formal trade school credentials"
+      - "Continuing education credentials from training providers"
+
+systems:
+  # Populated by C1 skill (/keri:design1-service). Lists services built within
+  # this ecosystem. Leave empty during C0 design.
+  []
