@@ -4,7 +4,6 @@ permalink: /ecosystems/humanitarian-service-marketplace/credentials/
 layout: single
 toc: true
 toc_sticky: true
-classes: wide
 description: "Complete credential catalog for the Humanitarian Service Marketplace ecosystem."
 ---
 

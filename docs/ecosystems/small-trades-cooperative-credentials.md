@@ -4,7 +4,6 @@ permalink: /ecosystems/small-trades-cooperative/credentials/
 layout: single
 toc: true
 toc_sticky: true
-classes: wide
 description: "Complete credential catalog for the Small Trades Cooperative ecosystem."
 ---
 

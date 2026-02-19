@@ -4,7 +4,6 @@ permalink: /ecosystems/small-trades-cooperative/
 layout: single
 toc: true
 toc_sticky: true
-classes: wide
 description: "A cooperative of independent skilled tradespeople where each worker holds verifiable credentials and contracts directly with homeowners and cities."
 ---
 

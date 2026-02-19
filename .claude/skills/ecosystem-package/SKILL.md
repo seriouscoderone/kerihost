@@ -80,7 +80,6 @@ permalink: /ecosystems/{name}/
 layout: single
 toc: true
 toc_sticky: true
-classes: wide
 description: "{First sentence of ecosystem.description}"
 ---
 ```
@@ -187,7 +186,6 @@ permalink: /ecosystems/{name}/credentials/
 layout: single
 toc: true
 toc_sticky: true
-classes: wide
 description: "Complete credential catalog for the {display_name} ecosystem."
 ---
 ```
@@ -246,7 +244,6 @@ For each credential in `credential_catalog[]`, generate:
 title: "Ecosystems"
 permalink: /ecosystems/
 layout: single
-classes: wide
 description: "KERI ecosystem designs — real communities, real credentials, real architecture."
 ---
 ```
