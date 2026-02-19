@@ -5,8 +5,6 @@ main:
     url: /manifesto/
   - title: "Ecosystem Stories"
     url: /ecosystem-stories/
-  - title: "What We Don't Do"
-    url: /blog/2026/02/06/data-at-the-edge/
   - title: "GitHub"
     url: https://github.com/seriouscoderone/kerihost
   - title: "Sponsor"
