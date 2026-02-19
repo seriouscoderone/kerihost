@@ -6,7 +6,7 @@ classes: wide
 description: "KERI ecosystem designs — real communities, real credentials, real architecture."
 ---
 
-Ecosystem designs are conceptual architectures (C0 level) that map out how KERI credentials, roles, and governance work together for specific communities. Each design is a complete specification — roles, credentials, delegation trees, and interoperability — ready to be implemented.
+Ecosystem designs are conceptual architectures that map out how KERI credentials, roles, and governance work together for specific communities. Each design is a complete specification — roles, credentials, delegation trees, and interoperability — ready to be implemented. Credentials and schemas shown are illustrative examples, not finalized specifications.
 
 These are not whitepapers. They are buildable blueprints.
 

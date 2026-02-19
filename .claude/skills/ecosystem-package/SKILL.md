@@ -1,5 +1,5 @@
 ---
-description: Generate visual ecosystem pages with Mermaid diagrams from C0 ecosystem design YAML artifacts. Produces browsable overview and credential catalog pages for the KERI.host blog.
+description: Generate visual ecosystem pages with Mermaid diagrams from ecosystem design YAML artifacts. Produces browsable overview and credential catalog pages for the KERI.host blog.
 user_invocable: true
 command: ecosystem-package
 ---
@@ -9,7 +9,7 @@ command: ecosystem-package
 ## When to Use
 
 Use this skill when the user asks to:
-- Build ecosystem pages from a C0 design (`/ecosystem-package build [name]`)
+- Build ecosystem pages from a design (`/ecosystem-package build [name]`)
 - List available ecosystems (`/ecosystem-package list`)
 - Rebuild pages after artifact changes (`/ecosystem-package rebuild [name]`)
 - Regenerate the ecosystem index (`/ecosystem-package index`)
@@ -46,7 +46,8 @@ Same as `build` — overwrites existing generated pages.
 Ecosystem pages follow the KERI.host voice. Key points:
 
 - **Conversational but substantive.** Explain to a smart reader, not an academic or marketer.
-- **Anti-hype.** No breathless language. If something is C0-level design (not built yet), say so.
+- **Anti-hype.** No breathless language. If something is a design (not built yet), say so.
+- **Credentials are examples.** Always note that credentials and schemas are illustrative examples, not finalized specifications.
 - **Grounded in architecture.** Every claim maps to a credential, role, or delegation tree in the YAML.
 - **No crypto buzzwords** without immediately grounding them in human outcomes.
 - **No emojis.** Clean, professional markdown.
@@ -86,21 +87,13 @@ description: "{First sentence of ecosystem.description}"
 
 ### Content Structure
 
-Generate the following sections in order:
+Generate the following sections in order. Diagrams come first (the visual hook), roles go at the bottom (reference material). The sticky TOC sidebar lets readers jump to any section.
 
 #### 1. Introduction
 
-Write 2-3 paragraphs summarizing the ecosystem from `ecosystem.description`. Use the KERI.host voice — conversational, grounded, anti-hype. Mention this is a C0 ecosystem design (conceptual, not yet implemented).
+Write 2-3 paragraphs summarizing the ecosystem from `ecosystem.description`. Use the KERI.host voice — conversational, grounded, anti-hype. Mention this is an ecosystem design (conceptual, not yet implemented). Note that credentials and schemas are illustrative examples, not finalized specifications.
 
-#### 2. Roles
-
-For each role in `roles[]`:
-- Display name as `###` heading
-- 1-2 sentence description drawn from the YAML `description` field, rewritten in the KERI.host voice (not copied verbatim)
-- A compact table of KERI infrastructure requirements (witness pool, watcher network, agent service, ACDC registry)
-- List governance obligations as bullet points
-
-#### 3. Role Interaction Map (Mermaid Diagram)
+#### 2. Role Interaction Map (Mermaid Diagram)
 
 Generate a Mermaid `graph LR` diagram showing:
 - Each role as a node (use `display_name`)
@@ -129,7 +122,7 @@ graph LR
 - Keep edge labels short (credential name, not full description)
 - If the diagram has more than 15 edges, split into sub-diagrams by category
 
-#### 4. Credential Issuance Flow (Mermaid Diagram)
+#### 3. Credential Issuance Flow (Mermaid Diagram)
 
 Generate a Mermaid `graph TD` (top-down) diagram showing:
 - Issuer roles at the top
@@ -138,7 +131,7 @@ Generate a Mermaid `graph TD` (top-down) diagram showing:
 - Group by issuer role to show who issues what
 - Only include credentials where both issuer and holder are in `roles[]`
 
-#### 5. Delegation Trees (Mermaid Diagram)
+#### 4. Delegation Trees (Mermaid Diagram)
 
 Generate a Mermaid `graph TD` diagram from `delegation_trees[]`:
 - Root role at the top
@@ -146,7 +139,7 @@ Generate a Mermaid `graph TD` diagram from `delegation_trees[]`:
 - Show `depth_limit` in the edge label if > 1
 - One sub-diagram per delegation tree, or combine if they share root roles
 
-#### 6. Credential Dependency Graph (Mermaid Diagram)
+#### 5. Credential Dependency Graph (Mermaid Diagram)
 
 Generate a Mermaid `graph LR` diagram from `credential_catalog[].chained_from`:
 - Each credential as a node
@@ -154,13 +147,21 @@ Generate a Mermaid `graph LR` diagram from `credential_catalog[].chained_from`:
 - Only include credentials that participate in chains (have a non-null `chained_from` or are referenced by another credential's `chained_from`)
 - Label nodes with credential display name
 
-#### 7. Governance
+#### 6. Governance
 
 Summarize `governance.regulatory_frameworks`, `governance.privacy_requirements`, and `governance.dispute_resolution` in narrative paragraphs. Don't just list them — weave them into a story about how the ecosystem governs itself.
 
-#### 8. Interoperability
+#### 7. Interoperability
 
 For each entry in `interoperability[]`, write a short paragraph about the bridge to that ecosystem and what flows across the boundary. List bridge credentials.
+
+#### 8. Roles
+
+For each role in `roles[]`:
+- Display name as `###` heading
+- 1-2 sentence description drawn from the YAML `description` field, rewritten in the KERI.host voice (not copied verbatim)
+- A compact table of KERI infrastructure requirements (witness pool, watcher network, agent service, ACDC registry)
+- List governance obligations as bullet points
 
 #### 9. Footer
 
@@ -168,7 +169,7 @@ Add:
 ```markdown
 ---
 
-*This is a C0 ecosystem design — a conceptual architecture, not a running system. See the [credential catalog](/ecosystems/{name}/credentials/) for the full credential specification.*
+*This is an ecosystem design — a conceptual architecture, not a running system. Credentials and schemas are illustrative examples, not finalized specifications. See the [credential catalog](/ecosystems/{name}/credentials/) for the full credential specification.*
 
 *Generated from [`docs/{name}/ecosystem.yaml`](https://github.com/seriouscoderone/kerihost/blob/main/docs/{name}/ecosystem.yaml) by the `/ecosystem-package` skill.*
 ```
@@ -195,7 +196,7 @@ description: "Complete credential catalog for the {display_name} ecosystem."
 
 #### 1. Introduction
 
-One paragraph: "This is the complete credential catalog for the {display_name} ecosystem. Each credential below includes its issuer, holder, verifiers, schema fields, disclosure mode, and chaining relationships."
+One paragraph: "This is the complete credential catalog for the {display_name} ecosystem. Each credential below includes its issuer, holder, verifiers, schema fields, disclosure mode, and chaining relationships. Credentials and schemas are illustrative examples showing the type of data each credential would carry, not finalized specifications."
 
 Add a link back to the overview: `[Back to {display_name} overview](/ecosystems/{name}/)`
 
@@ -253,7 +254,7 @@ description: "KERI ecosystem designs — real communities, real credentials, rea
 ### Content
 
 ```markdown
-Ecosystem designs are conceptual architectures (C0 level) that map out how KERI credentials, roles, and governance work together for specific communities. Each design is a complete specification — roles, credentials, delegation trees, and interoperability — ready to be implemented.
+Ecosystem designs are conceptual architectures that map out how KERI credentials, roles, and governance work together for specific communities. Each design is a complete specification — roles, credentials, delegation trees, and interoperability — ready to be implemented. Credentials and schemas are illustrative examples, not finalized specifications.
 
 These are not whitepapers. They are buildable blueprints.
 ```

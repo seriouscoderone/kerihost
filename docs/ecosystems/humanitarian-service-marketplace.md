@@ -14,110 +14,7 @@ Today, volunteer coordination lives inside organizational silos. The Red Cross t
 
 This ecosystem design flips that model. Individuals own their identity, credentials, and service history. Organizations participate as peers in a shared marketplace — each credentialing and vetting volunteers according to their own governance, while service opportunities and verified service records flow freely across organizational boundaries. Trust is rooted in verifiable credentials: whoever issues a credential is also responsible for verifying it.
 
-This is a C0 ecosystem design — a conceptual architecture, not a running system. Everything here maps to specific roles, credentials, and delegation trees defined in the [ecosystem YAML](https://github.com/seriouscoderone/kerihost/blob/main/docs/humanitarian-service-marketplace/ecosystem.yaml). The diagrams below are generated from that specification.
-
-## Roles
-
-### Individual
-
-A person at the center of the ecosystem — can be a requester, a volunteer, or both. Owns their identity, credentials, and service history. May hold a State-Endorsed Digital Identity (SEDI) or bootstrap trust through ecosystem-native KYV credentials.
-
-| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
-|:---:|:---:|:---:|:---:|
-| No | No | Yes | No |
-
-- Maintain key security for their AID
-- Provide truthful self-asserted data (equipment inventory, availability)
-- Honor service commitments or revoke them before the commitment window
-
-### Guardian
-
-Manages a delegated AID on behalf of someone who cannot manage their own — a minor, elderly person, or person with disabilities. The ward retains their own AID; the guardian holds a delegated AID that acts within a cryptographically bounded scope. When the ward gains capacity, delegation is revoked and they take full control.
-
-| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
-|:---:|:---:|:---:|:---:|
-| No | No | Yes | No |
-
-- Act within the scope defined by the guardian delegation credential
-- Preserve the ward's AID and transfer control when delegation ends
-- Comply with applicable guardianship laws and court orders
-
-### Grassroots Organization
-
-Informal groups — neighborhood clubs, homeschool co-ops, friend networks, small faith communities — that publish needs and coordinate volunteers without formal governance. Same protocols as large platforms, different scale and reputation depth. Permissionless entry.
-
-| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
-|:---:|:---:|:---:|:---:|
-| No | No | Yes | No |
-
-- Publish service needs accurately
-- Honor interoperability agreements with partner organizations
-- Comply with legal obligations that scale with organizational formality
-
-### Service Platform
-
-Formal organizations — Red Cross, United Way, faith-based organizations — that operate as marketplace peers. They match volunteers to needs, run Know Your Volunteer programs, and serve as trust anchors. Their value evolves as the ecosystem matures: KYV vetting, disaster coordination at scale, government liaison — rather than simply being middlemen.
-
-| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
-|:---:|:---:|:---:|:---:|
-| Yes | Yes | Yes | Yes |
-
-- Maintain witness pool with >= 3 geographically distributed witnesses
-- Publish OOBI endpoints for discovery
-- Operate KYV programs per published standards
-- Honor interoperability and attribution agreements with partner platforms
-- Report duplicity evidence to governance body
-- Comply with nonprofit reporting and tax-exempt auditing requirements
-
-### Credential Provider
-
-Entities that issue skill and training credentials — trade schools, CPR trainers, online education platforms, professional licensing bodies. The issuer is also the verifier: whoever grants the credential is responsible for confirming its validity.
-
-| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
-|:---:|:---:|:---:|:---:|
-| Yes | No | Yes | Yes |
-
-- Verify credential validity when queried
-- Revoke credentials when underlying qualifications expire or are lost
-- Maintain credential schemas in the ecosystem schema registry
-- Publish OOBI endpoints for credential verification
-
-### KYV Provider
-
-Entities running Know Your Volunteer programs — composing background checks, training certificates, psychological evaluations, and other component credentials into a KYV credential. Multiple KYV standards coexist, each with known strengths and weaknesses. Could be a service platform, a specialized provider, or a consortium.
-
-| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
-|:---:|:---:|:---:|:---:|
-| Yes | Yes | Yes | Yes |
-
-- Publish the KYV standard definition (what component credentials are required)
-- Verify all component credentials before issuing KYV credential
-- Revoke KYV credentials when component credentials expire or are revoked
-- May require in-person training or other governance structures as they see fit
-
-### Verification Service
-
-Background check providers, identity verification services, biometric verification providers — the component suppliers that feed into KYV and other composite credentials. Specialized providers that serve multiple KYV providers and platforms.
-
-| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
-|:---:|:---:|:---:|:---:|
-| No | No | Yes | Yes |
-
-- Perform checks according to published standards
-- Issue results as verifiable credentials with clear methodology disclosure
-- Maintain data privacy per legal and contractual obligations
-
-### Government Agency
-
-Regulatory bodies that issue licenses (SEDI identity, professional licenses), receive tax reporting, and enforce child protection laws. Benefits from KERI's automatic verifiability — reduced accounting overhead, provable compliance. Consumes aggregated, auditable roll-ups of service data.
-
-| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
-|:---:|:---:|:---:|:---:|
-| Yes | Yes | Yes | Yes |
-
-- Issue SEDI and other government-backed credentials per regulatory standards
-- Publish credential schemas and verification endpoints
-- Accept and validate aggregated reporting from ecosystem participants
+This is an ecosystem design — a conceptual architecture, not a running system. Credentials and schemas shown are illustrative examples showing the type of data each credential would carry, not finalized specifications. Everything here maps to specific roles, credentials, and delegation trees defined in the [ecosystem YAML](https://github.com/seriouscoderone/kerihost/blob/main/docs/humanitarian-service-marketplace/ecosystem.yaml). The diagrams below are generated from that specification.
 
 ## Role Interaction Map
 
@@ -252,8 +149,111 @@ Formal service platforms verify liability coverage for high-risk volunteer activ
 
 Government agencies receive aggregated, auditable volunteer hour roll-ups. Individuals claim tax deductions backed by cryptographically verified service records — no more self-reported hours on the honor system. Bridge credentials: `service_hour_aggregation`, `tax_deduction_certificate`.
 
+## Roles
+
+### Individual
+
+A person at the center of the ecosystem — can be a requester, a volunteer, or both. Owns their identity, credentials, and service history. May hold a State-Endorsed Digital Identity (SEDI) or bootstrap trust through ecosystem-native KYV credentials.
+
+| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
+|:---:|:---:|:---:|:---:|
+| No | No | Yes | No |
+
+- Maintain key security for their AID
+- Provide truthful self-asserted data (equipment inventory, availability)
+- Honor service commitments or revoke them before the commitment window
+
+### Guardian
+
+Manages a delegated AID on behalf of someone who cannot manage their own — a minor, elderly person, or person with disabilities. The ward retains their own AID; the guardian holds a delegated AID that acts within a cryptographically bounded scope. When the ward gains capacity, delegation is revoked and they take full control.
+
+| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
+|:---:|:---:|:---:|:---:|
+| No | No | Yes | No |
+
+- Act within the scope defined by the guardian delegation credential
+- Preserve the ward's AID and transfer control when delegation ends
+- Comply with applicable guardianship laws and court orders
+
+### Grassroots Organization
+
+Informal groups — neighborhood clubs, homeschool co-ops, friend networks, small faith communities — that publish needs and coordinate volunteers without formal governance. Same protocols as large platforms, different scale and reputation depth. Permissionless entry.
+
+| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
+|:---:|:---:|:---:|:---:|
+| No | No | Yes | No |
+
+- Publish service needs accurately
+- Honor interoperability agreements with partner organizations
+- Comply with legal obligations that scale with organizational formality
+
+### Service Platform
+
+Formal organizations — Red Cross, United Way, faith-based organizations — that operate as marketplace peers. They match volunteers to needs, run Know Your Volunteer programs, and serve as trust anchors. Their value evolves as the ecosystem matures: KYV vetting, disaster coordination at scale, government liaison — rather than simply being middlemen.
+
+| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
+|:---:|:---:|:---:|:---:|
+| Yes | Yes | Yes | Yes |
+
+- Maintain witness pool with >= 3 geographically distributed witnesses
+- Publish OOBI endpoints for discovery
+- Operate KYV programs per published standards
+- Honor interoperability and attribution agreements with partner platforms
+- Report duplicity evidence to governance body
+- Comply with nonprofit reporting and tax-exempt auditing requirements
+
+### Credential Provider
+
+Entities that issue skill and training credentials — trade schools, CPR trainers, online education platforms, professional licensing bodies. The issuer is also the verifier: whoever grants the credential is responsible for confirming its validity.
+
+| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
+|:---:|:---:|:---:|:---:|
+| Yes | No | Yes | Yes |
+
+- Verify credential validity when queried
+- Revoke credentials when underlying qualifications expire or are lost
+- Maintain credential schemas in the ecosystem schema registry
+- Publish OOBI endpoints for credential verification
+
+### KYV Provider
+
+Entities running Know Your Volunteer programs — composing background checks, training certificates, psychological evaluations, and other component credentials into a KYV credential. Multiple KYV standards coexist, each with known strengths and weaknesses. Could be a service platform, a specialized provider, or a consortium.
+
+| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
+|:---:|:---:|:---:|:---:|
+| Yes | Yes | Yes | Yes |
+
+- Publish the KYV standard definition (what component credentials are required)
+- Verify all component credentials before issuing KYV credential
+- Revoke KYV credentials when component credentials expire or are revoked
+- May require in-person training or other governance structures as they see fit
+
+### Verification Service
+
+Background check providers, identity verification services, biometric verification providers — the component suppliers that feed into KYV and other composite credentials. Specialized providers that serve multiple KYV providers and platforms.
+
+| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
+|:---:|:---:|:---:|:---:|
+| No | No | Yes | Yes |
+
+- Perform checks according to published standards
+- Issue results as verifiable credentials with clear methodology disclosure
+- Maintain data privacy per legal and contractual obligations
+
+### Government Agency
+
+Regulatory bodies that issue licenses (SEDI identity, professional licenses), receive tax reporting, and enforce child protection laws. Benefits from KERI's automatic verifiability — reduced accounting overhead, provable compliance. Consumes aggregated, auditable roll-ups of service data.
+
+| Witness Pool | Watcher Network | Agent Service | ACDC Registry |
+|:---:|:---:|:---:|:---:|
+| Yes | Yes | Yes | Yes |
+
+- Issue SEDI and other government-backed credentials per regulatory standards
+- Publish credential schemas and verification endpoints
+- Accept and validate aggregated reporting from ecosystem participants
+
 ---
 
-*This is a C0 ecosystem design — a conceptual architecture, not a running system. See the [credential catalog](/ecosystems/humanitarian-service-marketplace/credentials/) for the full credential specification.*
+*This is an ecosystem design — a conceptual architecture, not a running system. Credentials and schemas are illustrative examples, not finalized specifications. See the [credential catalog](/ecosystems/humanitarian-service-marketplace/credentials/) for the full credential specification.*
 
 *Generated from [`docs/humanitarian-service-marketplace/ecosystem.yaml`](https://github.com/seriouscoderone/kerihost/blob/main/docs/humanitarian-service-marketplace/ecosystem.yaml) by the `/ecosystem-package` skill.*

@@ -8,7 +8,7 @@ classes: wide
 description: "Complete credential catalog for the Small Trades Cooperative ecosystem."
 ---
 
-This is the complete credential catalog for the Small Trades Cooperative ecosystem. Each credential below includes its issuer, holder, verifiers, schema fields, disclosure mode, and chaining relationships.
+This is the complete credential catalog for the Small Trades Cooperative ecosystem. Each credential below includes its issuer, holder, verifiers, schema fields, disclosure mode, and chaining relationships. Credentials and schemas are illustrative examples showing the type of data each credential would carry, not finalized specifications.
 
 [Back to Small Trades Cooperative overview](/ecosystems/small-trades-cooperative/)
 

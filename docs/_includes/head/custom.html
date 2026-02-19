@@ -1,2 +1,16 @@
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-<script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
+<script>
+  // Jekyll/kramdown renders ```mermaid blocks as <div class="language-mermaid"><pre><code>
+  // Mermaid expects <pre class="mermaid">. Transform on DOMContentLoaded, then render.
+  mermaid.initialize({ startOnLoad: false, theme: 'default' });
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.language-mermaid code').forEach(function(codeEl) {
+      var pre = document.createElement('pre');
+      pre.className = 'mermaid';
+      pre.textContent = codeEl.textContent;
+      var wrapper = codeEl.closest('.language-mermaid') || codeEl.parentElement;
+      wrapper.parentElement.replaceChild(pre, wrapper);
+    });
+    mermaid.run();
+  });
+</script>
