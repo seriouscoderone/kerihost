@@ -10,7 +10,7 @@ theme_summary: "When you do pure strategy work on AI commoditization — Wardley
 
 ## Someone Mapped the Future and Found Us Already There
 
-A Wardley Map analysis crossed our desk recently. The kind of thing strategists do when a technology layer commoditizes — trace where value migrates, identify the new scarcities, figure out where the next generation of defensible businesses gets built.
+A [Wardley Map analysis](https://gist.github.com/seriouscoderone/eb9e3da919ed89ec3837fc88c572b413) crossed our desk recently. The kind of thing strategists do when a technology layer commoditizes — trace where value migrates, identify the new scarcities, figure out where the next generation of defensible businesses gets built.
 
 This one started with a simple premise: AI capabilities are becoming commodity infrastructure, like electricity or cloud compute before them. When that happens, where does competitive advantage go?
 
