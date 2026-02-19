@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 627px;
+    background: #0a0e1a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container {
+    width: 1200px;
+    height: 627px;
+    position: relative;
+    background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #0f172a 100%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 50px 60px;
+    gap: 50px;
+  }
+
+  /* Subtle grid background */
+  .container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    z-index: 1;
+  }
+
+  .title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #f1f5f9;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+  }
+  .title span {
+    color: #f43f5e;
+  }
+
+  .subtitle {
+    font-size: 17px;
+    color: #94a3b8;
+    line-height: 1.6;
+    max-width: 480px;
+  }
+
+  .brand {
+    font-size: 14px;
+    color: #475569;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .brand strong {
+    color: #64748b;
+  }
+
+  .right {
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1;
+  }
+
+  .layer {
+    border-radius: 12px;
+    padding: 20px 24px;
+    position: relative;
+  }
+
+  .layer-commodity {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+  }
+  .layer-scarce {
+    background: rgba(30, 58, 92, 0.5);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+  }
+  .layer-keri {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(244, 63, 94, 0.05));
+    border: 1px solid rgba(244, 63, 94, 0.4);
+    box-shadow: 0 0 30px rgba(244, 63, 94, 0.08);
+  }
+
+  .layer-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .layer-commodity .layer-label { color: #64748b; }
+  .layer-scarce .layer-label { color: #60a5fa; }
+  .layer-keri .layer-label { color: #f43f5e; }
+
+  .layer-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .layer-items .item {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .layer-commodity .item {
+    background: rgba(71, 85, 105, 0.3);
+    color: #94a3b8;
+  }
+  .layer-scarce .item {
+    background: rgba(59, 130, 246, 0.1);
+    color: #93c5fd;
+  }
+  .layer-keri .item {
+    background: rgba(244, 63, 94, 0.15);
+    color: #fda4af;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #475569;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 0;
+  }
+  .arrow svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #475569;
+    stroke-width: 2;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <div class="title">The Map Has a<br><span>KERI-Shaped</span> Hole</div>
+      <div class="subtitle">
+        A Wardley Map analysis of AI commoditization — with no knowledge of KERI — keeps describing the same gaps: trust, identity, provenance, sovereign agency.
+      </div>
+      <div class="subtitle" style="color: #64748b; font-size: 15px;">
+        Independent convergence from different starting points isn't coincidence. It's gravity.
+      </div>
+      <div class="brand"><strong>keri.host</strong> / blog</div>
+    </div>
+
+    <div class="right">
+      <div class="layer layer-commodity">
+        <div class="layer-label">Commodity Layer</div>
+        <div class="layer-items">
+          <span class="item">AI Models</span>
+          <span class="item">Orchestration</span>
+          <span class="item">Code Gen</span>
+          <span class="item">Content</span>
+          <span class="item">Analytics</span>
+        </div>
+      </div>
+
+      <div class="arrow">
+        <svg viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4"/></svg>
+        value migrates upward
+        <svg viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4"/></svg>
+      </div>
+
+      <div class="layer layer-scarce">
+        <div class="layer-label">What Stays Scarce</div>
+        <div class="layer-items">
+          <span class="item">Trust</span>
+          <span class="item">Identity</span>
+          <span class="item">Provenance</span>
+          <span class="item">Accountability</span>
+          <span class="item">Sovereign Agency</span>
+        </div>
+      </div>
+
+      <div class="arrow">
+        <svg viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4"/></svg>
+        independent convergence
+        <svg viewBox="0 0 16 16"><path d="M8 3v10M4 9l4 4 4-4"/></svg>
+      </div>
+
+      <div class="layer layer-keri">
+        <div class="layer-label">KERI Fills the Gap</div>
+        <div class="layer-items">
+          <span class="item">Autonomous IDs</span>
+          <span class="item">Verifiable Credentials</span>
+          <span class="item">Witnesses</span>
+          <span class="item">Signing at the Edge</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
