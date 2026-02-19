@@ -3,8 +3,8 @@ main:
     url: /
   - title: "Manifesto"
     url: /manifesto/
-  - title: "Ecosystem Stories"
-    url: /ecosystem-stories/
+  # - title: "Ecosystem Stories"
+  #   url: /ecosystem-stories/
   - title: "GitHub"
     url: https://github.com/seriouscoderone/kerihost
   - title: "Sponsor"
