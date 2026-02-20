@@ -99,7 +99,7 @@ Genealogy is the worked example, but the pattern is universal.
 
 Every monopoly platform is a bundle of separable services held together by data lock-in. Social media bundles identity, content, discovery, and community. Ride-sharing bundles driver credentials, matching, payment, and reputation. Healthcare bundles records, billing, scheduling, and provider credentials.
 
-KERI ecosystems decompose all of them the same way: make credentials portable, make reputation travel with the individual, make contracts explicit, and let services compete on merit instead of lock-in. The [community service marketplace](/blog/2026/02/08/community-service-marketplace/) does this for volunteer coordination. The [small trades cooperative](/ecosystems/small-trades-cooperative/) does it for skilled labor. Genealogy is just the next instance.
+KERI ecosystems decompose all of them the same way: make credentials portable, make reputation travel with the individual, make contracts explicit, and let services compete on merit instead of lock-in. The [community service marketplace](/blog/2026/02/08/community-service-marketplace/) does this for volunteer coordination. The [small trades cooperative](/ecosystems/small-trades-cooperative/) does it for skilled labor. The [genealogy ecosystem](/ecosystems/genealogy/) does it for family history research.
 
 Capitalism works fine when markets are actually competitive. The job isn't to fix capitalism. It's to remove the artificial bundling that prevents competition from happening.
 
