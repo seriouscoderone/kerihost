@@ -5,6 +5,8 @@ main:
     url: /manifesto/
   - title: "Ecosystems"
     url: /ecosystems/
+  - title: "Services"
+    url: /services/
   - title: "GitHub"
     url: https://github.com/seriouscoderone/kerihost
   - title: "Sponsor"
