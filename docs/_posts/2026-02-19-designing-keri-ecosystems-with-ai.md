@@ -161,9 +161,39 @@ Every design decision is documented. Every credential has a schema, an issuer, a
 
 This is not a whitepaper. It's a buildable specification.
 
+## Installing the Skills
+
+The design skills are part of [keri-claude](https://github.com/SeriousCoderOne/keri-claude), a Claude Code plugin with 16 skills covering KERI protocol specs, implementation APIs, coding conventions, and architecture planning. The four design skills are a subset.
+
+Install with two commands:
+
+```bash
+# Add the marketplace
+/plugin marketplace add SeriousCoderOne/keri-claude
+
+# Install the plugin
+/plugin install keri@keri-skills
+```
+
+That's it. All skills are available immediately. The design skills are invoked as:
+
+- `/keri:design0-ecosystem` — industry governance
+- `/keri:design1-service` — human-facing service
+- `/keri:design2-infrastructure` — AWS infrastructure stacks
+- `/keri:design3-domain` — KERI protocol components
+
+The plugin also includes auto-activating skills for the three KERI specifications (KERI, CESR, ACDC), five implementation libraries (keripy, keriox, signify-ts, cesride, parside), and a KERI coding style guide. The design skills reference these automatically — when C3 needs to verify protocol invariants, it calls `/keri:spec`; when it needs to check runtime compatibility, it calls the appropriate implementation skill.
+
+If you prefer not to use the plugin system, you can clone the repo and load it directly:
+
+```bash
+git clone https://github.com/SeriousCoderOne/keri-claude.git ~/keri-claude
+claude --plugin-dir ~/keri-claude
+```
+
 ## Where We Are
 
-The skills exist and work. The [three ecosystem designs](/ecosystems/) on this site were all produced by `/keri:design0-ecosystem`. You can install the skills from the [keri-skills plugin](https://github.com/seriouscoderone/keri-skills) and start designing your own ecosystem today.
+The skills exist and work. The [three ecosystem designs](/ecosystems/) on this site were all produced by `/keri:design0-ecosystem`.
 
 C0 through C3 are conversational design. What comes next — C4, actual implementation — is where the YAML becomes code. That's a different post. But the design skills give you a foundation that's architecturally sound, protocol-correct, and grounded in your industry's actual trust relationships.
 
