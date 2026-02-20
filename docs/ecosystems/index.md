@@ -21,3 +21,9 @@ A cross-organizational ecosystem where individuals and organizations declarative
 A cooperative of independent skilled tradespeople where each worker holds verifiable credentials — trade licenses, insurance, bonding, safety certifications — and contracts directly with homeowners and cities. No general contractor middleman. The cooperative provides community and collective bargaining, not administrative overhead. Workers capture the full value of their labor.
 
 **12 roles** · **24 credentials** · [View credentials](/ecosystems/small-trades-cooperative/credentials/)
+
+### [Genealogy Ecosystem](/ecosystems/genealogy/)
+
+Restructures family history research around cryptographically verifiable relationships between people, records, and evidence. Individuals own their research as portable, signed artifacts — family trees, source citations, DNA interpretations, and narrative histories — that carry provenance from source archives through researchers to families.
+
+**10 roles** · **16 credentials** · [View credentials](/ecosystems/genealogy/credentials/)
