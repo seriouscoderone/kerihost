@@ -1,0 +1,589 @@
+version: "1.0"
+
+ecosystem:
+  name: "genealogy"
+  display_name: "Genealogy Ecosystem"
+  description: >-
+    Restructures family history research around cryptographically verifiable
+    relationships between people, records, and evidence. Individuals own their
+    research as portable, signed artifacts -- family trees, source citations,
+    DNA interpretations, and narrative histories -- that carry provenance from
+    source archives through researchers to families. Record repositories issue
+    verifiable credentials for digitized documents. Professional genealogists
+    hold accreditation credentials that chain to certifying bodies. DNA testing
+    results are held by the individual with selective disclosure, not stored by
+    platforms. Research conclusions carry proof chains showing the evidence and
+    methodology behind them, enabling peer review without platform lock-in. The
+    ecosystem eliminates the need to trust any single platform by making the
+    evidence itself trustworthy.
+
+governance:
+  regulatory_frameworks:
+    - "State genetic privacy laws (Maryland, Montana, California, Utah, Arizona)"
+    - "GINA (Genetic Information Nondiscrimination Act) -- employment and health insurance"
+    - "State adoption record sealing statutes"
+    - "State vital records access laws (birth, death, marriage)"
+    - "GDPR (where applicable to European data subjects)"
+    - "Indigenous/tribal records sovereignty requirements"
+    - "Copyright law for digitized record expressions (not facts)"
+
+  privacy_requirements:
+    - "DNA credentials use selective disclosure only -- individual controls what is revealed and to whom"
+    - "Living people are notified when identified in records and can accept, dispute, or request removal"
+    - "Time-locked disclosure: records sealed until conditions met (death records verified + time elapsed)"
+    - "Selective disclosure during lock periods -- fact of existence visible, details sealed"
+    - "Privacy hierarchy: regulation overrides record holder, record holder overrides individual"
+    - "Locked-record visibility creates verification trails and incentives for community contribution"
+    - "Facts extracted from records are not copyrightable and belong to the researcher"
+    - "Digitization expressions (photos, scans) may carry copyright controlled by the digitizer"
+
+  dispute_resolution: >-
+    The ecosystem does not enforce disputes or impose liability. All actions are
+    signed and attributable. Disputes are expressed as signed dispute_claim
+    credentials visible in the public claim graph. Endorsements are signed
+    endorsement credentials. Consensus emerges from the visible balance of
+    disputes and endorsements. Algorithm services compute corroboration scores
+    from this data. Individuals decide what to trust. If actions violate law,
+    the signed audit trail provides evidence for external legal proceedings.
+
+roles:
+  - name: archive
+    display_name: "Archive"
+    description: >-
+      Custodian of original physical records. Root authority in the provenance
+      chain. Examples: county courthouses, churches, national archives, libraries,
+      historical societies. Issues record custody credentials and authorizes
+      digitization of their collections.
+    keri_infrastructure:
+      witness_pool: true
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Maintain witness pool with >= 3 witnesses for high-value attestations"
+      - "Publish OOBI endpoints for record custody credential verification"
+      - "Revoke digitization authorizations when terms are violated"
+    credentials_issued:
+      - record_custody
+      - digitization_authorization
+    credentials_required: []
+
+  - name: digitizer
+    display_name: "Digitizer"
+    description: >-
+      Creates digital copies of physical records. Ranges from professional
+      scanning companies to individual volunteers photographing gravestones
+      (e.g., Findagrave contributors). Issues digitization record credentials
+      with provenance back to the source object.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Digitization credentials must reference the source object"
+      - "Must disclose capture method and conditions (scan resolution, photo angle, etc.)"
+      - "Must honor copyright terms of digitization authorizations"
+    credentials_issued:
+      - digitization_record
+      - source_link
+    credentials_required: []
+
+  - name: indexer
+    display_name: "Indexer"
+    description: >-
+      Transcribes and tags digitized records to make them searchable. May be
+      volunteers (like FamilySearch indexers), professionals, or AI services.
+      Issues index entry credentials linking transcribed data to digitization
+      records.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Index entries must reference the digitization record they were derived from"
+      - "Must disclose transcription method (manual, AI-assisted, fully automated)"
+    credentials_issued:
+      - index_entry
+    credentials_required: []
+
+  - name: record_attestor
+    display_name: "Record Attestor"
+    description: >-
+      Verifies the fidelity of a digital copy to its physical original. May be
+      an archive employee, a certified records examiner, or a trusted third party.
+      Issues record attestation credentials that strengthen the provenance chain.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Must have examined or compared the digital copy against the physical original"
+      - "Must disclose the basis of attestation (in-person comparison, authorized proxy, etc.)"
+    credentials_issued:
+      - record_attestation
+    credentials_required: []
+
+  - name: record_host
+    display_name: "Record Host"
+    description: >-
+      Stores and serves digital record copies. The decentralized replacement for
+      Ancestry/MyHeritage hosting. Anyone can be a record host -- individuals,
+      companies, nonprofits. Heaviest infrastructure role due to content serving
+      at scale.
+    keri_infrastructure:
+      witness_pool: true
+      watcher_network: true
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Maintain witness pool with >= 3 witnesses"
+      - "Subscribe to watcher network for KEL sync and duplicity detection"
+      - "Honor hosting agreement terms (access controls, copyright restrictions)"
+      - "Publish OOBI endpoints for hosted collections"
+    credentials_issued: []
+    credentials_required:
+      - hosting_agreement
+
+  - name: researcher
+    display_name: "Researcher"
+    description: >-
+      Interprets records and makes claims about people and relationships. Ranges
+      from professional genealogists to hobbyists. Issues research claims,
+      identity resolution claims, disputes, and endorsements. Reputation emerges
+      from visible claim history -- not from a gatekept certification.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Research claims must reference supporting evidence (digitization records, index entries, etc.)"
+      - "Identity resolution claims must state the basis for linking records to the same person"
+    credentials_issued:
+      - research_claim
+      - identity_resolution
+      - source_link
+      - dispute_claim
+      - endorsement
+    credentials_required: []
+
+  - name: individual
+    display_name: "Individual"
+    description: >-
+      Person researching their own family history. Curates a personal genealogy
+      view by accepting or rejecting research claims from others. Owns their
+      research graph, DNA results, and identity links. Lightest infrastructure
+      role -- just an agent to manage their personal view.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: false
+      agent_service: true
+      acdc_registry: false
+    governance_obligations:
+      - "Responsible for own key security and backup"
+    credentials_issued:
+      - dispute_claim
+      - endorsement
+    credentials_required: []
+
+  - name: certification_body
+    display_name: "Certification Body"
+    description: >-
+      Issues professional credentials for genealogists. Includes certification
+      boards (e.g., Board for Certification of Genealogists), universities,
+      genealogy institutes, and training programs. Authority is organic and
+      reputation-based -- the ecosystem does not anoint any single body.
+    keri_infrastructure:
+      witness_pool: true
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Maintain witness pool with >= 3 witnesses for credential issuance"
+      - "Publish criteria for certification and accreditation"
+      - "Revoke certifications when standards are not maintained"
+    credentials_issued:
+      - professional_certification
+      - program_accreditation
+    credentials_required: []
+
+  - name: algorithm_service
+    display_name: "Algorithm Service"
+    description: >-
+      Provides corroboration scoring, matching, search indexing, and hint
+      generation over the public claim graph. The decentralized replacement for
+      Ancestry's matching algorithm. Competitive service layer -- anyone can
+      build one. Reads the claim graph via watcher network, computes scores,
+      and presents simplified views.
+    keri_infrastructure:
+      witness_pool: false
+      watcher_network: true
+      agent_service: true
+      acdc_registry: false
+    governance_obligations:
+      - "Subscribe to watcher network for claim graph access"
+      - "Disclose scoring methodology (open or proprietary)"
+    credentials_issued: []
+    credentials_required: []
+
+  - name: dna_service
+    display_name: "DNA Service"
+    description: >-
+      Processes genetic samples and issues DNA result credentials held by the
+      individual, not stored by the platform. Includes ethnicity estimates and
+      kinship matches. Results are selective disclosure -- the individual
+      controls what is revealed and to whom.
+    keri_infrastructure:
+      witness_pool: true
+      watcher_network: false
+      agent_service: true
+      acdc_registry: true
+    governance_obligations:
+      - "Maintain witness pool with >= 3 witnesses for DNA credential issuance"
+      - "DNA result credentials must be issued to the individual, not retained by the service"
+      - "Must support selective disclosure for all DNA credentials"
+      - "Must comply with applicable genetic privacy laws"
+    credentials_issued:
+      - dna_result
+      - ethnicity_estimate
+      - kinship_match
+    credentials_required: []
+
+credential_catalog:
+  - id: record_custody
+    name: "Record Custody Credential"
+    description: >-
+      Attests that an archive is the custodian of a specified collection of
+      physical records. Root credential in the provenance chain.
+    issuer_role: archive
+    holder_role: archive
+    verifier_roles: [digitizer, record_host, researcher, individual]
+    schema_fields:
+      - { name: "collection_name", type: "string", required: true }
+      - { name: "collection_description", type: "string", required: true }
+      - { name: "geographic_scope", type: "string", required: true }
+      - { name: "date_range_start", type: "string", required: false }
+      - { name: "date_range_end", type: "string", required: false }
+      - { name: "record_types", type: "string[]", required: true }
+      - { name: "access_policy", type: "string", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: digitization_authorization
+    name: "Digitization Authorization"
+    description: >-
+      Authorizes a digitizer to create digital copies of records in a specified
+      collection. Chains from record_custody. Defines terms of use and
+      copyright constraints.
+    issuer_role: archive
+    holder_role: digitizer
+    verifier_roles: [record_attestor, record_host, researcher]
+    schema_fields:
+      - { name: "collection_ref", type: "SAID", required: true }
+      - { name: "authorized_scope", type: "string", required: true }
+      - { name: "copyright_terms", type: "string", required: true }
+      - { name: "expiration_date", type: "date", required: false }
+      - { name: "redistribution_allowed", type: "boolean", required: true }
+    disclosure_mode: full
+    chained_from: record_custody
+
+  - id: digitization_record
+    name: "Digitization Record"
+    description: >-
+      Attests that a digital copy was created from a physical source object.
+      References the source object and capture conditions. May or may not chain
+      from a digitization_authorization (volunteer grave photos do not require
+      archive authorization).
+    issuer_role: digitizer
+    holder_role: digitizer
+    verifier_roles: [researcher, individual, record_attestor, algorithm_service]
+    schema_fields:
+      - { name: "source_object_description", type: "string", required: true }
+      - { name: "source_location", type: "string", required: true }
+      - { name: "capture_method", type: "string", required: true }
+      - { name: "capture_date", type: "date", required: true }
+      - { name: "resolution", type: "string", required: false }
+      - { name: "content_said", type: "SAID", required: true }
+      - { name: "authorization_ref", type: "SAID", required: false }
+      - { name: "freeform_notes", type: "string", required: false }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: record_attestation
+    name: "Record Attestation"
+    description: >-
+      Verifies the fidelity of a digital copy to its physical original. Issued
+      by a record attestor who has compared the digital and physical versions.
+      Strengthens the provenance chain.
+    issuer_role: record_attestor
+    holder_role: digitizer
+    verifier_roles: [researcher, individual, record_host]
+    schema_fields:
+      - { name: "digitization_ref", type: "SAID", required: true }
+      - { name: "attestation_method", type: "string", required: true }
+      - { name: "attestation_date", type: "date", required: true }
+      - { name: "fidelity_assessment", type: "string", required: true }
+      - { name: "notes", type: "string", required: false }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: index_entry
+    name: "Index Entry Credential"
+    description: >-
+      A transcription or tagging of a digitized record. Links searchable text
+      to the digitization record it was derived from. Discloses transcription
+      method (manual, AI-assisted, fully automated).
+    issuer_role: indexer
+    holder_role: indexer
+    verifier_roles: [researcher, individual, algorithm_service]
+    schema_fields:
+      - { name: "digitization_ref", type: "SAID", required: true }
+      - { name: "transcription_method", type: "string", required: true }
+      - { name: "schema_ref", type: "SAID", required: true }
+      - { name: "structured_fields", type: "object", required: true }
+      - { name: "freeform_content", type: "string", required: false }
+      - { name: "confidence_notes", type: "string", required: false }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: hosting_agreement
+    name: "Record Hosting Agreement"
+    description: >-
+      Authorizes a record host to store and serve digital copies from a
+      specified collection. Defines access controls, copyright restrictions,
+      and terms of service.
+    issuer_role: archive
+    holder_role: record_host
+    verifier_roles: [researcher, individual]
+    schema_fields:
+      - { name: "collection_ref", type: "SAID", required: true }
+      - { name: "hosting_terms", type: "string", required: true }
+      - { name: "access_controls", type: "string", required: true }
+      - { name: "copyright_constraints", type: "string", required: true }
+      - { name: "expiration_date", type: "date", required: false }
+    disclosure_mode: full
+    chained_from: record_custody
+
+  - id: research_claim
+    name: "Research Claim"
+    description: >-
+      A signed assertion about a person, event, date, place, or relationship.
+      References supporting evidence (digitization records, index entries, other
+      claims). The fundamental unit of genealogical research in this ecosystem.
+      Schema references a shared genealogy schema (lifeline, census, vital record,
+      etc.) via schema_ref.
+    issuer_role: researcher
+    holder_role: researcher
+    verifier_roles: [individual, researcher, algorithm_service]
+    schema_fields:
+      - { name: "claim_type", type: "string", required: true }
+      - { name: "schema_ref", type: "SAID", required: true }
+      - { name: "subject_person_ref", type: "SAID", required: true }
+      - { name: "claim_data", type: "object", required: true }
+      - { name: "evidence_refs", type: "SAID[]", required: true }
+      - { name: "methodology_notes", type: "string", required: false }
+      - { name: "confidence_assessment", type: "string", required: false }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: identity_resolution
+    name: "Identity Resolution Claim"
+    description: >-
+      Asserts that two or more records refer to the same person. The
+      decentralized replacement for platform deduplication. Others can endorse
+      or dispute this link. Never destructive -- records stay separate, the
+      link is an overlay.
+    issuer_role: researcher
+    holder_role: researcher
+    verifier_roles: [individual, researcher, algorithm_service]
+    schema_fields:
+      - { name: "person_refs", type: "SAID[]", required: true }
+      - { name: "basis", type: "string", required: true }
+      - { name: "evidence_refs", type: "SAID[]", required: true }
+      - { name: "confidence_assessment", type: "string", required: false }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: source_link
+    name: "Source Object Link"
+    description: >-
+      Asserts that multiple digitizations depict the same physical source object
+      (e.g., three photos of the same gravestone). Creates a virtual node
+      representing the source object. Multiple digitizations stay separate but
+      are linked.
+    issuer_role: researcher
+    holder_role: researcher
+    verifier_roles: [individual, researcher, digitizer]
+    schema_fields:
+      - { name: "digitization_refs", type: "SAID[]", required: true }
+      - { name: "source_object_description", type: "string", required: true }
+      - { name: "source_location", type: "string", required: false }
+      - { name: "basis", type: "string", required: true }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: professional_certification
+    name: "Professional Genealogist Certification"
+    description: >-
+      Attests that a researcher holds a professional genealogy certification or
+      degree. Issued by certification bodies whose authority is organic and
+      reputation-based. Selective disclosure allows proving certification
+      without revealing personal details.
+    issuer_role: certification_body
+    holder_role: researcher
+    verifier_roles: [individual, researcher]
+    schema_fields:
+      - { name: "certification_type", type: "string", required: true }
+      - { name: "issuing_body_name", type: "string", required: true }
+      - { name: "specializations", type: "string[]", required: false }
+      - { name: "issue_date", type: "date", required: true }
+      - { name: "expiration_date", type: "date", required: false }
+      - { name: "certificate_number", type: "string", required: true }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: program_accreditation
+    name: "Program Accreditation"
+    description: >-
+      Accredits a genealogy education program or sub-organization. Enables
+      delegation -- an accredited program can issue its own certifications
+      that chain from this accreditation.
+    issuer_role: certification_body
+    holder_role: certification_body
+    verifier_roles: [researcher, individual]
+    schema_fields:
+      - { name: "program_name", type: "string", required: true }
+      - { name: "institution", type: "string", required: true }
+      - { name: "accreditation_scope", type: "string", required: true }
+      - { name: "issue_date", type: "date", required: true }
+      - { name: "review_date", type: "date", required: false }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: dna_result
+    name: "DNA Result Credential"
+    description: >-
+      Raw DNA analysis results issued to the individual, not retained by the
+      service. Selective disclosure allows proving specific genetic facts
+      without revealing the full profile.
+    issuer_role: dna_service
+    holder_role: individual
+    verifier_roles: [researcher]
+    schema_fields:
+      - { name: "test_type", type: "string", required: true }
+      - { name: "sample_date", type: "date", required: true }
+      - { name: "processing_date", type: "date", required: true }
+      - { name: "result_data_said", type: "SAID", required: true }
+      - { name: "methodology", type: "string", required: true }
+      - { name: "lab_identifier", type: "string", required: true }
+    disclosure_mode: selective
+    chained_from: null
+
+  - id: ethnicity_estimate
+    name: "Ethnicity Estimate"
+    description: >-
+      Interpretation of DNA results as ethnicity/ancestry composition. Issued
+      to the individual with selective disclosure. Estimates change as reference
+      populations grow, so versioning is important.
+    issuer_role: dna_service
+    holder_role: individual
+    verifier_roles: [researcher]
+    schema_fields:
+      - { name: "dna_result_ref", type: "SAID", required: true }
+      - { name: "estimate_version", type: "string", required: true }
+      - { name: "regions", type: "object[]", required: true }
+      - { name: "reference_population_size", type: "integer", required: false }
+      - { name: "confidence_intervals", type: "object", required: false }
+    disclosure_mode: selective
+    chained_from: dna_result
+
+  - id: kinship_match
+    name: "Kinship Match"
+    description: >-
+      Asserts a genetic relationship between two individuals based on shared
+      DNA segments. Issued to both matched individuals with selective disclosure.
+      Enables biological family discovery while protecting privacy.
+    issuer_role: dna_service
+    holder_role: individual
+    verifier_roles: [individual]
+    schema_fields:
+      - { name: "matched_individual_ref", type: "SAID", required: true }
+      - { name: "shared_cm", type: "number", required: true }
+      - { name: "shared_segments", type: "integer", required: true }
+      - { name: "estimated_relationship", type: "string", required: true }
+      - { name: "confidence_level", type: "string", required: true }
+    disclosure_mode: selective
+    chained_from: dna_result
+
+  - id: dispute_claim
+    name: "Dispute Claim"
+    description: >-
+      A signed disagreement with another claim (research_claim,
+      identity_resolution, source_link, or any other credential). States the
+      basis for disagreement and optionally provides counter-evidence. Visible
+      in the public claim graph.
+    issuer_role: researcher
+    holder_role: researcher
+    verifier_roles: [individual, researcher, algorithm_service]
+    schema_fields:
+      - { name: "disputed_credential_ref", type: "SAID", required: true }
+      - { name: "dispute_basis", type: "string", required: true }
+      - { name: "counter_evidence_refs", type: "SAID[]", required: false }
+      - { name: "proposed_correction", type: "string", required: false }
+    disclosure_mode: full
+    chained_from: null
+
+  - id: endorsement
+    name: "Endorsement Claim"
+    description: >-
+      A signed agreement with another claim. Strengthens the corroboration
+      signal for algorithm services. May optionally add supporting evidence
+      beyond what the original claim referenced.
+    issuer_role: researcher
+    holder_role: researcher
+    verifier_roles: [individual, researcher, algorithm_service]
+    schema_fields:
+      - { name: "endorsed_credential_ref", type: "SAID", required: true }
+      - { name: "endorsement_basis", type: "string", required: false }
+      - { name: "additional_evidence_refs", type: "SAID[]", required: false }
+    disclosure_mode: full
+    chained_from: null
+
+delegation_trees:
+  - root_role: archive
+    delegates:
+      - role: digitizer
+        scope: "Create digital copies of authorized collections"
+        depth_limit: 2
+      - role: record_host
+        scope: "Store and serve digitized records from authorized collections"
+        depth_limit: 1
+      - role: record_attestor
+        scope: "Verify fidelity of digital copies against physical originals"
+        depth_limit: 1
+
+  - root_role: certification_body
+    delegates:
+      - role: certification_body
+        scope: "Accredit sub-programs or regional examiners"
+        depth_limit: 2
+
+  - root_role: dna_service
+    delegates:
+      - role: dna_service
+        scope: "Process samples at authorized partner laboratories"
+        depth_limit: 1
+
+interoperability:
+  - target_ecosystem: "identity"
+    bridge_credentials:
+      - "individual identity verification"
+    data_flows:
+      - "Genealogy ecosystem consumes identity credentials for living person verification"
+      - "Living person notification requires identity ecosystem bridge for contact resolution"
+      - "Death record verification may originate from identity or vital records ecosystems"
+
+systems: []
