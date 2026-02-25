@@ -185,37 +185,28 @@ If the file does not exist, stop and tell the user:
 Use the Bash tool to call the x.ai API with the image prompt from Step 1. Substitute `XAI_API_KEY` with the value read from `params.json`.
 
 ```bash
-curl https://api.x.ai/v1/chat/completions \
+curl https://api.x.ai/v1/images/generations \
   -s \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer XAI_API_KEY" \
   -d '{
-    "messages": [
-      {
-        "role": "system",
-        "content": "You are a visual art director. Given an image generation prompt, return only the final refined prompt ready to paste into an image generation model. No explanation, no preamble."
-      },
-      {
-        "role": "user",
-        "content": "<IMAGE_PROMPT_FROM_STEP_1>"
-      }
-    ],
-    "model": "grok-imagine-image-pro",
-    "stream": false,
-    "temperature": 0.7
+    "model": "aurora",
+    "prompt": "<IMAGE_PROMPT_FROM_STEP_1>",
+    "n": 1
   }'
 ```
 
-### Step 4 — Present the result
+### Step 4 — Save the image and update the post
 
-Show the user:
-- The refined image prompt returned by the API
-- A reminder of which image generation tool to paste it into (Midjourney, DALL-E 3, Flux, etc.) based on the creative-direction recommendation
-- Where to save the image: `docs/assets/images/posts/YYYY-MM-DD-slug.jpg`
-- The frontmatter snippet to uncomment and add to the post once the image is saved:
-  ```yaml
-  header:
-    overlay_image: /assets/images/posts/YYYY-MM-DD-slug.jpg
-    overlay_filter: 0.4
-    teaser: /assets/images/posts/YYYY-MM-DD-slug.jpg
-  ```
+The API returns a URL or base64 image. Download it and save to:
+```
+docs/assets/images/posts/YYYY-MM-DD-slug.jpg
+```
+
+Then uncomment and update the `header` block in the post frontmatter:
+```yaml
+header:
+  overlay_image: /assets/images/posts/YYYY-MM-DD-slug.jpg
+  overlay_filter: 0.4
+  teaser: /assets/images/posts/YYYY-MM-DD-slug.jpg
+```
