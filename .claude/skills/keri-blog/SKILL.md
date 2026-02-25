@@ -164,7 +164,7 @@ After every new post is written, run this workflow automatically.
 
 ### Step 1 — Generate an image prompt
 
-Invoke the `creative-direction` skill with the post content to produce a hero image prompt. Pass the post file path as context. The skill will return a ready-to-use prompt following the creative direction framework.
+Invoke the `keri-blog-image` skill with the post content. The skill runs a 4-phase ideation process (Extract → Ideate → Refine → Synthesize) and outputs a Grok-optimized hero image prompt. Present the Phase 2 concepts to the user for selection before finalizing the prompt in Phase 4.
 
 ### Step 2 — Load the API key
 

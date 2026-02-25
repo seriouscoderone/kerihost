@@ -10,7 +10,7 @@ header:
 theme_summary: "Software teams spend enormous time and risk on data migrations — not because migration is inherently necessary, but because they built applications that own their users' data. When data is controlled by the AID holder instead, a new application with the right credentials can access the same data immediately. The migration problem is actually the data-ownership problem in disguise. KERI solves the ownership problem, and migration largely dissolves with it."
 ---
 
-![A worn leather wallet on concrete, one clean door and one aged door visible behind it](/assets/images/posts/2026-02-25-no-migration-required.jpg)
+![Work-worn hands transferring a manila folder between two open steel filing cabinet drawers in a concrete workshop](/assets/images/posts/2026-02-25-no-migration-required.jpg)
 
 ## Every Developer Knows This Feeling
 
