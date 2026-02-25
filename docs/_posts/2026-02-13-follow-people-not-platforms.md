@@ -6,7 +6,11 @@ tags: [social-media, platforms, publishing, bots, followers, sovereignty, conten
 description: "You don't follow people on social media. You follow platforms that show you whatever they want."
 status: draft
 theme_summary: "Social media convinced us we're following people. We're not. We're following algorithms that decide what we see, surrounded by bots pretending to be people. KERI lets you follow actual humans — directly, verifiably, without a platform in between."
+header:
+  teaser: /assets/images/posts/2026-02-13-follow-people-not-platforms.jpg
 ---
+
+![Worn leather address book open to handwritten names, fountain pen resting across the pages, soft morning window light](/assets/images/posts/2026-02-13-follow-people-not-platforms.jpg)
 
 ## You Don't Follow People
 

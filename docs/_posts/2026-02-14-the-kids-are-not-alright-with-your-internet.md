@@ -6,7 +6,11 @@ tags: [gen-z, authenticity, dumb-phones, social-media, community, relationships,
 description: "The most digital-native generation in history is rejecting digital life. They're not wrong."
 status: draft
 theme_summary: "Teenagers are ditching smartphones for flip phones. Young adults romanticize the 1980s — a decade they never lived in. The most digitally native generation in history is rejecting the digital world they inherited. This isn't nostalgia. It's a diagnosis. They can feel that something is fundamentally wrong with how digital life was built — the notifications, the ads, the algorithmic opinions, the performed identities. They want authenticity. They want real relationships. They want community that isn't mediated by an engagement algorithm. They're right about the problem. KERI offers something they haven't considered yet: a digital life actually worth living."
+header:
+  teaser: /assets/images/posts/2026-02-14-the-kids-are-not-alright-with-your-internet.jpg
 ---
+
+![A worn brass house key resting on aged handmade paper on raw concrete — ownership made physical](/assets/images/posts/2026-02-14-the-kids-are-not-alright-with-your-internet.jpg)
 
 ## They Don't Want Your Phone
 

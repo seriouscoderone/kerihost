@@ -6,7 +6,11 @@ tags: [internet-history, adoption, network-effects, digital-identity, paradigm-s
 description: "We're at the same moment with digital identity that the internet was in 1990. The things it enables are beyond what we can currently imagine."
 status: draft
 theme_summary: "In 1990, asking \"why do I need the internet?\" got answers that sounded insane. We're at that same moment with digital identity. The things it will enable are beyond what we can currently imagine."
+header:
+  teaser: /assets/images/posts/2026-02-11-1990-internet-moment.jpg
 ---
+
+![A black Bakelite rotary telephone on an aged walnut desk, side-lit by a north-facing window, newspaper blurred in the foreground](/assets/images/posts/2026-02-11-1990-internet-moment.jpg)
 
 ## The Question Nobody Could Answer
 

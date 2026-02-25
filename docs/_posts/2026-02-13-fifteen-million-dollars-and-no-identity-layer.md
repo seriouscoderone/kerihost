@@ -6,7 +6,11 @@ tags: [cto-challenge, credentials, ler, talent-marketplace, education, workforce
 description: "The U.S. Department of Education is spending $15M to connect talent to opportunity. The missing piece is identity."
 status: draft
 theme_summary: "The U.S. Department of Education's Connecting Talent to Opportunity Challenge is a $15 million effort to build state-level talent marketplaces that connect learners, credentials, and employers. It describes the right problem — fragmented credentials, siloed records, no portability. But it never addresses the foundational question: who is this person, and how do we know? KERI answers that question in a way that makes everything else in the challenge actually work."
+header:
+  teaser: /assets/images/posts/2026-02-13-fifteen-million-dollars-and-no-identity-layer.jpg
 ---
+
+![A slightly open filing cabinet drawer dense with aged paper folders, a bare empty key hook mounted on the concrete wall above it — the records are there, but nothing anchors them to a person](/assets/images/posts/2026-02-13-fifteen-million-dollars-and-no-identity-layer.jpg)
 
 ## The Right Problem
 

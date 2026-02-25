@@ -6,7 +6,11 @@ tags: [peace, earth, evolution, sustainability, infrastructure]
 description: "The Earth has carried us through billions of years of turmoil. Maybe it's time to let her rest."
 status: draft
 theme_summary: "The Earth, anthropomorphized as a mother who has endured billions of years of turmoil — geological and human — is ready for her children to rest. From an evolutionary perspective, we are her children, and she has carried us through chaos toward this moment."
+header:
+  teaser: /assets/images/posts/2026-02-08-earth-ready-for-peace.jpg
 ---
+
+![Work-worn open hands resting palms-up on linen, a dried seed pod resting across one palm, soft window light](/assets/images/posts/2026-02-08-earth-ready-for-peace.jpg)
 
 ## The Earth's Long Memory
 

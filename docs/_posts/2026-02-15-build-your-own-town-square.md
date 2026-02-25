@@ -5,8 +5,12 @@ categories: [community, identity]
 tags: [platforms, community, sovereignty, infrastructure, cost, facebook, slack, self-hosting, keri-host]
 description: "KERI infrastructure is cheap enough that anyone can own their community. No Facebook required."
 status: draft
+header:
+  teaser: /assets/images/posts/2026-02-15-build-your-own-town-square.jpg
 theme_summary: "We're approaching the moment where standing up your own community infrastructure costs about the same as a Slack subscription. Mothers running PTAs, organizers building movements, neighbors helping neighbors — none of them need Facebook's permission anymore. But getting there means letting go of the assumption that communities need platforms at all."
 ---
+
+![A worn brass key resting on aged kraft paper with a faint neighborhood map, side-lit on a dark walnut table](/assets/images/posts/2026-02-15-build-your-own-town-square.jpg)
 
 ## You Don't Need Facebook's Permission to Organize Your Neighborhood
 

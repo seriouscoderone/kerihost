@@ -6,7 +6,11 @@ tags: [ecosystem-design, claude-code, skills, architecture, credentials, governa
 description: "Four conversational AI skills walk you from industry analysis to domain implementation. Here's how they work."
 status: draft
 theme_summary: "Building a KERI ecosystem from scratch is daunting. You need roles, credentials, delegation trees, governance, infrastructure, and domain components — and they all have to fit together. We built four conversational AI design skills that guide you through the entire process, one level at a time. They are opinionated, conversational, and grounded in real KERI architecture. This is how you use them."
+header:
+  teaser: /assets/images/posts/2026-02-19-designing-keri-ecosystems-with-ai.jpg
 ---
+
+![Architectural blueprint unrolled on a worn oak workbench, a brass compass resting nearby, pencil annotations in the margin, side light from a window](/assets/images/posts/2026-02-19-designing-keri-ecosystems-with-ai.jpg)
 
 ## The Problem: Where Do You Even Start?
 

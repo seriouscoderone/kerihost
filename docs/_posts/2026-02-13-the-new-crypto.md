@@ -6,7 +6,11 @@ tags: [keri, blockchain, cryptography, mychips, credit-clearing, key-management,
 description: "KERI isn't a blockchain killer. It's what comes after we stop confusing the ledger with the cryptography."
 status: draft
 theme_summary: "Blockchain conflated two things that should have stayed separate: cryptographic proof and global consensus. KERI takes the cryptography — the part that actually matters — and drops the chain. What emerges isn't a better blockchain. It's a new breed of crypto entirely, and systems like MyCHIPs show what becomes possible when you build on these primitives instead."
+header:
+  teaser: /assets/images/posts/2026-02-13-the-new-crypto.jpg
 ---
+
+![An aged brass wax seal stamp resting on an unrolled yellowed blueprint on a worn oak workbench, lit by overcast morning window light casting a long soft shadow](/assets/images/posts/2026-02-13-the-new-crypto.jpg)
 
 ## Blockchain Solved the Wrong Problem
 

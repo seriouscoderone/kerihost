@@ -6,7 +6,11 @@ tags: [value-economy, intermediaries, direct-exchange, reputation, efficiency]
 description: "Strip away the intermediaries and extraction — what remains is people creating real value for other people."
 status: draft
 theme_summary: "When you strip away the intermediaries, the data extraction, the attention harvesting, and the artificial friction — what remains is simple: people creating real value for other people. The new ecosystem makes this the default."
+header:
+  teaser: /assets/images/posts/2026-02-06-actual-value-economy.jpg
 ---
+
+![A single wax-sealed envelope resting alone on a cleared, worn oak worktable — golden hour light raking across the grain, indigo shadow pooling in the open space to the left](/assets/images/posts/2026-02-06-actual-value-economy.jpg)
 
 ## The Bloat We've Accepted
 

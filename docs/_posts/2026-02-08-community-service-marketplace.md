@@ -6,7 +6,11 @@ tags: [oada, mutual-aid, reputation, marketplace, community-service, time-bankin
 description: "What if community service was contract, not charity? A KERI OADA marketplace where lifting burdens is the economy."
 status: draft
 theme_summary: "What if community service wasn't charity but contract? What if helping your neighbor was a verifiable, reciprocal, reputation-building act? A KERI OADA marketplace for community service — where lifting burdens is the economy."
+header:
+  teaser: /assets/images/posts/2026-02-08-community-service-marketplace.jpg
 ---
+
+![A hand offering a small brown paper bag toward a weathered front door slightly ajar, warm amber light spilling through the threshold onto a worn concrete stoop](/assets/images/posts/2026-02-08-community-service-marketplace.jpg)
 
 ## The Old Model of Help
 

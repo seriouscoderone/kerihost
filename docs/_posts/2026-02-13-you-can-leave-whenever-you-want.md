@@ -6,7 +6,11 @@ tags: [key-rotation, pre-rotation, apple, google, transition, sovereignty, migra
 description: "KERI's key rotation means you can start with Apple or Google and take your identity back whenever you're ready."
 status: draft
 theme_summary: "The biggest objection to self-sovereign identity is the transition: how do we get from here to there? KERI's answer is elegant — anyone can create an AID for you, including Apple and Google. And because of pre-rotation, you can take control of that AID from them whenever you want, without their permission. This isn't a revolution. It's an exit door that's always unlocked."
+header:
+  teaser: /assets/images/posts/2026-02-13-you-can-leave-whenever-you-want.jpg
 ---
+
+![Aged oak door slightly ajar in a raw concrete wall, a brass key hanging on the interior hook, morning light spilling across worn floorboards](/assets/images/posts/2026-02-13-you-can-leave-whenever-you-want.jpg)
 
 ## The Transition Problem
 

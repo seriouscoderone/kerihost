@@ -5,8 +5,12 @@ categories: [identity, economy]
 tags: [acdc, contracts, privacy, terms-of-service, selective-disclosure, competition, consent, data-sovereignty]
 description: "You can't negotiate with your eye doctor's privacy policy. ACDCs change that by making contracts a primary primitive."
 status: draft
+header:
+  teaser: /assets/images/posts/2026-02-13-accept-these-terms-or-what.jpg
 theme_summary: "A man at the eye doctor read the fine print and discovered the office sells patient data to Apple, Google, and Facebook. He refused to sign. The office didn't know what to do — and neither did he, because there's no alternative. In today's economy, 'consent' means 'accept or leave.' In a KERI economy, contracts are primary primitives via ACDCs — customizable, transparent, comparable, and competitive. When contracts are real data structures instead of buried legalese, service providers compete on terms, not just price. That gives people something they've never had: options."
 ---
+
+![An unsigned form on a worn oak workbench, pen resting across the blank signature line, soft overcast window light](/assets/images/posts/2026-02-13-accept-these-terms-or-what.jpg)
 
 ## The Man Who Read the Fine Print
 

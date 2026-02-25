@@ -6,7 +6,11 @@ tags: [keri, ai-agents, delegation, security, threat-model, revocation]
 description: "KERI's cryptographic accountability combined with AI agent frameworks eliminates most traditional threat vectors."
 status: draft
 theme_summary: "KERI's cryptographic accountability combined with AI agent frameworks creates a security model that eliminates most traditional threat vectors."
+header:
+  teaser: /assets/images/posts/2026-02-06-keri-ai-security-framework.jpg
 ---
+
+![A wax-sealed letter on aged kraft paper resting on a worn oak workbench, side-lit from a north-facing window, representing cryptographic delegation — bounded authority made physical](/assets/images/posts/2026-02-06-keri-ai-security-framework.jpg)
 
 ## The Problem with AI Security Today
 

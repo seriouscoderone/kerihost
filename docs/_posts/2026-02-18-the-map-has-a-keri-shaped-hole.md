@@ -5,8 +5,12 @@ categories: [ai, philosophy]
 tags: [wardley-maps, ai-commoditization, identity, trust, infrastructure, strategy, value-migration, keri]
 description: "A strategic analyst mapped where value goes when AI commoditizes. They kept describing the architecture we're already building."
 status: draft
+header:
+  teaser: /assets/images/posts/2026-02-18-the-map-has-a-keri-shaped-hole.jpg
 theme_summary: "When you do pure strategy work on AI commoditization — Wardley Maps, value chain analysis, competitive moats — you keep finding the same holes. Trust. Identity. Provenance. Relationship accountability. Sovereign agency. You keep describing, without knowing it, the architecture KERI already provides. Independent convergence from different starting points isn't coincidence. It's gravity."
 ---
+
+![Aged topographic map with a rectangular hole cut through its center on a worn workbench, overcast window light pooling on raw concrete visible through the gap](/assets/images/posts/2026-02-18-the-map-has-a-keri-shaped-hole.jpg)
 
 ## Someone Mapped the Future and Found Us Already There
 

@@ -6,7 +6,11 @@ tags: [key-rotation, pre-rotation, multi-sig, recovery, witnesses, delegation, i
 description: "KERI gives you layers of identity theft protection — from a written-down key to a trusted circle of people who can help you recover."
 status: draft
 theme_summary: "Current identity theft protection is a service you subscribe to that monitors databases you don't control for breaches you can't prevent. KERI flips this entirely: you choose your level of protection, from a private key written on paper in a safe, to a circle of trusted people who can collectively help you recover your identity. Multiple layers, all under your control, all based on math rather than monitoring."
+header:
+  teaser: /assets/images/posts/2026-02-13-identity-theft-protection-you-actually-control.jpg
 ---
+
+![An aged brass key resting on raw concrete, its long shadow stretching across the surface, with a folded kraft paper envelope blurred in the background](/assets/images/posts/2026-02-13-identity-theft-protection-you-actually-control.jpg)
 
 ## The Identity Theft Protection Racket
 

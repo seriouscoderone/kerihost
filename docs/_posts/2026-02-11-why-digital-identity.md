@@ -6,7 +6,11 @@ tags: [digital-identity, accounts, reputation, credentials, sovereignty, privacy
 description: "You already have dozens of digital identities. You just don't own any of them."
 status: draft
 theme_summary: "The question isn't whether you have a digital identity — you already do. The question is who controls it and who profits from it. When you own your digital identity, everything changes."
+header:
+  teaser: /assets/images/posts/2026-02-11-why-digital-identity.jpg
 ---
+
+![Work-worn hands placing an open leather wallet on a concrete surface — wallet empty, ready to be filled on the owner's terms](/assets/images/posts/2026-02-11-why-digital-identity.jpg)
 
 ## The Question People Ask
 

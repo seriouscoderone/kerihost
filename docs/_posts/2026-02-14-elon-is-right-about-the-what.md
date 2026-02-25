@@ -6,7 +6,11 @@ tags: [keri, acdc, llm, agents, elon-musk, platforms, identity, contracts, edge-
 description: "Musk says AI will replace all apps. He's right. But who owns the AI that replaces them?"
 status: draft
 theme_summary: "Elon Musk recently predicted that phones will become AI edge nodes, apps and operating systems will disappear, and AI will simply show you whatever you need. He's probably right about all of it. But there's a question he didn't answer — and it's the only question that matters: who owns the AI, and who owns the data it runs on? Without verifiable identity and individual-owned contracts, 'AI curates everything' is just a polite way of saying 'whoever runs the AI controls everything.' KERI is the missing architecture that makes Musk's vision liberating instead of terrifying."
+header:
+  teaser: /assets/images/posts/2026-02-14-elon-is-right-about-the-what.jpg
 ---
+
+![An open brass padlock and worn key resting on a weathered oak workbench, with golden hour light casting long shadows across the grain](/assets/images/posts/2026-02-14-elon-is-right-about-the-what.jpg)
 
 ## The Prediction
 

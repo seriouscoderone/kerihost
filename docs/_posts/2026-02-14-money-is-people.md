@@ -6,7 +6,11 @@ tags: [mychips, credit, relationships, community, finance, money, incentives, ke
 description: "What if wealth came from the strength of your relationships, not the size of your hoard?"
 status: draft
 theme_summary: "We've been taught that money is a thing you get — a commodity to accumulate, hoard, and compete for. But there's an older and more honest model: money as credit, created in the space between two people who trust each other. In a credit economy, you don't get wealthy by taking. You get wealthy by being someone others trust, rely on, and want to work with. MyCHIPs and KERI make this model real. The implications are civilizational."
+header:
+  teaser: /assets/images/posts/2026-02-14-money-is-people.jpg
 ---
+
+![Two work-worn hands exchanging a folded slip of paper across a linen-covered kitchen table, soft morning light from the left](/assets/images/posts/2026-02-14-money-is-people.jpg)
 
 ## The Biggest Lie in Economics
 

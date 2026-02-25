@@ -6,7 +6,11 @@ tags: [capitalism, monopoly, genealogy, marketplace, decomposition, selective-di
 description: "Capitalism's real problem isn't profit — it's bundling. KERI ecosystems decompose monopoly platforms into competitive marketplaces."
 status: draft
 theme_summary: "Companies like Ancestry don't survive on superior technology. They survive on bundling — search, records, matching, DNA, community — into a single platform you can't leave. KERI ecosystems decompose those bundles into components where anyone can compete. Genealogy is the worked example, but the pattern applies everywhere."
+header:
+  teaser: /assets/images/posts/2026-02-19-unbundling-the-monopoly.jpg
 ---
+
+![Aged manila envelopes fanned open on raw concrete with a brass key in the foreground — each envelope a separable credential, the key the portable access only you hold](/assets/images/posts/2026-02-19-unbundling-the-monopoly.jpg)
 
 ## The Bundling Problem
 

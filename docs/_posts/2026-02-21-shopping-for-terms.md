@@ -6,7 +6,11 @@ tags: [acdc, contracts, terms-of-service, selective-disclosure, ai-agents, negot
 description: "What if you could shop for terms the way you shop for price? ACDC schemas and AI agents make contracts a competitive marketplace."
 status: draft
 theme_summary: "Today, terms and conditions flow one direction: from the service provider to you. Accept or leave. You can't negotiate, you can't counter-offer, and you can't even meaningfully compare. But when contracts are structured ACDC schemas — machine-readable, selectively disclosable, and bidirectional — something new becomes possible. Both parties publish acceptable ranges. AI agents find the overlap. You shop for terms the way you shop for price. That's not just better contracts. That's a new competitive landscape."
+header:
+  teaser: /assets/images/posts/2026-02-21-shopping-for-terms.jpg
 ---
+
+![Aged linen paper with two mirrored columns of handwritten text resting on a worn oak workbench, a rubber stamp out-of-focus in the foreground — both parties filling in the same form](/assets/images/posts/2026-02-21-shopping-for-terms.jpg)
 
 ## One-Way Paper
 

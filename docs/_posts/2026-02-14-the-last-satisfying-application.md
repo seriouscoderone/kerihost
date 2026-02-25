@@ -6,7 +6,11 @@ tags: [keri, acdc, llm, agents, contracts, insurance, claims, platforms, ui]
 description: "What if every application was just an AI that knew who you were and what you'd agreed to do?"
 status: draft
 theme_summary: "We keep building platforms. Login screens. Dashboards. Role-based access. Workflow engines. But there's a simpler formulation hiding underneath all of it: an identity, a set of contracts, and an AI that understands both. AID + ACDC + LLM. That's it. That's every application. The implications are unsettling if you build software for a living — and liberating if you use it."
+header:
+  teaser: /assets/images/posts/2026-02-14-the-last-satisfying-application.jpg
 ---
+
+![A folded typewritten document with a deep indigo wax seal on a worn oak desk, natural side light casting long shadows across the paper surface](/assets/images/posts/2026-02-14-the-last-satisfying-application.jpg)
 
 ## What Is an Application, Really?
 

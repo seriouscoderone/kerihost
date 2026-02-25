@@ -6,7 +6,11 @@ tags: [data-sovereignty, privacy, selective-disclosure, keri-store, surveillance
 description: "The era of extractive data companies is ending. The future belongs to service providers who treat individuals as partners."
 status: draft
 theme_summary: "The era of extractive data companies is ending. The future belongs to service providers who treat individuals as partners, with data staying at the edge in people's own KERI stores."
+header:
+  teaser: /assets/images/posts/2026-02-06-data-at-the-edge.jpg
 ---
+
+![An oxidized brass key resting on a worn oak workbench, golden hour light casting a long shadow across the wood grain](/assets/images/posts/2026-02-06-data-at-the-edge.jpg)
 
 ## The Lie We Accepted
 

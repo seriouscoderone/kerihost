@@ -6,7 +6,11 @@ tags: [money, coordination, payments, agents, stripe, coinbase, google, ubi, ker
 description: "Stripe and Coinbase are building payment rails for AI agents. But what if the agents didn't need money to coordinate?"
 status: draft
 theme_summary: "Stripe, Coinbase, and Google are racing to build payment rails for AI agents — fintech pipes, crypto pipes, ad-tech pipes. And yes, for now, those pipes are necessary because that's the plumbing the world runs on. But let's ask the harder question: why do AI agents need money at all? Money is a coordination technology. The most scalable one humans ever invented. But it coordinates with embedded values, power asymmetries, and blind spots baked in. KERI and AI offer something money never could: coordination on your terms, with your values, where community is the backbone — not currency."
+header:
+  teaser: /assets/images/posts/2026-02-21-just-coordinate.jpg
 ---
+
+![Two work-worn hands exchanging a folded handwritten document across a worn oak kitchen table, morning window light](/assets/images/posts/2026-02-21-just-coordinate.jpg)
 
 ## Everybody Wants to Be the Pipe
 

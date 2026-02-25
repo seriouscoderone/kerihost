@@ -6,7 +6,11 @@ tags: [ai-products, ai-services, big-tech, keri-agents, privacy, delegation, sov
 description: "AI services extend Big Tech's reach into your life. AI products you own and run locally are the exit."
 status: draft
 theme_summary: "The AI industry is racing to make you a subscriber — to rent intelligence from the same companies that already monetize your attention, your data, and your relationships. But there's another model: AI as a product you buy once, own outright, and run on your terms. Paired with KERI agents, owned AI becomes the management layer that makes self-sovereign identity practical for everyone."
+header:
+  teaser: /assets/images/posts/2026-02-13-buy-your-ai-dont-rent-it.jpg
 ---
+
+![A worn brass key with a torn rental tag resting on an oak workbench, side-lit by window light](/assets/images/posts/2026-02-13-buy-your-ai-dont-rent-it.jpg)
 
 ## The Subscription Trap
 

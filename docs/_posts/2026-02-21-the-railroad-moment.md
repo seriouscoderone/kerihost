@@ -6,7 +6,11 @@ tags: [railroads, industrial-revolution, ai, keri, infrastructure, economic-hist
 description: "Iron and steam were separate inventions. Paired together, they remade civilization. KERI and AI are the next pairing."
 status: draft
 theme_summary: "The steam engine existed for decades before it mattered economically. So did iron forging. Neither alone changed the world. But when someone put steam power on iron rails, the economy didn't just grow — it reorganized. Industries that couldn't exist before suddenly could. The same pairing is happening now with AI and KERI. AI provides the engine — speed, intelligence, automation. KERI provides the rails — identity, accountability, trust infrastructure. Neither alone delivers what both together make possible."
+header:
+  teaser: /assets/images/posts/2026-02-21-the-railroad-moment.jpg
 ---
+
+![An oxidized iron key hanging from a cut railroad nail in weathered wood planking, long shadow falling across the grain in warm side light](/assets/images/posts/2026-02-21-the-railroad-moment.jpg)
 
 ## Before the Rails
 
