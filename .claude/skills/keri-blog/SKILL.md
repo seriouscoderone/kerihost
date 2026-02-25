@@ -82,13 +82,11 @@ tags: [specific, relevant, tags]
 description: "[One sentence, under 160 characters, for SEO]"
 status: draft
 theme_summary: "[One paragraph capturing the core thesis]"
-# Optional hero image (omit entire header block if no image)
+# Optional image (omit entire header block if no image)
 # Save image to docs/assets/images/posts/YYYY-MM-DD-slug.jpg
+# Then add inline in post body above first ## (see Post Template below)
 # header:
-#   image: /assets/images/posts/YYYY-MM-DD-slug.jpg        # full-width hero, no text overlay
-#   overlay_image: /assets/images/posts/YYYY-MM-DD-slug.jpg # hero with title text overlaid
-#   overlay_filter: 0.4                                      # darken overlay (0.0–1.0)
-#   teaser: /assets/images/posts/YYYY-MM-DD-slug.jpg        # thumbnail in post listings
+#   teaser: /assets/images/posts/YYYY-MM-DD-slug.jpg        # thumbnail in post listings only
 ---
 
 ## [Opening section — hook the reader with a provocative observation or question]
@@ -203,10 +201,17 @@ The API returns a URL or base64 image. Download it and save to:
 docs/assets/images/posts/YYYY-MM-DD-slug.jpg
 ```
 
-Then uncomment and update the `header` block in the post frontmatter:
+Then update the post:
+1. Set `header.teaser` in frontmatter (for listing page thumbnails)
+2. Add the image inline at the top of the post body, above the first `##`:
+
 ```yaml
 header:
-  overlay_image: /assets/images/posts/YYYY-MM-DD-slug.jpg
-  overlay_filter: 0.4
   teaser: /assets/images/posts/YYYY-MM-DD-slug.jpg
+```
+
+```markdown
+![Alt text describing the image](/assets/images/posts/YYYY-MM-DD-slug.jpg)
+
+## First Section Heading
 ```
