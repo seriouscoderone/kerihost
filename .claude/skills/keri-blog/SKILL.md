@@ -82,6 +82,13 @@ tags: [specific, relevant, tags]
 description: "[One sentence, under 160 characters, for SEO]"
 status: draft
 theme_summary: "[One paragraph capturing the core thesis]"
+# Optional hero image (omit entire header block if no image)
+# Save image to docs/assets/images/posts/YYYY-MM-DD-slug.jpg
+# header:
+#   image: /assets/images/posts/YYYY-MM-DD-slug.jpg        # full-width hero, no text overlay
+#   overlay_image: /assets/images/posts/YYYY-MM-DD-slug.jpg # hero with title text overlaid
+#   overlay_filter: 0.4                                      # darken overlay (0.0–1.0)
+#   teaser: /assets/images/posts/YYYY-MM-DD-slug.jpg        # thumbnail in post listings
 ---
 
 ## [Opening section — hook the reader with a provocative observation or question]
@@ -204,3 +211,11 @@ curl https://api.x.ai/v1/chat/completions \
 Show the user:
 - The refined image prompt returned by the API
 - A reminder of which image generation tool to paste it into (Midjourney, DALL-E 3, Flux, etc.) based on the creative-direction recommendation
+- Where to save the image: `docs/assets/images/posts/YYYY-MM-DD-slug.jpg`
+- The frontmatter snippet to uncomment and add to the post once the image is saved:
+  ```yaml
+  header:
+    overlay_image: /assets/images/posts/YYYY-MM-DD-slug.jpg
+    overlay_filter: 0.4
+    teaser: /assets/images/posts/YYYY-MM-DD-slug.jpg
+  ```
