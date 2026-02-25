@@ -200,7 +200,7 @@ curl https://api.x.ai/v1/chat/completions \
         "content": "<IMAGE_PROMPT_FROM_STEP_1>"
       }
     ],
-    "model": "grok-4-latest",
+    "model": "grok-imagine-image-pro",
     "stream": false,
     "temperature": 0.7
   }'
