@@ -190,7 +190,7 @@ curl https://api.x.ai/v1/images/generations \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer XAI_API_KEY" \
   -d '{
-    "model": "aurora",
+    "model": "grok-imagine-image-pro",
     "prompt": "<IMAGE_PROMPT_FROM_STEP_1>",
     "n": 1
   }'
