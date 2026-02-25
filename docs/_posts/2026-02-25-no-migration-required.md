@@ -110,4 +110,4 @@ Build the new thing. Present the right credentials. The data is already there.
 
 **Related:** [The Last Application](/blog/2026/02/14/the-last-satisfying-application/) explores how AID + ACDC + LLM collapses the entire application development model into identity, contracts, and an agent that understands both.
 
-*TODO: Add a concrete schema comparison showing what application data looks like "owned by the app" vs. "owned by the AID." Add a diagram illustrating parallel old/new application running against the same KERI credential layer. Expand the AI section with a worked example of agent context continuity across model swaps.*
+{% comment %}TODO: Add a concrete schema comparison showing what application data looks like "owned by the app" vs. "owned by the AID." Add a diagram illustrating parallel old/new application running against the same KERI credential layer. Expand the AI section with a worked example of agent context continuity across model swaps.{% endcomment %}

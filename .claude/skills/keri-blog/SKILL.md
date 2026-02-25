@@ -37,7 +37,7 @@ Every post must embody this voice. It is non-negotiable.
 
 ### What We ALWAYS Do
 - Ground technical concepts in human impact
-- Acknowledge what doesn't exist yet (use `*TODO:*` notes)
+- Acknowledge what doesn't exist yet (use `{% comment %}TODO:{% endcomment %}` notes — never bare `*TODO:*` which renders on the page)
 - Treat the reader as intelligent and capable of nuance
 - Connect individual posts to the broader KERI.host vision
 - **Cross-link related posts:** When referencing ideas from another blog post, always include a markdown link using the permalink format: `[Post Title](/blog/YYYY/MM/DD/slug-name/)`. Read `docs/_posts/` to find the correct slug and date. Also add a `**Related:**` link at the bottom of posts that have a companion piece.
@@ -105,7 +105,7 @@ theme_summary: "[One paragraph capturing the core thesis]"
 [Short, punchy conclusion.]
 [End with an honest assessment, not a sales pitch.]
 
-*TODO: [What needs to be added or expanded]*
+{% comment %}TODO: [What needs to be added or expanded]{% endcomment %}
 ```
 
 ## File Location
