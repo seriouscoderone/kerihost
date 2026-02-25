@@ -135,6 +135,7 @@ The blog exists alongside other KERI.host content:
 2. Draft the full post following the template
 3. Write it to `docs/_posts/YYYY-MM-DD-slug.md`
 4. Show the user the frontmatter and first section for review
+5. Run the **Post-Writing Image Generation** workflow below
 
 ### For `/blog edit [post-name]`
 1. Read the existing post from `docs/_posts/`
@@ -149,3 +150,57 @@ The blog exists alongside other KERI.host content:
 
 ### For `/blog list`
 1. List all posts in `docs/_posts/` with their title, date, categories, and status
+
+---
+
+## Post-Writing Image Generation
+
+After every new post is written, run this workflow automatically.
+
+### Step 1 — Generate an image prompt
+
+Invoke the `creative-direction` skill with the post content to produce a hero image prompt. Pass the post file path as context. The skill will return a ready-to-use prompt following the creative direction framework.
+
+### Step 2 — Load the API key
+
+Read `params.json` from the repo root using the Read tool.
+
+```
+params.json → { "xai": "<key>" }
+```
+
+If the file does not exist, stop and tell the user:
+
+> `params.json` not found. Copy `params.template.json` to `params.json` and replace the placeholder value for `"xai"` with your x.ai API key, then run the image generation step again.
+
+### Step 3 — Call the x.ai API
+
+Use the Bash tool to call the x.ai API with the image prompt from Step 1. Substitute `XAI_API_KEY` with the value read from `params.json`.
+
+```bash
+curl https://api.x.ai/v1/chat/completions \
+  -s \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer XAI_API_KEY" \
+  -d '{
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a visual art director. Given an image generation prompt, return only the final refined prompt ready to paste into an image generation model. No explanation, no preamble."
+      },
+      {
+        "role": "user",
+        "content": "<IMAGE_PROMPT_FROM_STEP_1>"
+      }
+    ],
+    "model": "grok-4-latest",
+    "stream": false,
+    "temperature": 0.7
+  }'
+```
+
+### Step 4 — Present the result
+
+Show the user:
+- The refined image prompt returned by the API
+- A reminder of which image generation tool to paste it into (Midjourney, DALL-E 3, Flux, etc.) based on the creative-direction recommendation
