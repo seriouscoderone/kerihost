@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-13-identity-theft-protection-you-actually-control.jpg
 ---
 
-![An aged brass key resting on raw concrete, its long shadow stretching across the surface, with a folded kraft paper envelope blurred in the background](/assets/images/posts/2026-02-13-identity-theft-protection-you-actually-control.jpg)
+![A single folded piece of paper resting inside an open combination safe, its door of worn industrial enamel swung to the left, concrete wall behind catching a long soft shadow from the open door, side light raking across the scene, deep indigo in the safe's interior corners](/assets/images/posts/2026-02-13-identity-theft-protection-you-actually-control.jpg)
 
 ## The Identity Theft Protection Racket
 

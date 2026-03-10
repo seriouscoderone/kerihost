@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-11-why-digital-identity.jpg
 ---
 
-![Work-worn hands placing an open leather wallet on a concrete surface — wallet empty, ready to be filled on the owner's terms](/assets/images/posts/2026-02-11-why-digital-identity.jpg)
+![A worn tanned leather accordion folder lying open on a dark walnut table, aged handwritten pages catching soft window light, long shadows falling left across the wood surface, open left third of frame clear](/assets/images/posts/2026-02-11-why-digital-identity.jpg)
 
 ## The Question People Ask
 

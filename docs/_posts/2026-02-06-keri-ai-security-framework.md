@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-06-keri-ai-security-framework.jpg
 ---
 
-![A wax-sealed letter on aged kraft paper resting on a worn oak workbench, side-lit from a north-facing window, representing cryptographic delegation — bounded authority made physical](/assets/images/posts/2026-02-06-keri-ai-security-framework.jpg)
+![A rubber ink stamp pressed into aged kraft paper on a worn oak desk, ink impression still glistening, long soft shadow falling across the document from window light, deep indigo shadow pooling against a raw concrete wall in the background](/assets/images/posts/2026-02-06-keri-ai-security-framework.jpg)
 
 ## The Problem with AI Security Today
 

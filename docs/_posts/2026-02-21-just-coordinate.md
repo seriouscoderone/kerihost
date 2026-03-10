@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-21-just-coordinate.jpg
 ---
 
-![Two work-worn hands exchanging a folded handwritten document across a worn oak kitchen table, morning window light](/assets/images/posts/2026-02-21-just-coordinate.jpg)
+![Two pairs of work-worn hands exchanging a folded handwritten note across a worn oak kitchen table, soft overcast morning window light falling across aged paper and amber wood](/assets/images/posts/2026-02-21-just-coordinate.jpg)
 
 ## Everybody Wants to Be the Pipe
 

@@ -10,7 +10,7 @@ header:
 theme_summary: "A man at the eye doctor read the fine print and discovered the office sells patient data to Apple, Google, and Facebook. He refused to sign. The office didn't know what to do — and neither did he, because there's no alternative. In today's economy, 'consent' means 'accept or leave.' In a KERI economy, contracts are primary primitives via ACDCs — customizable, transparent, comparable, and competitive. When contracts are real data structures instead of buried legalese, service providers compete on terms, not just price. That gives people something they've never had: options."
 ---
 
-![An unsigned form on a worn oak workbench, pen resting across the blank signature line, soft overcast window light](/assets/images/posts/2026-02-13-accept-these-terms-or-what.jpg)
+![A hand holding a pen loosely above a blank signature line on aged cream paper, suspended in the moment of refusal, overcast morning light from the left raking across the knuckles, deep shadow pooling across the open left side of the frame, worn oak surface receding into soft focus behind](/assets/images/posts/2026-02-13-accept-these-terms-or-what.jpg)
 
 ## The Man Who Read the Fine Print
 

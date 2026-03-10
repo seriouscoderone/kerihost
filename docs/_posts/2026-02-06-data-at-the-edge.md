@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-06-data-at-the-edge.jpg
 ---
 
-![An oxidized brass key resting on a worn oak workbench, golden hour light casting a long shadow across the wood grain](/assets/images/posts/2026-02-06-data-at-the-edge.jpg)
+![A worn leather portfolio resting on an oak kitchen table, one hand placed flat on the cover in a gesture of quiet possession, overcast window light casting long soft shadows across the wood grain](/assets/images/posts/2026-02-06-data-at-the-edge.jpg)
 
 ## The Lie We Accepted
 

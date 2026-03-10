@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-13-you-can-leave-whenever-you-want.jpg
 ---
 
-![Aged oak door slightly ajar in a raw concrete wall, a brass key hanging on the interior hook, morning light spilling across worn floorboards](/assets/images/posts/2026-02-13-you-can-leave-whenever-you-want.jpg)
+![A heavy wooden interior door standing slightly ajar, aged cream paint worn to dark walnut at the lower edge, soft daylight spilling through the gap and casting a long shadow across worn honey-oak floorboards, viewed from inside a quiet room](/assets/images/posts/2026-02-13-you-can-leave-whenever-you-want.jpg)
 
 ## The Transition Problem
 

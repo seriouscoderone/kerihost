@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-14-money-is-people.jpg
 ---
 
-![Two work-worn hands exchanging a folded slip of paper across a linen-covered kitchen table, soft morning light from the left](/assets/images/posts/2026-02-14-money-is-people.jpg)
+![Two pairs of work-worn hands exchanging a small folded slip of aged paper across a scarred oak kitchen table, soft morning side light from the left, shallow depth of field with the paper in sharp focus](/assets/images/posts/2026-02-14-money-is-people.jpg)
 
 ## The Biggest Lie in Economics
 

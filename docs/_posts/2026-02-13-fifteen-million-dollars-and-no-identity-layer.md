@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-13-fifteen-million-dollars-and-no-identity-layer.jpg
 ---
 
-![A slightly open filing cabinet drawer dense with aged paper folders, a bare empty key hook mounted on the concrete wall above it — the records are there, but nothing anchors them to a person](/assets/images/posts/2026-02-13-fifteen-million-dollars-and-no-identity-layer.jpg)
+![A worn oak workbench scattered with real documents — a folded transcript, a trade certificate, a handwritten letter of reference — each casting long shadows in raking golden light, with a single conspicuously blank cream page at the near edge, the only thing in the frame with nothing written on it](/assets/images/posts/2026-02-13-fifteen-million-dollars-and-no-identity-layer.jpg)
 
 ## The Right Problem
 

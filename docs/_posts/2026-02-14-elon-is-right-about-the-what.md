@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-14-elon-is-right-about-the-what.jpg
 ---
 
-![An open brass padlock and worn key resting on a weathered oak workbench, with golden hour light casting long shadows across the grain](/assets/images/posts/2026-02-14-elon-is-right-about-the-what.jpg)
+![A small handheld mirror resting face-up on a worn oak workbench, tilted to catch cold window light, its reflection showing a warmly lit interior that does not match the room around it, raw concrete wall soft in the background](/assets/images/posts/2026-02-14-elon-is-right-about-the-what.jpg)
 
 ## The Prediction
 

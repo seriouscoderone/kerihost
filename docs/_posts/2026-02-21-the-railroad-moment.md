@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-21-the-railroad-moment.jpg
 ---
 
-![An oxidized iron key hanging from a cut railroad nail in weathered wood planking, long shadow falling across the grain in warm side light](/assets/images/posts/2026-02-21-the-railroad-moment.jpg)
+![A lone figure standing at the abrupt end of weathered railroad ties laid across a dry hillside field, the last tie placed, open earth stretching ahead unmarked in the blue-hour dusk, warm amber side light raking across the aged wood, long shadows falling across dry grass between the ties](/assets/images/posts/2026-02-21-the-railroad-moment.jpg)
 
 ## Before the Rails
 

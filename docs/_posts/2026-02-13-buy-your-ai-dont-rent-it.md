@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-13-buy-your-ai-dont-rent-it.jpg
 ---
 
-![A worn brass key with a torn rental tag resting on an oak workbench, side-lit by window light](/assets/images/posts/2026-02-13-buy-your-ai-dont-rent-it.jpg)
+![A worn wooden folding rule with oxidized brass hinges resting diagonally on an aged oak workbench, side light from a north-facing window casting long shadows across the grain, indigo shadow pooling beneath the rule against a soft concrete wall background](/assets/images/posts/2026-02-13-buy-your-ai-dont-rent-it.jpg)
 
 ## The Subscription Trap
 

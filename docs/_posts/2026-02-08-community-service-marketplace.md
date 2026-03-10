@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-08-community-service-marketplace.jpg
 ---
 
-![A hand offering a small brown paper bag toward a weathered front door slightly ajar, warm amber light spilling through the threshold onto a worn concrete stoop](/assets/images/posts/2026-02-08-community-service-marketplace.jpg)
+![A worn pencil resting diagonally across a handwritten list of names and small tasks on lined notebook paper, several items checkmarked, lying on a worn oak kitchen table in soft morning window light](/assets/images/posts/2026-02-08-community-service-marketplace.jpg)
 
 ## The Old Model of Help
 

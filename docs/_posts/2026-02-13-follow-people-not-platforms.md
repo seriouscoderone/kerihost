@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-13-follow-people-not-platforms.jpg
 ---
 
-![Worn leather address book open to handwritten names, fountain pen resting across the pages, soft morning window light](/assets/images/posts/2026-02-13-follow-people-not-platforms.jpg)
+![Handwritten letter on aged cream paper resting on a worn dark walnut kitchen table, morning window light raking softly across the page, a sealed institutional envelope blurred in the foreground](/assets/images/posts/2026-02-13-follow-people-not-platforms.jpg)
 
 ## You Don't Follow People
 

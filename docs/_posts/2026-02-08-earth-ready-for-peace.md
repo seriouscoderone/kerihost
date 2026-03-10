@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-08-earth-ready-for-peace.jpg
 ---
 
-![Work-worn open hands resting palms-up on linen, a dried seed pod resting across one palm, soft window light](/assets/images/posts/2026-02-08-earth-ready-for-peace.jpg)
+![A single dried seed pod resting in the loose open palm of one weathered hand, soft overcast light from the left casting long shadows across the palm lines, raw plaster wall behind, aged linen at the foreground edge, warm amber seed pod against muted oatmeal tones, deep indigo shadow at right](/assets/images/posts/2026-02-08-earth-ready-for-peace.jpg)
 
 ## The Earth's Long Memory
 

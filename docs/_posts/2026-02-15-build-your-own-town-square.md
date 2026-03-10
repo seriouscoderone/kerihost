@@ -10,7 +10,7 @@ header:
 theme_summary: "We're approaching the moment where standing up your own community infrastructure costs about the same as a Slack subscription. Mothers running PTAs, organizers building movements, neighbors helping neighbors — none of them need Facebook's permission anymore. But getting there means letting go of the assumption that communities need platforms at all."
 ---
 
-![A worn brass key resting on aged kraft paper with a faint neighborhood map, side-lit on a dark walnut table](/assets/images/posts/2026-02-15-build-your-own-town-square.jpg)
+![A weathered cedar community bulletin board with a single sheet of aged linen paper hand-pinned at the right, surrounded by ghost impressions of old staple holes, shot under cool overcast morning light](/assets/images/posts/2026-02-15-build-your-own-town-square.jpg)
 
 ## You Don't Need Facebook's Permission to Organize Your Neighborhood
 

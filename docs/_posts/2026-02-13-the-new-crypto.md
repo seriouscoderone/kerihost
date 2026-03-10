@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-13-the-new-crypto.jpg
 ---
 
-![An aged brass wax seal stamp resting on an unrolled yellowed blueprint on a worn oak workbench, lit by overcast morning window light casting a long soft shadow](/assets/images/posts/2026-02-13-the-new-crypto.jpg)
+![An aged brass deadbolt cylinder mechanism resting alone on a raw concrete workbench, lit by overcast morning side light casting a long soft shadow to the left, the brass sharp and warm against a muted concrete background](/assets/images/posts/2026-02-13-the-new-crypto.jpg)
 
 ## Blockchain Solved the Wrong Problem
 

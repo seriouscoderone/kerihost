@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-21-shopping-for-terms.jpg
 ---
 
-![Aged linen paper with two mirrored columns of handwritten text resting on a worn oak workbench, a rubber stamp out-of-focus in the foreground — both parties filling in the same form](/assets/images/posts/2026-02-21-shopping-for-terms.jpg)
+![A handwritten market board listing terms and prices side by side on weathered timber, seen from the buyer's side of a worn oak counter at golden hour — two soft-focus competing stalls visible in the background, buyer's hands blurred in the foreground, implying choice](/assets/images/posts/2026-02-21-shopping-for-terms.jpg)
 
 ## One-Way Paper
 

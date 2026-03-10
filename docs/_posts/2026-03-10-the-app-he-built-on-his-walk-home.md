@@ -10,7 +10,7 @@ header:
 theme_summary: "When data lives with the person — not the app — and every permission is a signed contract, a new kind of software becomes possible: apps assembled on demand from attested data, shared through trust relationships, and dissolved when you're done. A teenager with an idea can build what used to require a team. This is what contract-first development looks like from the user's side."
 ---
 
-![Work-worn hands placing a sealed envelope onto a small stack of two others, each with a distinct deep indigo wax seal, on a worn oak kitchen table](/assets/images/posts/2026-03-10-the-app-he-built-on-his-walk-home.jpg)
+![An open spiral notebook resting on a worn oak surface, right page holding a few handwritten lines at the top with the rest bare and cream-white, a dark ballpoint pen lying diagonally across the spread, golden hour side light raking across the paper and casting a long soft shadow from the pen](/assets/images/posts/2026-03-10-the-app-he-built-on-his-walk-home.jpg)
 
 ## He Had an Idea
 

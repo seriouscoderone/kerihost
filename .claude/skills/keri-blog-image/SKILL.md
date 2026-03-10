@@ -54,12 +54,32 @@ modifiers, composition patterns, and what to avoid. Load it before Phase 4.
 
 ## Phase 1: Content Extraction
 
-Read the blog post carefully. Extract a structured content brief:
+Read the blog post carefully. Your primary task is to extract the **human story**, not the technical mechanism. KERI is the plumbing; the post is about what people can do because of it. Strip all KERI-specific and cryptographic terminology from your understanding of the post's core meaning before you name it.
+
+Use this translation table when rephrasing technical concepts:
+
+| KERI/Technical term | Human equivalent |
+|---|---|
+| AID, identifier, DID | a person's name or identity — what makes them recognizable |
+| ACDC, credential, verifiable credential | a signed record you carry — a certificate, a letter of reference |
+| key rotation | changing your locks — updating who can prove it's you |
+| data sovereignty, self-sovereign identity | owning your own records — deciding who sees your information |
+| wallet (crypto/KERI sense) | what belongs to you — your documents, your proof |
+| signing at the edge | doing it yourself — not handing your pen to someone else |
+| witness, watcher | a notary, a neutral third party who saw it happen |
+| escrow | things held in trust while a condition is met |
+| OOBI, bootstrap | an introduction — how two strangers first verify each other |
+| delegated AI agent | giving someone limited power of attorney |
+| threshold multi-sig | requiring multiple people to agree before acting |
+| pre-rotation commitment | writing your successor in a sealed envelope before you need one |
+
+Extract a structured content brief:
 
 ```json
 {
   "topic": "one sentence — what the post is actually about",
-  "thesis": "the core argument or insight the author is making",
+  "thesis": "the core argument or insight the author is making (may include technical framing)",
+  "humanEssence": "the thesis stripped of all KERI/crypto/identity-tech terminology — what this post means for ordinary people, expressed in terms anyone would recognize. If you cannot write this without using a technical term, you have not translated far enough.",
   "tone": "one of: [reflective, technical, cautionary, optimistic, philosophical, instructional]",
   "audience": "who this is written for and what they care about",
   "keyMetaphors": ["any vivid metaphors or analogies the author already uses"],
@@ -68,15 +88,17 @@ Read the blog post carefully. Extract a structured content brief:
 }
 ```
 
-Show this brief to the user before proceeding. It's the foundation everything
-else rests on — if it's wrong, the image will be wrong.
+Show this brief to the user before proceeding. It's the foundation everything else rests on — if it's wrong, the image will be wrong. Pay special attention to `humanEssence` — if it still contains words like "key," "credential," "identifier," "wallet," or "signing," translate further.
 
 ---
 
 ## Phase 2: Visual Concept Ideation
 
-Generate **3 distinct visual concepts** using the content brief. Each concept
-must use a different visual strategy from this list:
+Generate **3 distinct visual concepts** derived from `humanEssence`, not from `thesis`. The thesis is the technical argument; `humanEssence` is the human story. Visual concepts must come from the human story.
+
+**Default rule — avoid KERI brand vocabulary objects.** Do not reach for keys, wallets, wax seals, padlocks, or sealed envelopes as your default visual unless `humanEssence` is specifically and explicitly about access, physical possession, or the mechanics of trust ceremonies — and even then, exhaust fresher metaphors first. A post about people owning their own records is about autonomy and custody, not keys. A post about portable reputation is about being known, not wallets. Find the image that would make sense to someone who has never heard of KERI.
+
+Each concept must use a different visual strategy from this list:
 
 | Strategy | When to use |
 |---|---|
@@ -127,8 +149,9 @@ Take the selected concept and add specificity across five dimensions:
 
 **Metaphor grounding**
 - Name the specific object or scene element that carries the meaning
-- How does it connect to the brand vocabulary?
-  (Keys, wallets, doors, handshakes, paper, physical infrastructure — things you can hold)
+- Confirm it derives from `humanEssence`, not from the technical vocabulary of the post
+- Brand vocabulary objects (keys, wallets, wax seals, padlocks, sealed envelopes) may appear only if they are the strongest available image for the `humanEssence` — not because the post is about cryptographic signing or key management
+- Non-brand environments and objects are encouraged when they serve the human story better: an empty classroom, a hand-addressed envelope, a community garden plot, a worn tool passed between hands, a bus window in rain
 
 ---
 
@@ -145,6 +168,7 @@ Assemble the final prompt using this structure:
 ```
 
 **Grok-specific rules:**
+- **No technical terminology in the final prompt.** Aurora has no KERI training data. Terms like "key rotation," "credential," "identifier," "KERI," "AID," or "self-sovereign" produce generic stock imagery or are ignored entirely. The prompt must be composed of visual, physical, sensory language only — what a photographer would put in a scene brief. If you find a technical term in the prompt, replace it with the concrete visual object or human situation it represents.
 - Lead with the style prefix *before* the subject (Aurora weights early tokens heavily)
 - Single focal subject performs better than multi-subject compositions
 - Be explicit about negative space: *"open left third for title overlay"*

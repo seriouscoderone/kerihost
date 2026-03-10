@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-14-the-last-satisfying-application.jpg
 ---
 
-![A folded typewritten document with a deep indigo wax seal on a worn oak desk, natural side light casting long shadows across the paper surface](/assets/images/posts/2026-02-14-the-last-satisfying-application.jpg)
+![A folded letter with a dark wax impression resting on a worn oak table, overcast morning light warming the paper, an open doorway behind it leading into an empty indigo-shadowed hallway, shot on 35mm film with shallow depth of field](/assets/images/posts/2026-02-14-the-last-satisfying-application.jpg)
 
 ## What Is an Application, Really?
 

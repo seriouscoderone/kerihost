@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-19-designing-keri-ecosystems-with-ai.jpg
 ---
 
-![Architectural blueprint unrolled on a worn oak workbench, a brass compass resting nearby, pencil annotations in the margin, side light from a window](/assets/images/posts/2026-02-19-designing-keri-ecosystems-with-ai.jpg)
+![A large architectural blueprint partially unrolled on a worn oak workbench, an oxidized brass compass resting on the near corner, pencil annotations filling the margins, overcast morning window light washing across the surface, open left third of frame clear for text](/assets/images/posts/2026-02-19-designing-keri-ecosystems-with-ai.jpg)
 
 ## The Problem: Where Do You Even Start?
 

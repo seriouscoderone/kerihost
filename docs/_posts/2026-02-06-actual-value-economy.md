@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-06-actual-value-economy.jpg
 ---
 
-![A single wax-sealed envelope resting alone on a cleared, worn oak worktable — golden hour light raking across the grain, indigo shadow pooling in the open space to the left](/assets/images/posts/2026-02-06-actual-value-economy.jpg)
+![An old tarnished brass balance scale with both empty pans level, resting on a raw concrete surface — overcast morning side light casts one long shadow from the scale arm, deep indigo shadow pools in the upper-left corner, open concrete wall to the left](/assets/images/posts/2026-02-06-actual-value-economy.jpg)
 
 ## The Bloat We've Accepted
 

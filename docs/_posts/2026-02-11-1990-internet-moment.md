@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-11-1990-internet-moment.jpg
 ---
 
-![A black Bakelite rotary telephone on an aged walnut desk, side-lit by a north-facing window, newspaper blurred in the foreground](/assets/images/posts/2026-02-11-1990-internet-moment.jpg)
+![A yellowed cream plastic telephone receiver from the 1980s held in an open palm at chest height, cord hanging loose, side-lit by overcast morning window light against a blurred plaster wall](/assets/images/posts/2026-02-11-1990-internet-moment.jpg)
 
 ## The Question Nobody Could Answer
 

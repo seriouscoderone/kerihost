@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-14-the-kids-are-not-alright-with-your-internet.jpg
 ---
 
-![A worn brass house key resting on aged handmade paper on raw concrete — ownership made physical](/assets/images/posts/2026-02-14-the-kids-are-not-alright-with-your-internet.jpg)
+![A disposable film camera resting on a worn denim jacket against raw concrete, soft window light casting a long shadow to the right — a deliberate choice of something real and irreversible](/assets/images/posts/2026-02-14-the-kids-are-not-alright-with-your-internet.jpg)
 
 ## They Don't Want Your Phone
 

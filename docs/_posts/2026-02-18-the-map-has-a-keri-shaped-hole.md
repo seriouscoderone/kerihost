@@ -10,7 +10,7 @@ header:
 theme_summary: "When you do pure strategy work on AI commoditization — Wardley Maps, value chain analysis, competitive moats — you keep finding the same holes. Trust. Identity. Provenance. Relationship accountability. Sovereign agency. You keep describing, without knowing it, the architecture KERI already provides. Independent convergence from different starting points isn't coincidence. It's gravity."
 ---
 
-![Aged topographic map with a rectangular hole cut through its center on a worn workbench, overcast window light pooling on raw concrete visible through the gap](/assets/images/posts/2026-02-18-the-map-has-a-keri-shaped-hole.jpg)
+![Aged topographic map laid flat on a dark walnut workbench, four hand-drawn graphite lines from different edges of the map converging at a single small worn patch near center-right, a soft-focus pencil rolling off the table's left edge, raw concrete wall with indigo shadow in the background, overcast morning window light from the left](/assets/images/posts/2026-02-18-the-map-has-a-keri-shaped-hole.jpg)
 
 ## Someone Mapped the Future and Found Us Already There
 

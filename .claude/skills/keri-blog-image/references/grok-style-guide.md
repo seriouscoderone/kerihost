@@ -257,5 +257,5 @@ Before finalizing any prompt, verify:
 - [ ] Negative prompts appended with `-- no` syntax
 - [ ] No adjective stacks without nouns
 - [ ] No corporate office or digital UI in the environment
-- [ ] At least one brand vocabulary object or environment present
+- [ ] At least one brand vocabulary object or environment present — only if it serves `humanEssence`; omit if a non-brand object better illustrates the human story
 - [ ] Film grain and imperfection explicitly included

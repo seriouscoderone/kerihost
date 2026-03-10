@@ -10,7 +10,7 @@ header:
   teaser: /assets/images/posts/2026-02-19-unbundling-the-monopoly.jpg
 ---
 
-![Aged manila envelopes fanned open on raw concrete with a brass key in the foreground — each envelope a separable credential, the key the portable access only you hold](/assets/images/posts/2026-02-19-unbundling-the-monopoly.jpg)
+![Weathered hands carrying an overfull cardboard archive box mid-stride through a stone corridor threshold — your records in your arms, leaving on your own terms](/assets/images/posts/2026-02-19-unbundling-the-monopoly.jpg)
 
 ## The Bundling Problem
 
