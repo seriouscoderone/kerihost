@@ -4,7 +4,7 @@ date: 2026-03-10
 categories: [ai, community]
 tags: [acdc, contract-first-development, ai-agents, data-sovereignty, no-code, friends, attestations, trust, fitness, community-challenge]
 description: "A teenager described an app to his phone. His friends got an invite an hour later. Nobody wrote code. Here's why that's possible."
-status: draft
+status: published
 header:
   teaser: /assets/images/posts/2026-03-10-the-app-he-built-on-his-walk-home.jpg
 theme_summary: "When data lives with the person — not the app — and every permission is a signed contract, a new kind of software becomes possible: apps assembled on demand from attested data, shared through trust relationships, and dissolved when you're done. A teenager with an idea can build what used to require a team. This is what contract-first development looks like from the user's side."
