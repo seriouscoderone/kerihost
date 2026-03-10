@@ -32,7 +32,7 @@ Marcus's gym runs a KERI ecosystem app. Every check-in produces a signed credent
 
 His family uses a chore app built on the same foundation. Completed tasks are signed and stored with the person who completed them. Again — his record, not the app's.
 
-And somewhere running quietly, a cryptographic presence attestation service records where he was and when. Not to share it. Not to sell it. Just to let him prove it later, to anyone, on demand, with his consent.
+And somewhere running quietly, a KERI app on his phone — a cryptographic presence attestation service — records where he was and when. Not to share it. Not to sell it. Just to let him prove it later, to anyone, on demand, with his consent. The attestations stay on the device. The app issues signed credentials to his identifier, same as the gym app and the chore app do.
 
 These three apps don't share a database. They don't know each other exists. They're independent services that all happen to speak the same contract language.
 
