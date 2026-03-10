@@ -36,7 +36,7 @@ And somewhere running quietly, a KERI app on his phone — a cryptographic prese
 
 These three apps don't share a database. They don't know each other exists. They're independent services that all happen to speak the same contract language.
 
-When Marcus described his idea, the AI didn't build a new application from scratch. It composed a view — a reading across the credentials he already holds — and wrapped that in a challenge structure his friends could opt into. Each friend who accepted granted consent for specific attestations, scoped to the challenge, visible to the group.
+When Marcus described his idea, the AI on his phone didn't build a new application from scratch. It composed a view — a reading across the credentials he already holds — and wrapped that in a challenge structure his friends could opt into. Each friend who accepted granted consent for specific attestations, scoped to the challenge, visible to the group.
 
 That was the whole app.
 
@@ -62,9 +62,9 @@ In today's version of this, everyone would have to install an app, create accoun
 
 Nobody does that. The ask is too large.
 
-In the KERI model, Marcus's friends didn't sign up for anything. They already had identifiers. They already had credentials from their own gym apps, their own family chore apps, their own presence attestation services. The challenge app read only what they explicitly consented to share — not because of a privacy policy, but because that's how ACDCs work. Selective disclosure isn't a feature. It's the structure.
+In the KERI model, Marcus's friends didn't sign up for anything. They already had identifiers. They already had credentials from their own gym apps, their own family chore apps, their own presence attestation apps running on their own phones. The composed challenge — assembled by Marcus's AI, running at the edge, not on any central server — read only what they explicitly consented to share. Not because of a privacy policy, but because that's how ACDCs work. Selective disclosure isn't a feature. It's the structure.
 
-This is [Data at the Edge](/blog/2026/02/06/beyond-data-companies-partners-not-products/) taken to its logical end. The gym doesn't know Marcus accepted a challenge. The chore app doesn't know his friends exist. The presence service doesn't know any of them are connected. Each service sees only what it issued. The composition happens at the edge, in the moment, under consent.
+This is [Data at the Edge](/blog/2026/02/06/beyond-data-companies-partners-not-products/) taken to its logical end. The gym doesn't know Marcus accepted a challenge. The chore app doesn't know his friends exist. Each presence app on each phone doesn't know any of them are connected. Each service sees only what it issued. The composition happens at the edge, in the moment, under consent.
 
 When the challenge ends, nothing lingers. There's no company holding everyone's fitness records. No database to breach. The credentials go back to being what they always were: personal records belonging to the people they're about.
 
@@ -86,7 +86,7 @@ Marcus built exactly that. Without meaning to, he described what contract-first 
 
 ## Conclusion
 
-The gym app, the chore app, the presence service — three independent applications. No shared infrastructure. No mutual agreement. Just three services speaking the same contract language.
+The gym app, the chore app, the presence app on each person's phone — three independent applications. No shared infrastructure. No mutual agreement. Just three services speaking the same contract language.
 
 On top of that foundation, a teenager with an idea can build what a development team couldn't five years ago — not because AI wrote better code, but because the contracts were already there, waiting to be composed.
 
